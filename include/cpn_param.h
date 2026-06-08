@@ -29,7 +29,12 @@ typedef struct CPN_Param {
 							// d_L_rect[i] is the extension of the rectangle at the i-th hierarchical level
 	int *d_N_sweep_rect;	// d_N_sweep_rect is vector of length d_N_hierarch_levels
 							// d_N_sweep_rect[i] is the number of updating sweeps of the rectangle for the i-th hierarchical level
-							
+					
+	// nested sampling parameters
+	int d_N_live_pt;		// number of live points used in nested sampling
+	int d_N_meas_ns;		// number of measurements to do per nest
+	int d_save_dead;		// switch to save dead configs, 0=dont save
+
 	// simulation parameters
 	int d_MC_step;			// number of updating steps
 	int d_measevery;		// number of updating steps between two measures
@@ -71,6 +76,17 @@ typedef struct CPN_Param {
 
 } CPN_Param;
 
+// stores the smallest energies and the corresponding labels
+typedef struct Ns_Param {
+	int dead_label;
+	int new_label;
+	int mc_switch;
+
+	double dead_energy;
+	double new_energy;
+}
+Ns_Param;
+
 // in lib/cpn_param.c
 void remove_white_lines_and_comments(FILE *);
 void read_input(char const * const, CPN_Param *);
@@ -80,5 +96,6 @@ void init_data_file(FILE **, CPN_Param const * const);
 void init_topo_file(FILE **, CPN_Param const * const);
 void print_simulation_details_cpn(char const * const, CPN_Param const * const, time_t const * const, time_t const * const, clock_t const, clock_t const);
 void print_simulation_details_multicanonic_cpn(char const * const, CPN_Param const * const, time_t const * const, time_t const * const, clock_t const, clock_t const);
+void print_simulation_details_nest_samp_cpn(char const * const, CPN_Param const * const, time_t const * const, time_t const * const, clock_t const, clock_t const, time_t const * const, time_t const * const, clock_t const, clock_t const);
 
 #endif

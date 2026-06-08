@@ -48,6 +48,7 @@ double rng_theta_z(RNG_Param *, double const);
 
 // use this function to call a uniform Random Number Generator (RNG) in (0,1) with your favorite algorithm
 double rand_num(RNG_Param *);
+int rand_int(RNG_Param *, int, int);	// integer RNG in [a,b)
 
 // use these functions to read, write and initialize rng state
 void init_rng_state(RNG_Param *, CPN_Param const * const);

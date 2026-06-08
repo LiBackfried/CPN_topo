@@ -29,6 +29,60 @@ void parallel_tempering_with_hierarchic_update(CPN_Conf * conf, Rectangle const 
 	}
 }
 	
+// performs MC updates on the current proposed configuration and checks the boundary constraint
+// TODO: adapt to make it an int -> 0 to swap the dead with the random, 1 to switch the dead with the updated random
+// TODO: adapt so that the livepoint conf is updated and in the constraint violating case, the new suggested is kept (storing necessary?)
+void nested_sampling_update(CPN_Live_Conf *live, CPN_Param const * const param, Ns_Param *dead_param,
+							Geometry const * const geo, RNG_Param *rng_state)
+{
+	int i;
+	double upd_energy;
+	for (i=0; i<param->d_num_micro; i++) microcanonic_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param);
+	overheatbath_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param,rng_state);
+
+	// normalize the lattice fields of the updated config
+	if (((live[dead_param->dead_label].conf).update_index) % param->d_num_norm == 0) normalize_replicas(&(live[dead_param->dead_label].conf),param); 
+	(live[dead_param->dead_label].conf).update_index++;
+
+	// check constraint -> L_old <? L_upd
+	upd_energy = energy_density(&(live[dead_param->dead_label].conf), geo, param);
+	// printf("prev dead:\t%f\n", dead_param->dead_energy);
+	// printf("MC update:\t%f\n", upd_energy);
+
+	if (upd_energy < dead_param->dead_energy)
+	{
+		// swap the new live to the updated one; update the dead_param
+		dead_param->new_energy = upd_energy;
+		live[dead_param->dead_label].live_energy = upd_energy;
+		// copyconf(conf, param, &(live[dead_param->dead_label].conf));
+		dead_param->mc_switch += 1;
+
+		// printf("update accepted!\n");
+	} else {
+		// if rejected, swap the updated dead_label conf back to the original one and replace by the new_label
+		dead_param->new_energy = live[dead_param->new_label].live_energy;
+		live[dead_param->dead_label].live_energy = live[dead_param->new_label].live_energy;
+		copyconf(&(live[dead_param->new_label].conf), param, &(live[dead_param->dead_label].conf));	
+	
+		// printf("mc not accepted!\n");
+	}
+
+	// dead_param->new_label = dead_param->dead_label;	// leave the idx unchanged!
+	dead_param->dead_energy = dead_param->new_energy;
+}
+
+// identify the smallest likelihood/largest E
+void identify_dead_conf(CPN_Live_Conf *live, CPN_Param const * const param, Ns_Param *dead_param)
+{
+	int i;
+	for(i=0;i<param->d_N_live_pt;i++){
+		if(live[i].live_energy > dead_param->dead_energy){
+			dead_param->dead_energy = live[i].live_energy;
+			dead_param->dead_label = i;
+		}
+	}
+}
+
 // perform a hierarchic update on rectangles for conf[conf_label]
 void hierarchic_update_rectangle(CPN_Conf * conf, Geometry const * const geo, CPN_Param const * const param, int const conf_label, int const hierarc_level,
                                  Rectangle const * const most_update, Acc_Swap *swap_counter, CPN_Conf *aux_conf, RNG_Param *rng_state)

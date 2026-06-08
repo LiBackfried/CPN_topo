@@ -1,6 +1,7 @@
 bin_PROGRAMS = cpn \
                multicanonic_cpn \
-               cpn_conf_check
+               cpn_conf_check \
+               cpn_ns
 
 cpn_conf = ./include/cpn_cmplx_op.h \
            ./lib/cpn_cmplx_op.c \
@@ -48,6 +49,14 @@ cpn_conf_check_SOURCES = ./src/cpn_conf_check.c \
                          ${cpn_param} \
                          ${geometry} \
                          ${endianness}
+
+cpn_ns_SOURCES = ./src/cpn_ns.c \
+              ./include/macro.h \
+              ${rng} \
+              ${cpn_conf} \
+              ${cpn_param} \
+              ${geometry} \
+              ${endianness}
 
 if LINK_MD5_H 
 LDADD = -lm -lcrypto

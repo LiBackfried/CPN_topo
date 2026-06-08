@@ -288,6 +288,37 @@ void read_input(char const * const input_file_name, CPN_Param *param)
 				}
 				strcpy(param->d_rng_file, temp_str);
 			}
+			// nested sampling params:
+			else if(strncmp(str, "num_live_pts", 12)==0)
+			{
+				err=fscanf(input_fp, "%d", &temp_i);
+				if(err!=1)
+				{
+					fprintf(stderr, "Error in reading the file %s (%s, %d)\n", input_file_name, __FILE__, __LINE__);
+					exit(EXIT_FAILURE);
+				}
+				param->d_N_live_pt=temp_i;
+			}
+			else if(strncmp(str, "num_ns_meas", 11)==0)
+			{
+				err=fscanf(input_fp, "%d", &temp_i);
+				if(err!=1)
+				{
+					fprintf(stderr, "Error in reading the file %s (%s, %d)\n", input_file_name, __FILE__, __LINE__);
+					exit(EXIT_FAILURE);
+				}
+				param->d_N_meas_ns=temp_i;
+			}
+			else if(strncmp(str, "save_dead", 9)==0)
+			{
+				err=fscanf(input_fp, "%d", &temp_i);
+				if(err!=1)
+				{
+					fprintf(stderr, "Error in reading the file %s (%s, %d)\n", input_file_name, __FILE__, __LINE__);
+					exit(EXIT_FAILURE);
+				}
+				param->d_save_dead=temp_i;
+			}
 			else if(strncmp(str, "defect_size", 11)==0)
 			{
 				err=fscanf(input_fp, "%d", &temp_i);
@@ -680,4 +711,73 @@ void print_simulation_details_multicanonic_cpn(char const * const input_file_nam
 	}
 }
 
+// print simulations details of cpn
+void print_simulation_details_nest_samp_cpn(char const * const input_file_name, CPN_Param const * const param, 
+									        time_t const * const start_date, time_t const * const finish_date,
+                                            clock_t const start_time, clock_t const finish_time, 
+									        time_t const * const i_start_date, time_t const * const i_finish_date,
+                                            clock_t const i_start_time, clock_t const i_finish_time)
+{
+	FILE *fp;
+	
+	fp=fopen(param->d_log_file, "w");
+	if(fp==NULL)
+	{
+		fprintf(stderr, "Error in opening the file %s (%s, %d)\n", param->d_log_file, __FILE__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		fprintf(fp, "+----------------------------------------------+\n");
+		fprintf(fp, "|          Simulation details for cpn          |\n");
+		fprintf(fp, "+----------------------------------------------+\n\n");
+
+		fprintf(fp, "Theory: 2d CP^{N-1} model with N = %d\n\n", N);
+		fprintf( fp, "Input parameters read from file %s\n\n", input_file_name);
+		fprintf(fp, "Lattice size: %d x %d\n", param->d_size[0], param->d_size[1]);
+		fprintf(fp, "Number of live points: %d\n", param->d_N_live_pt);
+		fprintf(fp, "Number of nest.sampling steps: %d\n", param->d_N_meas_ns);
+		if (param->d_start==0) fprintf(fp, "Simulation started from random cold conf\n");
+		if (param->d_start==1) fprintf(fp, "Simulation started from random hot conf\n");
+		if (param->d_start==2) fprintf(fp, "Simulation started from stored conf read from file %s", param->d_conf_file);
+		fprintf(fp, "\n");
+
+		fprintf(fp, "\n");
+
+		fprintf(fp, "beta:  %.10lf\n", param->d_beta);
+		fprintf(fp, "theta: %.10lf\n", param->d_theta);
+
+		fprintf(fp, "\n");
+
+		fprintf(fp, "Over-relaxation/over-heat-bath ratio: %d / 1\n", param->d_num_micro);
+		fprintf(fp, "Initial heatbath measures taken every: %d\n", param->d_measevery);
+		fprintf(fp, "Conf normalized every: %d\n", param->d_num_norm);
+		fprintf(fp, "Conf saved every: %d\n", param->d_saveconf_backup_every);
+		fprintf(fp, "\n");
+
+		fprintf(fp, "Max num of cooling steps: %d\n", param->d_coolsteps);
+		fprintf(fp, "Topo obs measured every %d cooling steps\n", param->d_coolevery);
+		fprintf(fp, "\n");
+
+		if (param->d_rng_start==0) fprintf(fp, "Rng initializated from seed %ld\n", param->d_seed);
+		if (param->d_rng_start==1) fprintf(fp, "Rng initializated from last rng state read from file %s (seed = %ld)\n", param->d_rng_file, param->d_seed);
+		fprintf(fp, "\n");
+		
+		if (is_little_endian() == 0) fprintf(fp, "Little endian machine\n");
+		else fprintf(fp, "Big endian machine\n");
+		fprintf(fp, "\n");
+
+		fprintf(fp, "Heatbath init start: %s", ctime(i_start_date));
+		fprintf(fp, "Heatbath init end:   %s", ctime(i_finish_date));
+		fprintf(fp, "Heatbath init time:  %.5lf seconds\n", ((double)(i_finish_time-i_start_time))/CLOCKS_PER_SEC );
+		fprintf(fp, "\n");
+
+		fprintf(fp, "Simulation start: %s", ctime(start_date));
+		fprintf(fp, "Simulation end:   %s", ctime(finish_date));
+		fprintf(fp, "Simulation time:  %.5lf seconds\n", ((double)(finish_time-start_time))/CLOCKS_PER_SEC );
+		fprintf(fp, "\n");
+	
+		fclose(fp);
+	}
+}
 #endif

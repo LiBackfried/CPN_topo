@@ -42,6 +42,78 @@ void init_CPN_replicas(CPN_Conf **conf, CPN_Param const * const param, RNG_Param
 	}
 }
 
+////////////////////// NEW ///////////////////////////////////////////////////
+
+// allocate all live samples for nested sampling
+void init_CPN_lives(CPN_Live_Conf **live, CPN_Param const * const param, RNG_Param *rng_state)
+{
+	int i=0, err;
+	char conf_file_name[STD_STRING_LENGTH], r[STD_STRING_LENGTH];
+	// TODO: fix this to have the proper config file structure? which is...? => what do we want to load
+	strcpy(conf_file_name, param->d_conf_file); // conf_file_name = param->d_conf_file
+
+	// allocate the vector to store the nest walkers
+	err=posix_memalign((void **) live, (size_t) DOUBLE_ALIGN, (size_t) param->d_N_live_pt * sizeof(CPN_Live_Conf));
+	if(err!=0)
+	{
+		fprintf(stderr, "Problems in allocating the live points! (%s, %d)\n", __FILE__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+
+	for(i=0; i<param->d_N_live_pt; i++)
+	{
+		sprintf(r, "%d", i); // r='i'
+		strcpy(conf_file_name, param->d_conf_file); // conf_file_name = param->d_conf_file
+		strcat(conf_file_name, "_livept_"); // conf_file_name = param->d_conf_file + '_livept_'
+		strcat(conf_file_name, r); // conf_file_name = param->d_conf_file + '_livept_i'
+
+		allocate_CPN_conf(&((*live)[i].conf), param);
+		init_CPN_conf(&((*live)[i].conf), param, conf_file_name, rng_state);
+		init_bound_cond(&((*live)[i].conf), i, param);	// keep as im not sure if it will throw errors at some point though
+		
+		(((*live)[i]).conf).conf_label=i;
+		((*live)[i]).live_label=i;
+		((*live)[i]).live_energy=0.0;
+	}
+}
+
+// to use the heatbath nested sampling, we sample the initial live points from a thermalized Markov chain
+// TODO: add to the header file when ready
+void init_CPN_lives_heatbath(CPN_Live_Conf *live, CPN_Param const * const param,
+							 Geometry const * const geo, RNG_Param *rng_state)
+{
+	int i=0,j=0,conf_idx=0;
+	// fprintf(stdout, "#Made it into the initialization");
+
+	// use the d_MC_step<-num_MC_step for thermalization
+	// use the first entry of the livepts for updating and then from that initialize the rest!
+	for (i=0; i<param->d_MC_step; i++){
+		for (j=0; j<param->d_num_micro; j++) microcanonic_sweep_lattice(&(live[0].conf),geo,param);
+		overheatbath_sweep_lattice(&(live[0].conf),geo,param,rng_state);	// incl. the acc/rej step
+	}
+
+	// fprintf(stdout, "# Made it through thermalization");
+
+	// then sample every <meas_every> steps a live point from the Markov chain
+	for (i=0; i<(param->d_N_live_pt)*(param->d_measevery); i++){
+		for (j=0; j<param->d_num_micro; j++) microcanonic_sweep_lattice(&(live[conf_idx].conf),geo,param);
+		overheatbath_sweep_lattice(&(live[conf_idx].conf),geo,param,rng_state);	// incl. the acc/rej step
+	
+		if (i % (param->d_measevery) == 0){
+			if (conf_idx == param->d_N_live_pt-1) break;	// n_live-1!!! since otherwise we would still do one more run with nlive+1
+
+			// copyconf copies from first to last argument
+			copyconf(&(live[conf_idx].conf), param, &(live[conf_idx+1].conf));
+			
+			conf_idx++;
+		}
+		// printf("%d\n", conf_idx);
+	}
+	// fprintf(stdout, "# Made it through the init of the livepts.");
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 // allocate memory for a CPN conf
 void allocate_CPN_conf(CPN_Conf *conf, CPN_Param const * const param)
 {
@@ -207,6 +279,19 @@ void write_replicas(CPN_Conf const * const conf, CPN_Param const * const param)
 			write_CPN_conf_on_file(&(conf[i]), param, conf_file_name);
 		}
 	}
+}
+
+// save replicas confs
+void write_dead_conf(CPN_Conf const * const conf, CPN_Param const * const param, int ctr)
+{
+	char conf_file_name[STD_STRING_LENGTH], r[STD_STRING_LENGTH];
+	sprintf(r, "%d", ctr); // r='i'
+
+	strcpy(conf_file_name, param->d_conf_file); // conf_file_name = param->d_conf_file
+	strcat(conf_file_name, "_dead_"); // conf_file_name = param->d_conf_file + '_dead_'
+	strcat(conf_file_name, r); // conf_file_name = param->d_conf_file + '_dead_i'
+	
+	write_CPN_conf_on_file(conf, param, conf_file_name);
 }
 
 // save replicas confs for backup
@@ -418,6 +503,17 @@ void free_CPN_conf(CPN_Conf *conf, CPN_Param const * const param)
 	}
 	free(conf->z);
 	free(conf->U);
+}
+
+void free_CPN_live_pts(CPN_Live_Conf *live, CPN_Param const * const param)
+{
+	int i;
+	for(i=0; i<param->d_N_live_pt; i++)
+	{
+		free_CPN_conf(&(live[i].conf), param);
+		free_bound_cond(&(live[i].conf), param);
+	}
+	free(live);
 }
 
 #endif

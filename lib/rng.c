@@ -76,6 +76,13 @@ double rand_num(RNG_Param *rng_state)
 	return (ran2_rng(rng_state));
 }
 
+// Extract a uniform random number in [a,b)
+int rand_int(RNG_Param *rng_state, int start_pt, int end_pt)
+{
+	return (int)((end_pt-start_pt) * (ran2_rng(rng_state)) + start_pt);
+}
+
+
 // initialize rng state
 void init_rng_state(RNG_Param *rng_state, CPN_Param const * const param)
 {

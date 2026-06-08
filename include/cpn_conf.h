@@ -32,8 +32,23 @@ typedef struct Acc_Swap {
 
 } Acc_Swap;
 
+// CPN conf struct, stores configs, energies
+typedef struct CPN_Live_Conf {
+
+	// reuse the CPN_Conf structure! dont use a pointer here though!
+	CPN_Conf conf;
+
+	// for nested sampling
+	int live_label;  	  // stores the labels of the live points => keep here as we will copy the entire conf incl conf.conf_label as proposal! keep this unchanged!
+	double live_energy;	  // stores the energies associated with the live points
+
+} CPN_Live_Conf;
+
 // in lib/cpn_conf_def.c
 void init_CPN_replicas(CPN_Conf **, CPN_Param const * const, RNG_Param *);
+void init_CPN_lives(CPN_Live_Conf **, CPN_Param const * const, RNG_Param *);
+void init_CPN_lives_heatbath(CPN_Live_Conf *, CPN_Param const * const, Geometry const * const, RNG_Param *);
+// void init_CPN_lives_heatbath(CPN_Param const * const, Geometry const * const, CPN_Conf *, RNG_Param *);
 void allocate_CPN_conf(CPN_Conf *, CPN_Param const * const);
 void init_CPN_conf(CPN_Conf *, CPN_Param const * const, char const * const, RNG_Param *); 
 void init_bound_cond(CPN_Conf *, int const, CPN_Param const * const);
@@ -43,12 +58,14 @@ void normalize_CPN_conf(CPN_Conf *, CPN_Param const * const);
 void copyconf(CPN_Conf const * const, CPN_Param const * const, CPN_Conf *);
 void write_replicas(CPN_Conf const * const , CPN_Param const * const);
 void write_replicas_backup(CPN_Conf const * const, CPN_Param const * const);
+void write_dead_conf(CPN_Conf const * const, CPN_Param const * const, int);
 void write_CPN_conf_on_file(CPN_Conf const * const, CPN_Param const * const, char const * const);
 void read_CPN_conf_from_file(CPN_Conf *, CPN_Param const * const, char const * const);
 void compute_MD5_hash_conf(char *, CPN_Conf const * const, CPN_Param const * const);
 void free_CPN_replicas(CPN_Conf *, CPN_Param const * const);
 void free_bound_cond(CPN_Conf *, CPN_Param const * const);
 void free_CPN_conf(CPN_Conf *, CPN_Param const * const);
+void free_CPN_live_pts(CPN_Live_Conf *, CPN_Param const * const);
 
 // in lib/cpn_meas.c
 void perform_measures_localobs(CPN_Conf  * , Geometry const * const, CPN_Param const * const, FILE *, FILE *, CPN_Conf *);
@@ -65,6 +82,8 @@ void cooling(CPN_Conf *, Geometry const * const, CPN_Param const * const);
 // in lib/cpn_update.c
 void parallel_tempering_with_hierarchic_update(CPN_Conf *, Rectangle const * const, Acc_Swap *,
                                                CPN_Param const * const, Geometry const * const, CPN_Conf *, RNG_Param *);
+void nested_sampling_update(CPN_Live_Conf *, CPN_Param const * const, Ns_Param *, Geometry const * const, RNG_Param *);
+void identify_dead_conf(CPN_Live_Conf *, CPN_Param const * const, Ns_Param *);
 void hierarchic_update_rectangle(CPN_Conf *, Geometry const * const, CPN_Param const * const, int const, int const,
                                  Rectangle const * const, Acc_Swap *, CPN_Conf *, RNG_Param *);
 void update_rectangle(CPN_Conf *, Geometry const * const, CPN_Param const * const, Rectangle const * const, RNG_Param *);
