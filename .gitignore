@@ -5,7 +5,7 @@ compile
 config.*
 configure
 configure~
-cpn*
+/cpn*
 depcomp
 INSTALL
 install-sh
