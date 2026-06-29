@@ -1,31 +1,19 @@
-#!/usr/bin/env bash
+#!/bin/bash
+#SBATCH -J debug_nest_sampling
+#SBATCH --account=gratis
+#SBATCH --partition epyc2
+#SBATCH --qos job_debug
+#SBATCH --ntasks=8
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=16G
+#SBATCH --time=00:20:00
+#SBATCH --chdir=/storage/homefs/lb25v444/CPN_nestsamp/CPN_topo
+#SBATCH --mail-user=liane.backfried@unibe.ch
+#SBATCH --mail-type=end,fail
 
-###set -e   ### "warnings (and errors) can be ignored " - A.A., 2024
+mkdir -p /scratch/network/users/lb25v444/cpn_ns_N21
 
-N_RUNS=8
-BASE_SEED=12345
-OUTDIR="out_data_multrun_"
+outdir="/scratch/network/users/lb25v444/cpn_ns_N21/res_${SLURM_PROCID}"
+mkdir -p "$outdir"
 
-echo "Starting $N_RUNS nested sampling runs..."
-
-pids=()
-
-for i in $(seq 2 $N_RUNS); do
-    mkdir -p "$OUTDIR${i}"
-    echo "Launching run $i"
-
-    ./ns \
-        --seed "$SEED" \
-        --out "$OUTFILE" \
-        > "$LOGFILE" 2>&1 &
-
-    pids+=($!)
-done
-
-echo "Waiting for all runs to finish..."
-
-for pid in "${pids[@]}"; do
-    wait "$pid"
-done
-
-echo "All runs completed."
+srun bash -c './cpn_ns config_files/nest_${SLURM_PROCID}'

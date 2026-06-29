@@ -36,6 +36,8 @@ void nested_sampling_update(CPN_Live_Conf *live, CPN_Param const * const param, 
 							Geometry const * const geo, RNG_Param *rng_state)
 {
 	int i;
+	int ctr = 0;	// counter for repeats of constraint checks before recycling the original live point
+	int max_ctr = 100;
 	double upd_energy;
 	for (i=0; i<param->d_num_micro; i++) microcanonic_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param);
 	overheatbath_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param,rng_state);
@@ -58,13 +60,44 @@ void nested_sampling_update(CPN_Live_Conf *live, CPN_Param const * const param, 
 		dead_param->mc_switch += 1;
 
 		// printf("update accepted!\n");
-	} else {
-		// if rejected, swap the updated dead_label conf back to the original one and replace by the new_label
-		dead_param->new_energy = live[dead_param->new_label].live_energy;
-		live[dead_param->dead_label].live_energy = live[dead_param->new_label].live_energy;
-		copyconf(&(live[dead_param->new_label].conf), param, &(live[dead_param->dead_label].conf));	
-	
-		// printf("mc not accepted!\n");
+	} else 
+	{
+		while (ctr < max_ctr)
+		{
+			for (i=0; i<param->d_num_micro; i++) microcanonic_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param);
+			overheatbath_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param,rng_state);
+
+			// normalize the lattice fields of the updated config
+			if (((live[dead_param->dead_label].conf).update_index) % param->d_num_norm == 0) normalize_replicas(&(live[dead_param->dead_label].conf),param); 
+			(live[dead_param->dead_label].conf).update_index++;
+
+			// check constraint -> L_old <? L_upd
+			upd_energy = energy_density(&(live[dead_param->dead_label].conf), geo, param);
+
+			if (upd_energy < dead_param->dead_energy)
+			{
+				// swap the new live to the updated one; update the dead_param
+				dead_param->new_energy = upd_energy;
+				live[dead_param->dead_label].live_energy = upd_energy;
+				// copyconf(conf, param, &(live[dead_param->dead_label].conf));
+				dead_param->mc_switch += 1;
+
+				break;
+			}
+
+			ctr += 1; 
+		}
+
+		// condition is only met if the while counter maxes out
+		if (ctr == max_ctr)
+		{
+			// if rejected, swap the updated dead_label conf back to the original one and replace by the new_label
+			dead_param->new_energy = live[dead_param->new_label].live_energy;
+			live[dead_param->dead_label].live_energy = live[dead_param->new_label].live_energy;
+			copyconf(&(live[dead_param->new_label].conf), param, &(live[dead_param->dead_label].conf));	
+
+			// printf("mc updated constraint not accepted!\n");
+		}
 	}
 
 	// dead_param->new_label = dead_param->dead_label;	// leave the idx unchanged!
