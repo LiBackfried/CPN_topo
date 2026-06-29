@@ -35,12 +35,12 @@ num_ns_meas 20000      # number of nested sampling updates
 save_dead 0             # switch to save dead configs themselves, 0=dont save, any other integer=save
 
 # file names
-conf_file                 res_2/conf.dat                # save conf for backup
-data_file                 res_2/dati.dat                # save non-topological observables
-topo_file                 res_2/topo.dat                # save topological observables
-log_file                  res_2/my_log.dat              # save simulations details
-rng_state_file            res_2/rng_state.dat           # save rng state
-swap_acc_file             res_2/swap_acc.dat            # save swap acceptances (parallel tempering only)
-swap_track_file           res_2/swap_track.dat          # keep track of swaps (parallel tempering only)
-topo_potential_file       res_2/topo_potential          # read topo potential (multicanonic only)
-multicanonic_acc_file     res_2/multicanonic_acc.dat    # save multicanonic acceptances (multicanonic only)
+conf_file                 /scratch/network/users/lb25v444/cpn_ns_N21/res_2/conf.dat                # save conf for backup
+data_file                 /scratch/network/users/lb25v444/cpn_ns_N21/res_2/dati.dat                # save non-topological observables
+topo_file                 /scratch/network/users/lb25v444/cpn_ns_N21/res_2/topo.dat                # save topological observables
+log_file                  /scratch/network/users/lb25v444/cpn_ns_N21/res_2/my_log.dat              # save simulations details
+rng_state_file            /scratch/network/users/lb25v444/cpn_ns_N21/res_2/rng_state.dat           # save rng state
+swap_acc_file             /scratch/network/users/lb25v444/cpn_ns_N21/res_2/swap_acc.dat            # save swap acceptances (parallel tempering only)
+swap_track_file           /scratch/network/users/lb25v444/cpn_ns_N21/res_2/swap_track.dat          # keep track of swaps (parallel tempering only)
+topo_potential_file       /scratch/network/users/lb25v444/cpn_ns_N21/res_2/topo_potential          # read topo potential (multicanonic only)
+multicanonic_acc_file     /scratch/network/users/lb25v444/cpn_ns_N21/res_2/multicanonic_acc.dat    # save multicanonic acceptances (multicanonic only)
