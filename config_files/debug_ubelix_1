@@ -31,8 +31,8 @@ num_single_site_stoc_upd 2500    # number of stochastic single sites updates
 
 # nested sampling parameters
 num_live_pts 500        # number of livepoints for the nested sampling
-num_ns_meas 20000      # number of nested sampling updates
-save_dead 0            # switch to save dead configs themselves, 0=dont save, any other integer=save
+num_ns_meas 20000        # number of nested sampling updates
+save_dead 0         # switch to save dead configs themselves, 0=dont save, any other integer=save
 
 # file names
 conf_file                 out_data/res_1/conf.dat                # save conf for backup

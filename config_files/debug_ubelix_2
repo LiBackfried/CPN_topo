@@ -15,7 +15,7 @@ start 1                 # initialize conf: 0=random cold, 1=random hot, 2=start 
 num_cool_step    50     # number of cooling steps 
 meas_cool_every  5      # perform measures every <meas_cool_every> cool steps
 
-rng_seed  6771           # rng seed    (42)
+rng_seed  6772           # rng seed    (42)
 rng_start 0             # initialize rng state: 0=std initialization, 1=read rng state from file
 
 # Hasenbusch parallel tempering parameters
@@ -31,16 +31,16 @@ num_single_site_stoc_upd 2500    # number of stochastic single sites updates
 
 # nested sampling parameters
 num_live_pts 500        # number of livepoints for the nested sampling
-num_ns_meas 20000      # number of nested sampling updates
-save_dead 0            # switch to save dead configs themselves, 0=dont save, any other integer=save
+num_ns_meas 20000        # number of nested sampling updates
+save_dead 0         # switch to save dead configs themselves, 0=dont save, any other integer=save
 
 # file names
-conf_file                 out_data/res_1/conf.dat                # save conf for backup
-data_file                 out_data/res_1/dati.dat                # save non-topological observables
-topo_file                 out_data/res_1/topo.dat                # save topological observables
-log_file                  out_data/res_1/my_log.dat              # save simulations details
-rng_state_file            out_data/res_1/rng_state.dat           # save rng state
-swap_acc_file             out_data/res_1/swap_acc.dat            # save swap acceptances (parallel tempering only)
-swap_track_file           out_data/res_1/swap_track.dat          # keep track of swaps (parallel tempering only)
-topo_potential_file       out_data/res_1/topo_potential          # read topo potential (multicanonic only)
-multicanonic_acc_file     out_data/res_1/multicanonic_acc.dat    # save multicanonic acceptances (multicanonic only)
+conf_file                 out_data/res_2/conf.dat                # save conf for backup
+data_file                 out_data/res_2/dati.dat                # save non-topological observables
+topo_file                 out_data/res_2/topo.dat                # save topological observables
+log_file                  out_data/res_2/my_log.dat              # save simulations details
+rng_state_file            out_data/res_2/rng_state.dat           # save rng state
+swap_acc_file             out_data/res_2/swap_acc.dat            # save swap acceptances (parallel tempering only)
+swap_track_file           out_data/res_2/swap_track.dat          # keep track of swaps (parallel tempering only)
+topo_potential_file       out_data/res_2/topo_potential          # read topo potential (multicanonic only)
+multicanonic_acc_file     out_data/res_2/multicanonic_acc.dat    # save multicanonic acceptances (multicanonic only)

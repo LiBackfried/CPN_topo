@@ -36,8 +36,8 @@ void nested_sampling_update(CPN_Live_Conf *live, CPN_Param const * const param, 
 							Geometry const * const geo, RNG_Param *rng_state)
 {
 	int i;
-	int ctr = 0;	// counter for repeats of constraint checks before recycling the original live point
-	int max_ctr = 100;
+	int ctr = 0;	// counter for repeats of constraint checks before recycling the original live point; try to have no upper limit!
+	// int max_ctr = 500;
 	double upd_energy;
 	for (i=0; i<param->d_num_micro; i++) microcanonic_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param);
 	overheatbath_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param,rng_state);
@@ -62,7 +62,7 @@ void nested_sampling_update(CPN_Live_Conf *live, CPN_Param const * const param, 
 		// printf("update accepted!\n");
 	} else 
 	{
-		while (ctr < max_ctr)
+		while (ctr == 0)		//(ctr < max_ctr)
 		{
 			for (i=0; i<param->d_num_micro; i++) microcanonic_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param);
 			overheatbath_sweep_lattice(&(live[dead_param->dead_label].conf),geo,param,rng_state);
@@ -85,11 +85,11 @@ void nested_sampling_update(CPN_Live_Conf *live, CPN_Param const * const param, 
 				break;
 			}
 
-			ctr += 1; 
+			// ctr += 1; 
 		}
 
-		// condition is only met if the while counter maxes out
-		if (ctr == max_ctr)
+		// condition is only met if the while counter maxes out => try without bound for now!
+		/*if (ctr == max_ctr)
 		{
 			// if rejected, swap the updated dead_label conf back to the original one and replace by the new_label
 			dead_param->new_energy = live[dead_param->new_label].live_energy;
@@ -98,6 +98,7 @@ void nested_sampling_update(CPN_Live_Conf *live, CPN_Param const * const param, 
 
 			// printf("mc updated constraint not accepted!\n");
 		}
+		*/
 	}
 
 	// dead_param->new_label = dead_param->dead_label;	// leave the idx unchanged!
