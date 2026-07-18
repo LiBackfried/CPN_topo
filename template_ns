@@ -32,7 +32,7 @@ num_single_site_stoc_upd 2500    # number of stochastic single sites updates
 # nested sampling parameters
 num_live_pts 500        # number of livepoints for the nested sampling
 num_ns_meas 1000        # number of nested sampling updates
-# save_dead 0         # switch to save dead configs themselves, 0=dont save, any other integer=save
+save_dead 0         # switch to save dead configs themselves, 0=dont save, any other integer=save
 
 # file names
 conf_file                 out_data_2/conf.dat                # save conf for backup
@@ -44,3 +44,4 @@ swap_acc_file             out_data_2/swap_acc.dat            # save swap accepta
 swap_track_file           out_data_2/swap_track.dat          # keep track of swaps (parallel tempering only)
 topo_potential_file       out_data_2/topo_potential          # read topo potential (multicanonic only)
 multicanonic_acc_file     out_data_2/multicanonic_acc.dat    # save multicanonic acceptances (multicanonic only)
+live_energy_file          out_data_2/live_energy.dat         # save live energies of confs (nested sampling only)

@@ -288,7 +288,6 @@ void read_input(char const * const input_file_name, CPN_Param *param)
 				}
 				strcpy(param->d_rng_file, temp_str);
 			}
-			// nested sampling params:
 			else if(strncmp(str, "num_live_pts", 12)==0)
 			{
 				err=fscanf(input_fp, "%d", &temp_i);
@@ -318,6 +317,16 @@ void read_input(char const * const input_file_name, CPN_Param *param)
 					exit(EXIT_FAILURE);
 				}
 				param->d_save_dead=temp_i;
+			}
+			else if(strncmp(str, "live_energy_file", 16)==0)
+			{ 
+				err=fscanf(input_fp, "%s", temp_str);
+				if(err!=1)
+				{
+					fprintf(stderr, "Error in reading the file %s (%s, %d)\n", input_file_name, __FILE__, __LINE__);
+					exit(EXIT_FAILURE);
+				}
+				strcpy(param->d_live_energ_file, temp_str);
 			}
 			else if(strncmp(str, "defect_size", 11)==0)
 			{

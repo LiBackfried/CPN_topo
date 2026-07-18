@@ -19,6 +19,8 @@ srun --export=ALL /bin/bash -c '
 idx=$((SLURM_PROCID+4))
 outdir="./out_data/res_${idx}"
 mkdir -p "$outdir"
+outdir="/scratch/network/users/lb25v444/out_data/res_${idx}"
+mkdir -p "$outdir"
 
 ./cpn_ns config_files/N21_L72_${SLURM_PROCID}
 '

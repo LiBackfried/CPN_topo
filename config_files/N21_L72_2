@@ -35,9 +35,10 @@ num_ns_meas 20000        # number of nested sampling updates
 save_dead 0         # switch to save dead configs themselves, 0=dont save, any other integer=save
 
 # file names
-conf_file                 out_data/res_6/conf.dat                # save conf for backup
+conf_file                 /scratch/network/users/lb25v444/out_data/res_6/conf.dat                # save conf for backup
 data_file                 out_data/res_6/dati.dat                # save non-topological observables
 topo_file                 out_data/res_6/topo.dat                # save topological observables
+live_energy_file          out_data/res_6/live_energy.dat         # save live energies of confs (nested sampling only)
 log_file                  out_data/res_6/my_log.dat              # save simulations details
 rng_state_file            out_data/res_6/rng_state.dat           # save rng state
 swap_acc_file             out_data/res_6/swap_acc.dat            # save swap acceptances (parallel tempering only)

@@ -15,6 +15,7 @@ Makefile.in
 missing
 stamp-h1
 *.out
+.vscode
 
 autom4te.cache
 

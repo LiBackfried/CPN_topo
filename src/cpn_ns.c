@@ -1,3 +1,11 @@
+/**
+ * file: cpn_ns.c (new version)
+ * description: lattice simulations of 2d CP^{N-1} models topology via nested sampling
+ * author: Liane Backfried, Claudio Bonanno
+ *         based on the CPN topo package by Claudio Bonanno
+ * date: 16.07.2026
+*/
+
 #ifndef CPN_NS_C
 #define CPN_NS_C
 
@@ -16,167 +24,119 @@
 
 void real_main(char *input_file_name) 
 {
-	// TODO: should the structure conf member be a pointer??? no i didnt use that in the end
-	CPN_Live_Conf *livepts;	// store CPN_Conf as well as the energies and labels of the live points
-	CPN_Conf aux_conf;		// have one for the MC updates of a livepoint
-	CPN_Param param;			// contains all the simulation parameters; still adapt!!
-	Ns_Param dead_param;			
+	// can we modify the CPN_Live_Conf in such a way, that it contains the path or so? => save and load the configs s.t. we can have a lot of consecutive live points
+	// vars
+	CPN_Conf *conf;
+	CPN_Conf aux_conf;			// have one for the measurements
+	CPN_Param param;			// contains all the simulation parameters; adapt potentially to be tailored to the nested sampling setup	
+	NS_Param *live_param;	
+	NS_Param dead_param;	
 	Geometry geo;
 	RNG_Param rng_state;
-	double dead_energy=0.0;		// store the current lowest bound
 	time_t start_date, finish_date, i_start_date, i_finish_date;
 	clock_t start_time, finish_time, i_start_time, i_finish_time;
-	// TODO: adapt the below FILE instances
-	FILE *datafilep, *topofilep;   //, *swaptrackfilep get also rid of the swaptrackfile? or use smth similar to record the energies
-	int i, dead_label=0;
+	FILE *datafilep, *topofilep;
+	int i, new_label;
 
-	// TODO: fix this: I think it is fixed? But if I want to include more sophisticated read-ins/storage of live and dead points then it has to be adapted!
-	// read input file -> TODO: requires a new input file but in principle i think i understand whats going on here
+	// reuse the previous input_file template but add the nested sampling parameters
 	read_input(input_file_name, &param);
-	// printf("%d\n", param.d_N_live_pt);
-
-	// initialization of rng state
+	
+	// initialization of rng state; if continued run, d_rng_start == 1, else == 0
 	init_rng_state(&rng_state, &param);
 
-	// open data file => TODO change later WHAT is printed into the data file!
+	// open data file
+	// TODO: change later WHAT is printed into the data file! (potentially)
 	init_data_file(&datafilep, &param);
 
-	// open topo data file	=> TODO: do i still want this? maybe smth different instead? or to save the data from the dead configs?
+	// open topo data file
 	init_topo_file(&topofilep, &param);
 
-	// open swap tracking file => replace by some file that saves the measurements on the dead configs s.t. we dont have to save them?
-	// init_swap_track_file(&swaptrackfilep, &param);
+	// TODO: potentially another file that records further nested sampling stats?
+	//
 
 	// initialize geometry
 	init_geometry(&geo, &param);
-
-	// TODO!!!! a) conf or *conf in livepts? also: initialize ALL members, also the conf members!!!
-	// initialize nest of live points
-	init_CPN_lives(&livepts, &param, &rng_state);	// could get a new function init_CPN_livepts(...) where the boundary conditions are those of a single replica across all replicas
-
-	// TODO: what exactly do i need?
-	// initialize aux conf (will be used for cooling and for periodic conf translations) => we could use this just as the one dead_point that measurements are performed on; need two aux then?
+	
+	// initialize aux conf (will be used for cooling and for periodic conf translations)
 	allocate_CPN_conf(&aux_conf, &param);
 
-	// to use the aux for the initial MC chain, we need to also initialize it!!! e.g., use the first of the randomly initialized livepts
-	// copyconf(&(livepts[0].conf), &param, &aux_conf); 
-	// overheatbath_sweep_lattice(&(livepts[0].conf),&geo,&param,&rng_state);
+	// initialize list of live point energies
+	init_CPN_live_energies(&live_param, &param, &dead_param);
 
-	// printf("%d\n", 	param.d_measevery);
-	// if heatbath nested sampling, overwrite the lives to initialize them according to the heatbath prior distribution
-	// rewrite to be independent of the aux conf...!
+	// initialize ensemble of live points, fill live energies and dead param => single output conf contains current dead
+	// if heatbath nested sampling, initialize the live points according to the heatbath prior distribution
 	time(&i_start_date);
 	i_start_time=clock();
-	// init_CPN_lives_heatbath(livepts, &param, &geo, &aux_conf, &rng_state);
-	init_CPN_lives_heatbath(livepts, &param, &geo, &rng_state);
-	// init_CPN_lives_heatbath(&param, &geo, &aux_conf, &rng_state);
+	init_single_CPN_live(&conf, &live_param, &dead_param, &param, &geo, &rng_state);
 	time(&i_finish_date);
 	i_finish_time=clock();
 	fprintf(stdout, "#Heatbath init. time: %.10lf s\n", ((double)(i_finish_time-i_start_time))/CLOCKS_PER_SEC );
+	// printf("managed so far\n");
 
+	/****
+	   after init_single_CPN_live, conf[0] contains the current dead conf, 
+	   dead_param the associated energy density, E = S_{Symanzik}(theta=0) / (2 V N beta), 
+	   and the label 
+	****/
 
+	// do some measurements before starting the nested sampling routine
+	perform_measures_localobs(&(conf[0]), &geo, &param, datafilep, topofilep, &aux_conf);
+	if (param.d_save_dead != 0) write_dead_conf(&(conf[0]), &param, 0);
+	write_live_energy_on_file(live_param, &param);
+
+	/*-----------------------------------------------------------------------------*/
 	/*************************** nested sampling routine ***************************/
-	// initialize the energy densities E = S_{Symanzik}(theta=0) / (2 V N beta)
-	//double energy_density(CPN_Conf const * const conf, Geometry const * const geo, CPN_Param const * const param) 
+	/*-----------------------------------------------------------------------------*/
 
-	// loop through live points, assign them energies, find smallest
-	for(i=0;i<param.d_N_live_pt;i++){
-		livepts[i].live_energy = energy_density(&(livepts[i].conf), &geo, &param);	// works; for cold start, is just 0.00!
-		// printf("%f\n", livepts[i].live_energy);
-		if (i == 0) 
-		{
-			dead_energy = livepts[i].live_energy;
-			dead_label = 0;
-			// printf("%f\n", livepts[i].live_energy);
-			// printf("%d\n", dead_label);
-		} else if (livepts[i].live_energy > dead_energy) {
-			dead_energy = livepts[i].live_energy;
-			dead_label = i;
-		}
-	}
-
-	// assign initial vals to Ns_Param
-	dead_param.dead_label = dead_label;
-	// for testing, add a shitton of energy:
-	dead_param.dead_energy = dead_energy + 100.0;
-	dead_param.mc_switch = 0;
-	// printf("%d\n", 	dead_param.dead_label);
-
-	// DO SOME MEASUREMENTS HERE!
-	perform_measures_localobs(&(livepts[dead_param.dead_label].conf), &geo, &param, datafilep, topofilep, &aux_conf);
-	if (param.d_save_dead != 0) write_dead_conf(&(livepts[dead_param.dead_label].conf), &param, 0);
-
-	// actually this throws an error since it might be used uninitialized...
-	//printf("\nMinimum energy %f of configuration %d\n",dead_energy,dead_label);	// print dead_label (and dead_energy) otherwise it might throw an unassigned error
-	// printf("%d\n",param.d_N_live_pt);
-	// printf("%d\n",rand_int(&rng_state, 0, param.d_N_live_pt));
-
- 	// Nested sampling loop begins
 	time(&start_date);
 	start_time=clock();
-	for (i=0; i<param.d_N_meas_ns; i++)
+	for (i=1; i<param.d_N_meas_ns; i++)
 	{
 		// TODO: should i just move everything into a function?
-		// 1) get new proposal conf for replacing the dead and copy into aux_conf
-		dead_param.new_label = rand_int(&rng_state, 0, param.d_N_live_pt);
-		while (dead_param.new_label == dead_param.dead_label) {
-			dead_param.new_label = rand_int(&rng_state, 0, param.d_N_live_pt);
-			// printf("%d\n",dead_param.new_label);
-		}
-		// printf("%d\n",dead_param.new_label);
-		dead_param.new_energy = livepts[dead_param.new_label].live_energy;
-		copyconf(&(livepts[dead_param.new_label].conf), &param, &aux_conf);
-		// dead_energy = energy_density(&aux_conf, &geo, &param);
+		/* 1) get new proposal conf for replacing the dead; load into conf */
+		new_label = rand_int(&rng_state, 0, param.d_N_live_pt);
+		while (new_label == dead_param.conf_label) new_label = rand_int(&rng_state, 0, param.d_N_live_pt);
+		load_live_proposal(&(conf[0]), &param, new_label);
+
 		
-		/* perhaps just use the livept conf as update and if not copy back... no problems with a possible segfault...  */
-
-		// 2) 	update the proposed conf according to overrel + heatbath MC steps => then check if the nested sampling constraint holds
-		//		if the constraint is not fulfilled - do we introd a param for repeats on the MC updates? and after that we just use the og prop. config?
-		// in analogy to update_with_defect:
-		// update_with_defect(&aux_conf, &geo, &param, &rng_state);	// actually there is no defect! d_N_replica_pt == 1
-		//  nested_sampling_update(&aux_conf , livepts, &param, &dead_param, &geo,&rng_state);
-		// maybe add some counter that counts the succesful updates as we progress?
-		/*********************************** continue in the above function tomorrow! ***********************************/
-		// overheatbath_sweep_lattice(&aux_conf,&geo,&param,&rng_state);
-		copyconf(&(livepts[dead_param.new_label].conf), &param, &(livepts[dead_param.dead_label].conf));
-		nested_sampling_update(livepts, &param, &dead_param, &geo, &rng_state);
-
-		/* seg fault when using the aux_conf, not when using the livepts though! */
-		/* is it perhaps since we're indexing the conf? */
-		// update_with_defect(&(livepts[dead_param.new_label].conf), &geo, &param, &rng_state);
-		// update_with_defect(&(livepts[dead_param.dead_label].conf), &geo, &param, &rng_state);
-		// update_with_defect(&aux_conf, &geo, &param, &rng_state);
-
-		// => update with the live point config, in the worst case copy back the aux_conf
-		// if (i==1) copyconf(&aux_conf, &param, &(livepts[dead_param.new_label].conf));
+		/* 2) 	update the proposed conf according to overrel + heatbath MC steps => then check if the nested sampling constraint holds 
+	    		if the constraint is not fulfilled the updates are looped
+		*/
+		nested_sampling_update(conf, &param, live_param, &dead_param, &geo, &rng_state);
+		// what we have at this point: conf has the replacement live for the dead; and live_param[dead] = new energy
 		
-		// 3) identify smallest likelihood/largest E, measure, repeat => shouldnt we be doing this the other way around 
-		// 		more conveniently?
-		identify_dead_conf(livepts, &param, &dead_param);
+		// save new live in place of old dead
+		write_live_conf(&(conf[0]), &param, &dead_param);
 		
+		// identify new dead, overwrite dead_param, load dead config for measurements
+		identify_dead_conf(&live_param, &param, &dead_param);
+		// printf("New dead E: %.10lf \n",dead_param.conf_energy);
+		load_live_proposal(&(conf[0]), &param, dead_param.conf_label);
+		
+		// potentially save dead conf
+		if (param.d_save_dead != 0) write_dead_conf(&(conf[0]), &param, i);
 
-		// SAVE THE DEAD CONF/DEAD MEAS HERE!
-		// but only the dead conf, not the entire structure... maybe add at some point param. to turn on/off
+
+		/* 3) measurements on dead conf */
+		perform_measures_localobs(&(conf[0]), &geo, &param, datafilep, topofilep, &aux_conf);		
 
 
-		// potential stopping criterion?
-		// 
+		/* 4) potential stopping criterion? */
 
-		// do we want to put the measurements together into a final obs here? I would rather not, lets do that in python?
-		perform_measures_localobs(&(livepts[dead_param.dead_label].conf), &geo, &param, datafilep, topofilep, &aux_conf);
-		// TODO: add switch to save the dead configs as well!
-		if (param.d_save_dead != 0) write_dead_conf(&(livepts[dead_param.dead_label].conf), &param, i+1);
+
+		/* 5) config files */
+		write_live_energy_on_file(live_param, &param);
 		write_rng_state(&rng_state, &param);
-
-		// printf("dead %d:\t energy %f\n", dead_param.dead_label, energy_density(&(livepts[dead_param.dead_label].conf), &geo, &param));
-		// printf("prop %d:\t energy %f\n", dead_param.new_label, energy_density(&(livepts[dead_param.new_label].conf), &geo, &param));
+		
 	}
-	
-	// Monte Carlo ends
 	time(&finish_date);
 	finish_time=clock();
 	fprintf(stdout, "#Simulation time: %.10lf s\n", ((double)(finish_time-start_time))/CLOCKS_PER_SEC );
 
+
+	/*-----------------------------------------------------------------------------*/
+	/********************************** clean up  **********************************/
+	/*-----------------------------------------------------------------------------*/
 	// write simulations details on file
 	print_simulation_details_nest_samp_cpn(input_file_name, &param, &start_date, &finish_date, start_time, finish_time, &i_start_date, &i_finish_date, i_start_time, i_finish_time);
 
@@ -186,8 +146,14 @@ void real_main(char *input_file_name)
 	// close topo file
 	fclose(topofilep);
 
-	// free CPN replicas confs
-	free_CPN_live_pts(livepts, &param);
+	// close live energy file
+	// fclose(livenergfilep);	
+
+	// free the energy vector!
+	free_CPN_live_energies(live_param);
+
+	// free CPN conf (put d_N_replica=1)
+	free_CPN_replicas(conf, &param);
 
 	// free CPN aux conf
 	free_CPN_conf(&aux_conf, &param);
@@ -195,8 +161,8 @@ void real_main(char *input_file_name)
 	// free geometry
 	free_geometry(&geo, &param);
 
-	// // free rectangle params
-	free_param(&param);
+	// free params
+	free_param(&param); 
 }
 
 int main (int argc, char **argv)

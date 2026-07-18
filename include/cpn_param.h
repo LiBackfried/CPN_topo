@@ -32,7 +32,7 @@ typedef struct CPN_Param {
 					
 	// nested sampling parameters
 	int d_N_live_pt;		// number of live points used in nested sampling
-	int d_N_meas_ns;		// number of measurements to do per nest
+	int d_N_meas_ns;		// number of measurements to do per run per nest
 	int d_save_dead;		// switch to save dead configs, 0=dont save
 
 	// simulation parameters
@@ -69,6 +69,7 @@ typedef struct CPN_Param {
 	char d_swap_accept_file[STD_STRING_LENGTH];			// swap acceptances file
 	char d_swap_tracking_file[STD_STRING_LENGTH];		// swap history file
 	char d_multicanonic_acc_file[STD_STRING_LENGTH];	// multicanonical acceptances file	
+	char d_live_energ_file[STD_STRING_LENGTH];          // live energies of nested sampling walkers
 	
 	// derived constants
 	long d_volume;	// total lattice volume
@@ -77,15 +78,21 @@ typedef struct CPN_Param {
 } CPN_Param;
 
 // stores the smallest energies and the corresponding labels
-typedef struct Ns_Param {
-	int dead_label;
-	int new_label;
-	int mc_switch;
+// typedef struct Ns_Param {
+// 	int dead_label;
+// 	int new_label;
+// 	int mc_switch;
 
-	double dead_energy;
-	double new_energy;
+// 	double dead_energy;
+// 	double new_energy;
+// }
+// Ns_Param;
+
+typedef struct NS_Param {
+	int conf_label;
+	double conf_energy;
 }
-Ns_Param;
+NS_Param;
 
 // in lib/cpn_param.c
 void remove_white_lines_and_comments(FILE *);
@@ -94,6 +101,7 @@ void init_derived_constants(CPN_Param *);
 void free_param(CPN_Param *);
 void init_data_file(FILE **, CPN_Param const * const);
 void init_topo_file(FILE **, CPN_Param const * const);
+void init_live_energy_file(FILE **, CPN_Param const * const);
 void print_simulation_details_cpn(char const * const, CPN_Param const * const, time_t const * const, time_t const * const, clock_t const, clock_t const);
 void print_simulation_details_multicanonic_cpn(char const * const, CPN_Param const * const, time_t const * const, time_t const * const, clock_t const, clock_t const);
 void print_simulation_details_nest_samp_cpn(char const * const, CPN_Param const * const, time_t const * const, time_t const * const, clock_t const, clock_t const, time_t const * const, time_t const * const, clock_t const, clock_t const);
