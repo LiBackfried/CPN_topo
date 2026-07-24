@@ -1,0 +1,49 @@
+# continued run: rng_start 0, start 1
+# theory parameters
+size   72 72    # L_t L_x
+beta   0.6      # bare inverse coupling
+theta  0.0      # bare imaginary theta
+
+# simulation details
+num_MC_step      40
+meas_every       8
+num_micro        4
+num_norm         1
+save_conf_every  1
+
+start 2
+
+num_cool_step    50
+meas_cool_every  5
+
+rng_seed  1100
+rng_start 1
+
+# Hasenbusch parallel tempering parameters
+num_replica  1
+defect_size  0
+hierarc_upd  0
+
+# multicanonic parameters
+grid_step 1
+grid_max 100
+# num_smooth_step 0
+num_single_site_stoc_upd 2500
+
+# nested sampling parameters
+num_live_pts 10
+num_ns_meas 2000
+save_dead 0
+
+# file names
+conf_file                 /scratch/network/users/lb25v444/out_data/quick_run_5/conf
+data_file                 out_data/quick_run_5/dati.dat
+topo_file                 out_data/quick_run_5/topo.dat
+live_energy_file          out_data/quick_run_5/live_energy.dat
+log_file                  out_data/quick_run_5/my_log.dat
+rng_state_file            out_data/quick_run_5/rng_state.dat
+swap_acc_file             out_data/quick_run_5/swap_acc.dat
+swap_track_file           out_data/quick_run_5/swap_track.dat
+topo_potential_file       out_data/quick_run_5/topo_potential
+multicanonic_acc_file     out_data/quick_run_5/multicanonic_acc.dat
+    
