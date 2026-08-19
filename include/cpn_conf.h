@@ -93,6 +93,7 @@ void parallel_tempering_with_hierarchic_update(CPN_Conf *, Rectangle const * con
                                                CPN_Param const * const, Geometry const * const, CPN_Conf *, RNG_Param *);
 // void nested_sampling_update(CPN_Live_Conf *, CPN_Param const * const, Ns_Param *, Geometry const * const, RNG_Param *);
 void nested_sampling_update(CPN_Conf *, CPN_Param const * const, NS_Param *, NS_Param *, Geometry const * const, RNG_Param *);
+double nested_sampling_updat_w_accrate(CPN_Conf *, CPN_Param const * const, NS_Param *, NS_Param *, Geometry const * const, RNG_Param *);
 // void identify_dead_conf(CPN_Live_Conf *, CPN_Param const * const, Ns_Param *);
 void identify_dead_conf(NS_Param **, CPN_Param const * const, NS_Param *);
 void hierarchic_update_rectangle(CPN_Conf *, Geometry const * const, CPN_Param const * const, int const, int const,

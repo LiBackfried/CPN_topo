@@ -1,0 +1,4 @@
+if a problem with the configure arises, do 
+autoreconf -fi
+
+and if that throws an error: touch AUTHORS ChangeLog NEWS (if those are the missing files)

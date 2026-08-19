@@ -36,7 +36,9 @@ void real_main(char *input_file_name)
 	time_t start_date, finish_date, i_start_date, i_finish_date;
 	clock_t start_time, finish_time, i_start_time, i_finish_time;
 	FILE *datafilep, *topofilep;
+	FILE *acc_file;	// for the constraint acc.rate
 	int i, new_label;
+	double acc_rate, dead_E;
 
 	// reuse the previous input_file template but add the nested sampling parameters
 	read_input(input_file_name, &param);
@@ -92,22 +94,35 @@ void real_main(char *input_file_name)
 	start_time=clock();
 	for (i=1; i<param.d_N_meas_ns; i++)
 	{
-		// TODO: should i just move everything into a function?
+		/* 0) copy the current dead energy for the acceptance rate measurement */
+		dead_E = live_param[dead_param.conf_label].conf_energy;
+
+
 		/* 1) get new proposal conf for replacing the dead; load into conf */
 		new_label = rand_int(&rng_state, 0, param.d_N_live_pt);
 		while (new_label == dead_param.conf_label) new_label = rand_int(&rng_state, 0, param.d_N_live_pt);
 		load_live_proposal(&(conf[0]), &param, new_label);
 
-		
+		// overwrite the energy of the dead config in live_param
+		live_param[dead_param.conf_label].conf_energy = dead_param.conf_energy;
+		write_live_conf(&(conf[0]), &param, &dead_param);
+
+
 		/* 2) 	update the proposed conf according to overrel + heatbath MC steps => then check if the nested sampling constraint holds 
 	    		if the constraint is not fulfilled the updates are looped
 		*/
-		nested_sampling_update(conf, &param, live_param, &dead_param, &geo, &rng_state);
+		// nested_sampling_update(conf, &param, live_param, &dead_param, &geo, &rng_state);
 		// what we have at this point: conf has the replacement live for the dead; and live_param[dead] = new energy
 		
 		// save new live in place of old dead
-		write_live_conf(&(conf[0]), &param, &dead_param);
+		// write_live_conf(&(conf[0]), &param, &dead_param);
 		
+		// combine the acceptance rate measurements and writing of the live
+		acc_rate = nested_sampling_updat_w_accrate(conf, &param, live_param, &dead_param, &geo, &rng_state);
+ 		acc_file = fopen("acceptance_rate.dat", "a");
+		fprintf(acc_file, "%d %.8f %.8f\n", i, acc_rate, dead_E);
+		fclose(acc_file);
+
 		// identify new dead, overwrite dead_param, load dead config for measurements
 		identify_dead_conf(&live_param, &param, &dead_param);
 		// printf("New dead E: %.10lf \n",dead_param.conf_energy);

@@ -129,6 +129,43 @@ void nested_sampling_update(CPN_Conf *conf, CPN_Param const * const param,
 
 }
 
+double nested_sampling_updat_w_accrate(CPN_Conf *conf, CPN_Param const * const param, 
+									   NS_Param *live_param, NS_Param *dead_param,
+									   Geometry const * const geo, RNG_Param *rng_state)
+{
+	int i, n_sweeps=1000;
+	double acc_rate=0.0;
+	double upd_energy=dead_param->conf_energy;
+	double dead_energy=dead_param->conf_energy;
+	int update_conf=1;
+
+	for (i=0;i<n_sweeps;i++) {
+		for (i=0; i<param->d_num_micro; i++) microcanonic_sweep_lattice(&(conf[0]),geo,param);
+		overheatbath_sweep_lattice(&(conf[0]),geo,param,rng_state);
+
+		// normalize the lattice fields of the updated config
+		if ((conf[0]).update_index % param->d_num_norm == 0) normalize_replicas(&(conf[0]),param); 
+		(conf[0]).update_index++;
+
+		// check constraint -> L_old <? L_upd
+		upd_energy = energy_density(&(conf[0]), geo, param);
+
+
+		if ((upd_energy < dead_energy) && update_conf) {
+
+			live_param[dead_param->conf_label].conf_energy = upd_energy;
+			write_live_conf(&(conf[0]), param, dead_param);
+
+			update_conf = 0;
+		}
+		if (upd_energy < dead_energy) acc_rate += 1.0;
+
+	}
+
+	return acc_rate / (double)n_sweeps;
+}
+
+
 
 // identify the smallest likelihood/largest E
 // void identify_dead_conf(CPN_Live_Conf *live, CPN_Param const * const param, Ns_Param *dead_param)
