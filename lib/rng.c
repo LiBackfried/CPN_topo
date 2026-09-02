@@ -12,6 +12,7 @@ double rng_theta_U(RNG_Param *rng_state, double const a)
 	double theta_test;
 	if(a==0)
 	{
+		rng_state->hb_u_angle_candidates++;
 		theta_test = pi * rand_num(rng_state); // theta random uniform in (0,pi)
 	}
 	else
@@ -23,6 +24,7 @@ double rng_theta_U(RNG_Param *rng_state, double const a)
 		k0=atan(pi*c); 
 		do // P_true(theta) = Z exp( a cos(theta) ) is sampled using Von Neumann algorithm
 		{ 
+			rng_state->hb_u_angle_candidates++;
 			x_test = rand_num(rng_state); // uniform random in (0,1)
 			// theta_test extracted as a Lorentz distribution P_Lorentz(theta_test) = (c/k0) 1/(1+(c*theta_test)^2) with theta in (0,pi)
 			theta_test = tan(k0*x_test)/c;
@@ -32,6 +34,7 @@ double rng_theta_U(RNG_Param *rng_state, double const a)
 		} 
 		while (y > test); // Von-Neumann test
 	}
+	rng_state->hb_u_angle_samples++;
 	return theta_test;
 }
 
@@ -56,6 +59,7 @@ double rng_theta_z(RNG_Param *rng_state, double const a)
 
 	do // P_true(theta) = Z exp( a cos(theta) ) sin^(2N-2)(theta) is sampled using Von Neumann algorithm
 	{
+		rng_state->hb_z_angle_candidates++;
 		x_test = rand_num(rng_state); // uniform random in (0,1)
 		theta_test = theta_max + tan( x_test*k1 + (x_test-1.0)*k2 )/c; // theta_test extracted as a Lorentz distribution centered around theta_max 
 		b0 = sin(theta_test)/sin_theta_max;
@@ -64,6 +68,7 @@ double rng_theta_z(RNG_Param *rng_state, double const a)
 		y = rand_num(rng_state);
 	}
 	while (y>test); // Von-Neumann test
+	rng_state->hb_z_angle_samples++;
   
   return theta_test;
 }
@@ -87,6 +92,15 @@ int rand_int(RNG_Param *rng_state, int start_pt, int end_pt)
 void init_rng_state(RNG_Param *rng_state, CPN_Param const * const param)
 {
 	init_ran2_rng_state(rng_state, param);
+	reset_heatbath_angle_stats(rng_state);
+}
+
+void reset_heatbath_angle_stats(RNG_Param *rng_state)
+{
+	rng_state->hb_u_angle_candidates=0;
+	rng_state->hb_u_angle_samples=0;
+	rng_state->hb_z_angle_candidates=0;
+	rng_state->hb_z_angle_samples=0;
 }
 
 // print rng state

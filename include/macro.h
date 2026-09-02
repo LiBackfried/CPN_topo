@@ -21,7 +21,7 @@ static const double c2=(-1.0/12.0);
 #define DOUBLE_ALIGN 32
 
 // max length of unknown string
-#define STD_STRING_LENGTH 80
+#define STD_STRING_LENGTH 256
 
 // to activate posix_memalign in stdlib.h
 #define _POSIX_C_SOURCE 200809L

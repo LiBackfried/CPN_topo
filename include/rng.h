@@ -29,6 +29,12 @@ typedef struct RNG_Param {
 	long iy;
 	long iv[NTAB];
 
+	/* Von Neumann candidates and accepted angle samples since the last reset. */
+	long hb_u_angle_candidates;
+	long hb_u_angle_samples;
+	long hb_z_angle_candidates;
+	long hb_z_angle_samples;
+
 } RNG_Param;
 
 // in lib/rng.c
@@ -53,5 +59,6 @@ int rand_int(RNG_Param *, int, int);	// integer RNG in [a,b)
 // use these functions to read, write and initialize rng state
 void init_rng_state(RNG_Param *, CPN_Param const * const);
 void write_rng_state(RNG_Param const * const, CPN_Param const * const);
+void reset_heatbath_angle_stats(RNG_Param *);
 
 #endif

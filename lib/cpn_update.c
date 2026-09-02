@@ -131,16 +131,20 @@ void nested_sampling_update(CPN_Conf *conf, CPN_Param const * const param,
 
 double nested_sampling_updat_w_accrate(CPN_Conf *conf, CPN_Param const * const param, 
 									   NS_Param *live_param, NS_Param *dead_param,
-									   Geometry const * const geo, RNG_Param *rng_state)
+										   Geometry const * const geo, RNG_Param *rng_state,
+										   double *u_candidates_per_angle, double *z_candidates_per_angle)
 {
-	int i, n_sweeps=1000;
+	int i, j, n_sweeps=100;
 	double acc_rate=0.0;
 	double upd_energy=dead_param->conf_energy;
 	double dead_energy=dead_param->conf_energy;
 	int update_conf=1;
 
+	/* Measure only the heatbath work performed for this live-point proposal. */
+	reset_heatbath_angle_stats(rng_state);
+
 	for (i=0;i<n_sweeps;i++) {
-		for (i=0; i<param->d_num_micro; i++) microcanonic_sweep_lattice(&(conf[0]),geo,param);
+		for (j=0; j<param->d_num_micro; j++) microcanonic_sweep_lattice(&(conf[0]),geo,param);
 		overheatbath_sweep_lattice(&(conf[0]),geo,param,rng_state);
 
 		// normalize the lattice fields of the updated config
@@ -151,6 +155,7 @@ double nested_sampling_updat_w_accrate(CPN_Conf *conf, CPN_Param const * const p
 		upd_energy = energy_density(&(conf[0]), geo, param);
 
 
+		// if constraint is fulfilled and there has not yet been an update: overwrite dead conf and E in liveparam
 		if ((upd_energy < dead_energy) && update_conf) {
 
 			live_param[dead_param->conf_label].conf_energy = upd_energy;
@@ -161,6 +166,13 @@ double nested_sampling_updat_w_accrate(CPN_Conf *conf, CPN_Param const * const p
 		if (upd_energy < dead_energy) acc_rate += 1.0;
 
 	}
+
+	// if not update_conf: then live_param contains the original proposals energy and the corresponding conf is saved in the correct slot! 
+
+	*u_candidates_per_angle = (double) rng_state->hb_u_angle_candidates /
+							  (double) rng_state->hb_u_angle_samples;
+	*z_candidates_per_angle = (double) rng_state->hb_z_angle_candidates /
+							  (double) rng_state->hb_z_angle_samples;
 
 	return acc_rate / (double)n_sweeps;
 }

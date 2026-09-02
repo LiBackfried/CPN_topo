@@ -38,10 +38,20 @@ void real_main(char *input_file_name)
 	FILE *datafilep, *topofilep;
 	FILE *acc_file;	// for the constraint acc.rate
 	int i, new_label;
-	double acc_rate, dead_E;
+	double acc_rate, proposal_energy, u_candidates_per_angle, z_candidates_per_angle;
 
 	// reuse the previous input_file template but add the nested sampling parameters
 	read_input(input_file_name, &param);
+	if (param.d_N_live_pt < 2)
+	{
+		fprintf(stderr, "Nested sampling requires at least two live points.\n");
+		exit(EXIT_FAILURE);
+	}
+	if (param.d_num_norm <= 0)
+	{
+		fprintf(stderr, "num_norm must be positive.\n");
+		exit(EXIT_FAILURE);
+	}
 	
 	// initialization of rng state; if continued run, d_rng_start == 1, else == 0
 	init_rng_state(&rng_state, &param);
@@ -95,16 +105,17 @@ void real_main(char *input_file_name)
 	for (i=1; i<param.d_N_meas_ns; i++)
 	{
 		/* 0) copy the current dead energy for the acceptance rate measurement */
-		dead_E = live_param[dead_param.conf_label].conf_energy;
+		// dead_E = live_param[dead_param.conf_label].conf_energy;
 
 
 		/* 1) get new proposal conf for replacing the dead; load into conf */
 		new_label = rand_int(&rng_state, 0, param.d_N_live_pt);
 		while (new_label == dead_param.conf_label) new_label = rand_int(&rng_state, 0, param.d_N_live_pt);
 		load_live_proposal(&(conf[0]), &param, new_label);
+		proposal_energy = live_param[new_label].conf_energy;
 
-		// overwrite the energy of the dead config in live_param
-		live_param[dead_param.conf_label].conf_energy = dead_param.conf_energy;
+		// also update the energy of the former dead config with that of the proposed new config and save proposal into dead slot
+		live_param[dead_param.conf_label].conf_energy = live_param[new_label].conf_energy;
 		write_live_conf(&(conf[0]), &param, &dead_param);
 
 
@@ -117,10 +128,20 @@ void real_main(char *input_file_name)
 		// save new live in place of old dead
 		// write_live_conf(&(conf[0]), &param, &dead_param);
 		
-		// combine the acceptance rate measurements and writing of the live
-		acc_rate = nested_sampling_updat_w_accrate(conf, &param, live_param, &dead_param, &geo, &rng_state);
- 		acc_file = fopen("acceptance_rate.dat", "a");
-		fprintf(acc_file, "%d %.8f %.8f\n", i, acc_rate, dead_E);
+		// combine the acceptance rate measurements and writing of the live TODO: move below the dead param? or we want to explicitly see the energy of the proposal! such that we can gauge where in the distribution we are...!
+		acc_rate = nested_sampling_updat_w_accrate(conf, &param, live_param, &dead_param, &geo, &rng_state,
+														 &u_candidates_per_angle, &z_candidates_per_angle);
+ 		// we might actually be more interested in the proposal's original energy? no but the dead energy should also be good, since this is the benchmark!
+		acc_file = fopen("acceptance_rate.dat", "a");
+		if (acc_file == NULL)
+		{
+			perror("Error opening acceptance_rate.dat");
+			exit(EXIT_FAILURE);
+		}
+		/* Columns: NS iteration, constraint acceptance, proposal energy, and mean
+		   Von Neumann candidates needed per accepted U and z angle respectively. */
+		fprintf(acc_file, "%d %.8f %.8f %.8f %.8f\n", i, acc_rate, proposal_energy,
+				u_candidates_per_angle, z_candidates_per_angle);
 		fclose(acc_file);
 
 		// identify new dead, overwrite dead_param, load dead config for measurements
