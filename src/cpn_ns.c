@@ -13,6 +13,7 @@
 #include "../include/cpn_conf.h"
 #include "../include/cpn_cmplx_op.h"
 #include "../include/cpn_param.h"
+#include "../include/cpn_nestsampl.h"
 #include "../include/geometry.h"
 #include "../include/rng.h"
 #include "../include/endianness.h"
@@ -38,7 +39,7 @@ void real_main(char *input_file_name)
 	FILE *datafilep, *topofilep;
 	FILE *acc_file;	// for the constraint acc.rate
 	int i, new_label;
-	double acc_rate, proposal_energy, u_candidates_per_angle, z_candidates_per_angle;
+	double z_acceptance_rate, u_acceptance_rate, proposal_energy;
 
 	// reuse the previous input_file template but add the nested sampling parameters
 	read_input(input_file_name, &param);
@@ -128,9 +129,15 @@ void real_main(char *input_file_name)
 		// save new live in place of old dead
 		// write_live_conf(&(conf[0]), &param, &dead_param);
 		
-		// combine the acceptance rate measurements and writing of the live TODO: move below the dead param? or we want to explicitly see the energy of the proposal! such that we can gauge where in the distribution we are...!
-		acc_rate = nested_sampling_updat_w_accrate(conf, &param, live_param, &dead_param, &geo, &rng_state,
-														 &u_candidates_per_angle, &z_candidates_per_angle);
+		// // combine the acceptance rate measurements and writing of the live TODO: move below the dead param? or we want to explicitly see the energy of the proposal! such that we can gauge where in the distribution we are...!
+		// acc_rate = nested_sampling_updat_w_accrate(conf, &param, live_param, &dead_param, &geo, &rng_state,
+		// 												 &u_candidates_per_angle, &z_candidates_per_angle);
+
+		// Perform stochastic single-field/link updates and record their constraint acceptance rates.
+		// stochastic_nested_sampl_update(conf, &param, live_param, &dead_param, &geo, &rng_state,
+		// 									 &z_acceptance_rate, &u_acceptance_rate);
+		stochastic_hb_nested_sampl_update(conf, &param, live_param, &dead_param, &geo, &rng_state,
+											&z_acceptance_rate, &u_acceptance_rate);
  		// we might actually be more interested in the proposal's original energy? no but the dead energy should also be good, since this is the benchmark!
 		acc_file = fopen("acceptance_rate.dat", "a");
 		if (acc_file == NULL)
@@ -138,10 +145,11 @@ void real_main(char *input_file_name)
 			perror("Error opening acceptance_rate.dat");
 			exit(EXIT_FAILURE);
 		}
-		/* Columns: NS iteration, constraint acceptance, proposal energy, and mean
-		   Von Neumann candidates needed per accepted U and z angle respectively. */
-		fprintf(acc_file, "%d %.8f %.8f %.8f %.8f\n", i, acc_rate, proposal_energy,
-				u_candidates_per_angle, z_candidates_per_angle);
+		// fprintf(acc_file, "%d %.8f %.8f %.8f %.8f\n", i, acc_rate, proposal_energy,
+		// 		u_candidates_per_angle, z_candidates_per_angle);
+		/* Columns: NS iteration, z acceptance, U acceptance, proposal energy. */
+		fprintf(acc_file, "%d %.8f %.8f %.8f\n", i, z_acceptance_rate,
+				u_acceptance_rate, proposal_energy);
 		fclose(acc_file);
 
 		// identify new dead, overwrite dead_param, load dead config for measurements

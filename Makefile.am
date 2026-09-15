@@ -19,6 +19,9 @@ geometry = ./include/geometry.h \
 cpn_upd_multicanonic = ./include/cpn_multicanonic.h \
                        ./lib/cpn_update_multicanonic.c 
 
+cpn_upd_nestsampl = ./include/cpn_nestsampl.h \
+                    ./lib/cpn_update_nestsampl.c 
+
 rng = ./include/rng.h \
       ./lib/rng.c
 
@@ -56,7 +59,8 @@ cpn_ns_SOURCES = ./src/cpn_ns.c \
               ${cpn_conf} \
               ${cpn_param} \
               ${geometry} \
-              ${endianness}
+              ${endianness} \
+              ${cpn_upd_nestsampl}
 
 if LINK_MD5_H 
 LDADD = -lm -lcrypto
