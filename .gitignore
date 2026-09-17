@@ -26,3 +26,5 @@ lib/*.o
 src/.deps
 src/.dirstamp
 src/*.o
+
+*.out

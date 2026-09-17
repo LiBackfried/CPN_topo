@@ -6,7 +6,7 @@
 #SBATCH --ntasks=10
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=16G
-#SBATCH --time=06:00:00
+#SBATCH --time=09:00:00
 #SBATCH --chdir=/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo
 #SBATCH --mail-user=liane.backfried@unibe.ch
 #SBATCH --mail-type=end,fail
