@@ -1,4 +1,4 @@
-# CP^(20) nested-sampling run 2: 72x72, 5000 stochastic updates/step.
+# CP^(20) nested-sampling run 6: 72x72, 5000 stochastic updates/step.
 size 72 72
 beta 0.6
 theta 0.0
@@ -8,13 +8,13 @@ meas_every 8
 num_micro 4
 num_norm 1
 save_conf_every 1
-start 2
+start 1
 
 num_cool_step 50
 meas_cool_every 5
 
-rng_seed 16776
-rng_start 1
+rng_seed 26780
+rng_start 0
 
 num_replica 1
 defect_size 0
