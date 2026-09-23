@@ -8,13 +8,13 @@ meas_every 8
 num_micro 4
 num_norm 1
 save_conf_every 1
-start 1
+start 2
 
 num_cool_step 50
 meas_cool_every 5
 
 rng_seed 26774
-rng_start 0
+rng_start 1
 
 num_replica 1
 defect_size 0
