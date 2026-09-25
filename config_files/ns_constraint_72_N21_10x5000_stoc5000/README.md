@@ -1,4 +1,4 @@
-UPDATE: The second batch now also resumes. See ../ns_constraint_72_N21_10x5000_stoc5000_fresh2/README.md for the current submission command (defaults to original job 15985454). Its time limit is now 09:30:00. The fresh-start instructions below describe the previous setup.
+UPDATE: The second batch now also resumes. See ../ns_constraint_72_N21_10x5000_stoc5000_fresh2/README.md for the current submission command (defaults to original job 15985454). Its time limit is now 09:00:00 and each continuation adds 4500 updates. The fresh-start instructions below describe the previous setup.
 
 UBELIX: continuation and 10 additional fresh chains
 

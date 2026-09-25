@@ -1,4 +1,4 @@
-# CP^(20) nested-sampling run 4: 72x72, 5000 stochastic updates/step.
+# CP^(20) nested-sampling run 7: 72x72, 5000 stochastic updates/step.
 size 72 72
 beta 0.6
 theta 0.0
@@ -8,13 +8,13 @@ meas_every 8
 num_micro 4
 num_norm 1
 save_conf_every 1
-start 2
+start 1
 
 num_cool_step 50
 meas_cool_every 5
 
-rng_seed 26778
-rng_start 1
+rng_seed 36781
+rng_start 0
 
 num_replica 1
 defect_size 0
@@ -25,8 +25,8 @@ grid_max 100
 num_single_site_stoc_upd 5000
 
 num_live_pts 50
-# Initial measurement plus exactly 4500 nested-sampling updates.
-num_ns_meas 4501
+# Initial measurement plus exactly 5000 nested-sampling updates.
+num_ns_meas 5001
 save_dead 0
 
 conf_file conf.dat

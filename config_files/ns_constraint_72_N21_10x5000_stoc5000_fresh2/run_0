@@ -25,8 +25,8 @@ grid_max 100
 num_single_site_stoc_upd 5000
 
 num_live_pts 50
-# Initial measurement plus exactly 5000 nested-sampling updates.
-num_ns_meas 5001
+# Initial measurement plus exactly 4500 nested-sampling updates.
+num_ns_meas 4501
 save_dead 0
 
 conf_file conf.dat

@@ -6,7 +6,7 @@
 #SBATCH --ntasks=10
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=16G
-#SBATCH --time=09:30:00
+#SBATCH --time=09:00:00
 #SBATCH --chdir=/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo
 #SBATCH --mail-user=liane.backfried@unibe.ch
 #SBATCH --mail-type=end,fail
@@ -40,7 +40,7 @@ for run in {0..9}; do
         [[ -s "$outdir/$file" ]] || { echo "Missing checkpoint: $outdir/$file" >&2; exit 1; }
     done
 done
-echo "Continuing 10 chains in $output_root for 5000 more updates each"
+echo "Continuing 10 chains in $output_root for 4500 more updates each"
 
 srun --ntasks=10 --cpus-per-task=1 --export=ALL /bin/bash -c '
 set -euo pipefail

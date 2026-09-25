@@ -1,9 +1,9 @@
 Second UBELIX batch: continuation
 
 All run_0 through run_9 configurations use start=2 and rng_start=1.
-Each invocation adds 5000 updates (num_ns_meas=5001), with 50 live points.
+Each invocation adds 4500 updates (num_ns_meas=4501), with 50 live points.
 Seeds and other sampling parameters remain unchanged; the saved RNG state is loaded.
-The job requests 9 hours 30 minutes and resumes in the existing remote directories.
+The job requests 9 hours and resumes in the existing remote directories.
 
 After copying the configs and job script to UBELIX, submit:
 ```bash
