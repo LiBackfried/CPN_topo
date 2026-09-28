@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J N21_ns_fresh4
+#SBATCH -J N21_ns_resume4
 #SBATCH --account=gratis
 #SBATCH --partition epyc2
 #SBATCH --qos job_gratis
@@ -16,28 +16,39 @@ if [[ -z "${SLURM_JOB_ID:-}" ]]; then
     echo "Submit this script with sbatch (not bash or ./script)." >&2
     exit 1
 fi
+# The original fresh4 job ID identifies the existing scratch output folder.
+resume_job_id="${1:-16236075}"
+if [[ $# -gt 1 || ! "$resume_job_id" =~ ^[0-9]+$ ]]; then
+    echo "Usage: sbatch run_ns_constraint_72_N21_10x5000_stoc5000_fresh4_ubelix.sh ORIGINAL_JOB_ID" >&2
+    exit 1
+fi
 module load OpenSSL/1.1
 trap 'module purge' EXIT
 
 export project_dir="$PWD"
 export run_group="ns_constraint_72_N21_10x5000_stoc5000_fresh4"
-export output_root="/scratch/network/users/lb25v444/out_data/${run_group}/job_${SLURM_JOB_ID}"
+export output_root="/scratch/network/users/lb25v444/out_data/${run_group}/job_${resume_job_id}"
 
 [[ -x "$project_dir/cpn_ns" ]] || { echo "Build cpn_ns for N=21 first." >&2; exit 1; }
 for run in {0..9}; do
     [[ -r "$project_dir/config_files/$run_group/run_$run" ]] || exit 1
 done
-mkdir -p "$(dirname "$output_root")"
-# Refuse to reuse an existing output directory, including after a requeue.
-mkdir "$output_root"
-echo "Starting 10 fresh chains in $output_root for 5000 updates each"
+# Validate every checkpoint before starting any chain.
+for run in {0..9}; do
+    outdir="$output_root/run_$run"
+    for file in rng_state.dat live_energy.dat conf.dat_live_{0..49}; do
+        [[ -s "$outdir/$file" ]] || { echo "Missing checkpoint: $outdir/$file" >&2; exit 1; }
+    done
+done
+echo "Continuing 10 chains in $output_root for 4500 more updates each"
 
 srun --ntasks=10 --cpus-per-task=1 --export=ALL /bin/bash -c '
 set -euo pipefail
 outdir="$output_root/run_${SLURM_PROCID}"
-mkdir "$outdir"
-cp "$project_dir/config_files/$run_group/run_${SLURM_PROCID}" "$outdir/input.conf"
-# All relative output paths, including acceptance_rate.dat, resolve on scratch.
+[[ -d "$outdir" ]]
+cp "$project_dir/config_files/$run_group/run_${SLURM_PROCID}" "$outdir/input_resume_${SLURM_JOB_ID}.conf"
+# Relative config paths and acceptance_rate.dat must all resolve on scratch.
 cd "$outdir"
-exec "$project_dir/cpn_ns" input.conf > stdout.log 2> stderr.log
+if [[ -f log.dat ]]; then cp log.dat "log_before_resume_${SLURM_JOB_ID}.dat"; fi
+exec "$project_dir/cpn_ns" "input_resume_${SLURM_JOB_ID}.conf" >> stdout.log 2>> stderr.log
 '
