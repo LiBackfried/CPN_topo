@@ -29,3 +29,5 @@ src/.dirstamp
 src/*.o
 
 *.out
+
+utils/__pycache__

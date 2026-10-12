@@ -1,0 +1,13 @@
+Python: /software.9/software/Python/3.9.5-GCCcore-10.3.0/bin/python3
+Analyzing 40 streams from:
+  /scratch/network/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566
+  /scratch/network/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454
+  /scratch/network/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818
+  /scratch/network/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075
+Bootstrap replicates: 500 (seed 20261012)
+Output: /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_72_N21_4x10x5000/job_17959902
+/software.9/software/SciPy-bundle/2021.05-foss-2021a/lib/python3.9/site-packages/numpy/core/_asarray.py:102: UserWarning: Warning: converting a masked element to nan.
+  return array(a, dtype, copy=False, order=order)
+Analyzed 40 runs (382210 dead points).
+Results written to /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_72_N21_4x10x5000/job_17959902
+Analysis complete. Summary: /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_72_N21_4x10x5000/job_17959902/summary.txt
