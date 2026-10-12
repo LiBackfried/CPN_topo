@@ -68,11 +68,18 @@ done
 
 module load Python SciPy-bundle matplotlib
 trap 'module purge' EXIT
-python -c 'import matplotlib, numpy' || {
+python_bin="$(type -P python3 || type -P python || true)"
+[[ -n "$python_bin" && -x "$python_bin" ]] || {
+    echo "Could not find a Python executable after loading the UBELIX modules." >&2
+    echo "Check available versions with: module spider Python" >&2
+    exit 1
+}
+"$python_bin" -c 'import matplotlib, numpy' || {
     echo "The loaded UBELIX Python modules do not provide numpy and matplotlib." >&2
     echo "Check available versions with: module spider SciPy-bundle matplotlib" >&2
     exit 1
 }
+echo "Python: $python_bin"
 
 mkdir -p "$output_dir"
 echo "Analyzing 40 streams from:"
@@ -80,7 +87,7 @@ printf '  %s\n' "${input_roots[@]}"
 echo "Bootstrap replicates: $n_bootstrap (seed $bootstrap_seed)"
 echo "Output: $output_dir"
 
-srun --ntasks=1 --cpus-per-task=1 python "$project_dir/analyze_nested_sampling.py" \
+srun --ntasks=1 --cpus-per-task=1 --export=ALL "$python_bin" "$project_dir/analyze_nested_sampling.py" \
     "${input_roots[@]}" \
     --output "$output_dir" \
     --bootstrap "$n_bootstrap" \
