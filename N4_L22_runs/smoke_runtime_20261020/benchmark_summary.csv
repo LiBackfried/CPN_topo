@@ -1,0 +1,5 @@
+run,N,L,wall_seconds,heatbath_init_seconds,simulation_seconds,simulation_seconds_per_ns_update,exit_status
+1,21,72,61.36,7.064554,54.197472,10.8394944,0
+1,4,22,1.53,0.232050,1.249109,0.2498218,0
+2,21,72,61.00,7.460934,53.591523,10.7183046,0
+2,4,22,1.51,0.286956,1.205797,0.2411594,0
