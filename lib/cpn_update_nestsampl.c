@@ -3,6 +3,44 @@
 
 #include "../include/cpn_nestsampl.h"
 
+static const double NS_ENERGY_TOLERANCE = 1.0e-9;
+
+/*
+	Energy preservation and the nested-sampling constraint are separate
+	conditions.  In particular, do not require a live point to lie a full
+	tolerance below the constraint: valid live-point spacings can be smaller
+	than the numerical tolerance late in a run.
+*/
+static void check_nested_sampling_energy(char const * const stage,
+										 double const energy_before,
+										 double const energy_after,
+										 double const constraint)
+{
+	double const energy_shift = energy_after - energy_before;
+
+	if(fabs(energy_shift) > NS_ENERGY_TOLERANCE)
+	{
+		fprintf(stderr,
+				"%s changed the energy beyond tolerance: before=%.17g "
+				"after=%.17g shift=%.17g tolerance=%.17g "
+				"constraint=%.17g.\n",
+				stage, energy_before, energy_after, energy_shift,
+				NS_ENERGY_TOLERANCE, constraint);
+		exit(EXIT_FAILURE);
+	}
+
+	if(energy_after > constraint + NS_ENERGY_TOLERANCE)
+	{
+		fprintf(stderr,
+				"%s placed the energy above the nested-sampling constraint: "
+				"before=%.17g after=%.17g shift=%.17g "
+				"constraint=%.17g overshoot=%.17g tolerance=%.17g.\n",
+				stage, energy_before, energy_after, energy_shift, constraint,
+				energy_after - constraint, NS_ENERGY_TOLERANCE);
+		exit(EXIT_FAILURE);
+	}
+}
+
 /*
 	in addition, a file for the single link updates of the nested sampling routine:
 
@@ -37,7 +75,7 @@ void stochastic_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const para
 	double pr_micro = ((double)param->d_num_micro)/((double)( 1 + param->d_num_micro));
 
 	double curr_E = energy_density(&(conf[0]), geo, param);	// the original proposal's energy
-	double tol = 1e-9;
+	double const tol = NS_ENERGY_TOLERANCE;
 
 
 	for(i=0; i<param->d_stoc_single_site_upd; i++)
@@ -65,18 +103,17 @@ void stochastic_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const para
 			upd_U++;
 		}
 	
+		double const energy_before_normalization = curr_E;
+
 		// normalize the lattice fields of the updated config
 		if ((conf[0]).update_index % param->d_num_norm == 0) normalize_replicas(&(conf[0]),param); 
 		(conf[0]).update_index++;
 		// ... and recompute energy density
 		curr_E = energy_density(&(conf[0]), geo, param);
 
-		// in principal, the energy density should not be shifted across the threshold in this way; check to be safe though and for now exit program
-		if(curr_E >= dead_param->conf_energy - tol) 
-		{
-			printf("Warning: Normalization shifted the energy above the constraint!\n");
-			exit(EXIT_FAILURE);
-		}
+		check_nested_sampling_energy("Stochastic-update normalization/recomputation",
+									 energy_before_normalization, curr_E,
+									 dead_param->conf_energy);
 	}
 
 	live_param[dead_param->conf_label].conf_energy = curr_E;
@@ -110,18 +147,18 @@ void stochastic_hb_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const p
 	int upd_z=0, upd_U=0;
 	double pr_field;
 	double curr_E;
-	double tol = 1e-9;
+	double energy_before_microcanonical;
+	double const tol = NS_ENERGY_TOLERANCE;
 
+	energy_before_microcanonical = energy_density(&(conf[0]), geo, param);
 	for(i=0; i<param->d_num_micro; i++)
 		microcanonic_sweep_lattice(&(conf[0]), geo, param);
 
 	/* Recompute after the complete sweeps to avoid accumulating round-off. */
 	curr_E = energy_density(&(conf[0]), geo, param);
-	if(curr_E >= dead_param->conf_energy - tol)
-	{
-		fprintf(stderr, "Microcanonical sweeps shifted the energy above the nested-sampling constraint.\n");
-		exit(EXIT_FAILURE);
-	}
+	check_nested_sampling_energy("Microcanonical sweeps",
+								 energy_before_microcanonical, curr_E,
+								 dead_param->conf_energy);
 
 	for(i=0; i<param->d_stoc_single_site_upd; i++)
 	{
@@ -142,16 +179,16 @@ void stochastic_hb_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const p
 			upd_U++;
 		}
 
+		double const energy_before_normalization = curr_E;
+
 		if ((conf[0]).update_index % param->d_num_norm == 0)
 			normalize_replicas(&(conf[0]), param);
 		(conf[0]).update_index++;
 		curr_E = energy_density(&(conf[0]), geo, param);
 
-		if(curr_E >= dead_param->conf_energy - tol)
-		{
-			fprintf(stderr, "Normalization shifted the energy above the nested-sampling constraint.\n");
-			exit(EXIT_FAILURE);
-		}
+		check_nested_sampling_energy("Stochastic-update normalization/recomputation",
+									 energy_before_normalization, curr_E,
+									 dead_param->conf_energy);
 	}
 
 	live_param[dead_param->conf_label].conf_energy = curr_E;

@@ -15,6 +15,7 @@ This repository contains C code for CP(N-1) simulations, stochastic nested sampl
 ## Build conventions
 
 - Bootstrap Autotools files with `bash script_build_code.sh` when required.
+- For local compilation from Windows, explicitly use the `Ubuntu-24.04` WSL distribution, which provides GCC and Make: `wsl.exe --distribution Ubuntu-24.04 -- bash -lc 'cd /mnt/c/Liane/00_Doktorat/PhD_projects/CPN_NestSamp/CPN_topo && make cpn_ns'`. Do not rely on the default `wsl.exe` distribution; the default `Ubuntu` instance may not expose the compiler toolchain.
 - On UBELIX, `bash script_compile_code_ubelix.sh <N> [target]` changes `include/macro.h` and compiles. For example, `bash script_compile_code_ubelix.sh 21 cpn_ns`.
 - Treat `N` as part of the executable, not an input-file parameter. Before a run, verify that the executable was compiled for the intended `N`; invoking `cpn_ns` without a config prints its compiled value.
 - The N=4 helper at `N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/build_cpn_ns_N4_ubelix.sh` creates `cpn_ns_N4`, verifies it, and restores the pre-existing `include/macro.h` and `cpn_ns`. Preserve that restoration behavior when changing the helper.
