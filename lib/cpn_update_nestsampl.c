@@ -29,14 +29,14 @@ static void check_nested_sampling_energy(char const * const stage,
 		exit(EXIT_FAILURE);
 	}
 
-	if(energy_after > constraint + NS_ENERGY_TOLERANCE)
+	if(energy_after >= constraint)
 	{
 		fprintf(stderr,
-				"%s placed the energy above the nested-sampling constraint: "
+				"%s does not satisfy the strict nested-sampling constraint: "
 				"before=%.17g after=%.17g shift=%.17g "
-				"constraint=%.17g overshoot=%.17g tolerance=%.17g.\n",
+				"constraint=%.17g overshoot=%.17g.\n",
 				stage, energy_before, energy_after, energy_shift, constraint,
-				energy_after - constraint, NS_ENERGY_TOLERANCE);
+				energy_after - constraint);
 		exit(EXIT_FAILURE);
 	}
 }
