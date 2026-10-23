@@ -1,0 +1,478 @@
+{
+  "settings": {
+    "action_prefactor": 2.0,
+    "bootstrap_replicates": 500,
+    "seed": 20261012,
+    "n_live_effective": 2000
+  },
+  "runs": [
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_0",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_1",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_2",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_3",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_4",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_5",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_6",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_7",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_8",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 10000,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000/job_15484566/run_9",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9828,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_0",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_1",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_2",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_3",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_4",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_5",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 6882,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_6",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_7",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_8",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh2/job_15985454/run_9",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_0",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_1",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_2",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_3",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_4",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_5",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_6",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_7",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_8",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh3/job_16235818/run_9",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_0",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_1",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_2",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_3",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_4",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_5",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_6",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_7",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_8",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_72_N21_10x5000_stoc5000_fresh4/job_16236075/run_9",
+      "size": [
+        72,
+        72
+      ],
+      "n_live": 50,
+      "n_measurements": 9500,
+      "cooling_step": 50,
+      "beta": 0.6
+    }
+  ],
+  "estimates": {
+    "log_Z": -4.024831084946119e-14,
+    "mean_action_density": 0.8582894713344297,
+    "mean_energy": 1.7165789426688594,
+    "mean_G0": 14.85576948642382,
+    "mean_Gk": 14.203441245795785,
+    "xi_L_squared": 6.034669453248885,
+    "xi_L": 2.4565564217515714,
+    "mean_Q_U": 0.34714040247343625,
+    "mean_Q_U_squared": 3.430437512892889,
+    "chi_topological": 0.0006384897866248977,
+    "mean_Q_z": 0.34714040247343636,
+    "mean_Q_plaquette": 0.34710560813835484
+  },
+  "bootstrap_standard_errors": {
+    "log_Z": 6.317207611145603e-30,
+    "mean_action_density": 5.541463247610621e-05,
+    "mean_energy": 0.00011082926495221242,
+    "mean_G0": 0.22597987511875334,
+    "mean_Gk": 0.16168649257118478,
+    "xi_L_squared": 2.747662341271098,
+    "xi_L": NaN,
+    "mean_Q_U": 0.22119048372841585,
+    "mean_Q_U_squared": 0.5194024078342937,
+    "chi_topological": 8.279968448402548e-05,
+    "mean_Q_z": 0.22119048372841585,
+    "mean_Q_plaquette": 0.2211588441987258
+  }
+}

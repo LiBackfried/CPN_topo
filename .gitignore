@@ -1,5 +1,5 @@
 out_data*
-analysis_results/
+##analysis_results/
 TODO
 aclocal.m4
 compile
