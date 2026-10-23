@@ -1,9 +1,10 @@
 #!/bin/bash
-#SBATCH -J N4L22_b07_50
+#SBATCH -J N4L22_b07_2x25
 #SBATCH --account=gratis
 #SBATCH --partition=epyc2
 #SBATCH --qos=job_gratis
-#SBATCH --ntasks=50
+#SBATCH --array=0-1
+#SBATCH --ntasks=25
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=512M
 #SBATCH --time=02:00:00
@@ -24,9 +25,12 @@ trap 'module purge' EXIT
 export project_dir="$PWD"
 export run_group="ns_constraint_22_N4_beta0p7_10x50000_stoc1500"
 export config_dir="$project_dir/N4_L22_runs/$run_group"
-export output_root="/scratch/network/users/lb25v444/out_data/${run_group}/job_${SLURM_JOB_ID}"
 export executable="$project_dir/cpn_ns_N4"
-export first_run_id=50
+
+array_index="${SLURM_ARRAY_TASK_ID:?Missing SLURM_ARRAY_TASK_ID}"
+export first_run_id=$((50 + 25 * array_index))
+last_run_id=$((first_run_id + 24))
+export output_root="/scratch/network/users/lb25v444/out_data/${run_group}/job_${SLURM_JOB_ID}"
 
 [[ -x "$executable" ]] || {
     echo "Missing executable: $executable" >&2
@@ -41,7 +45,7 @@ grep -q 'Compiled with N = 4' <<< "$compile_info" || {
 }
 
 declare -A seen_seeds=()
-for run in {50..99}; do
+for ((run = first_run_id; run <= last_run_id; run++)); do
     config="$config_dir/run_$run"
     [[ -r "$config" ]] || {
         echo "Missing config: $config" >&2
@@ -98,10 +102,10 @@ for run in {50..99}; do
 done
 
 mkdir -p "$output_root"
-echo "Launching 50 fresh CP^3 chains (run IDs 50 through 99) in $output_root"
+echo "Launching 25 fresh CP^3 chains (run IDs $first_run_id through $last_run_id) in $output_root"
 echo "Each chain: L=22, beta=0.7, 50 live points, 1500 stochastic updates/NS update, 50000 NS updates"
 
-srun --ntasks=50 --cpus-per-task=1 --kill-on-bad-exit=1 --export=ALL /bin/bash -c '
+srun --ntasks=25 --cpus-per-task=1 --kill-on-bad-exit=1 --export=ALL /bin/bash -c '
 set -euo pipefail
 run_id=$((SLURM_PROCID + first_run_id))
 outdir="$output_root/run_${run_id}"

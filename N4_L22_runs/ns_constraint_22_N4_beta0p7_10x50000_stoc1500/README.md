@@ -2,7 +2,8 @@
 
 The initial batch launches ten independent fresh nested-sampling chains for
 the CP^3 model (`N=4`) on a 22x22 lattice. A second launcher adds 40 more
-independent chains, and a third launcher adds another 50.
+independent chains, and a third launcher adds another 50 as two Slurm-array
+elements of 25 chains each.
 
 ## Parameters
 
@@ -26,8 +27,10 @@ stochastic updates is the rounded working value.
 
 All jobs use single-threaded tasks, one per chain, on `epyc2` with the
 `job_gratis` QoS. They request 512 MB per task and a two-hour wall-time limit.
-The three launchers request 10, 40, and 50 tasks, respectively. Together, the
-100 chains yield 5,000,000 NS updates.
+The first two launchers request 10 and 40 tasks. The third uses a two-element
+Slurm array with 25 tasks per element: array element 0 runs IDs 50 through 74,
+and array element 1 runs IDs 75 through 99. Together, the 100 chains yield
+5,000,000 NS updates.
 
 ## Build and submit
 
@@ -44,7 +47,7 @@ After the initial ten runs have finished, submit the additional 40 with:
 sbatch N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/run_40_more_ubelix.sh
 ```
 
-Submit the third batch of 50 with:
+Submit the third batch of 50 as two independent 25-stream allocations with:
 
 ```bash
 sbatch N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/run_50_more_ubelix.sh
@@ -60,6 +63,7 @@ Output is written below:
 /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_<JOB_ID>/run_<RUN_ID>/
 ```
 
-The three jobs use run IDs 0 through 9, 10 through 49, and 50 through 99. The
-job-specific parent directories keep all outputs separate.
+The launchers use run IDs 0 through 9, 10 through 49, and 50 through 99. Each
+array element in the final launcher has its own Slurm job ID and therefore its
+own job-specific output directory.
 
