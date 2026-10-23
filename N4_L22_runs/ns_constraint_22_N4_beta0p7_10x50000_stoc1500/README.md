@@ -1,8 +1,9 @@
 # CP^3 nested-sampling production batch: L=22, beta=0.7
 
-This batch launches ten independent fresh nested-sampling chains for the
-CP^3 model (`N=4`) on a 22x22 lattice. It follows the recent N=21 UBELIX setup,
-with the requested model parameters and run length changes.
+The initial batch launches ten independent fresh nested-sampling chains for
+the CP^3 model (`N=4`) on a 22x22 lattice. A second launcher adds 40 more
+independent chains after the first ten completed in approximately 40 minutes
+on UBELIX.
 
 ## Parameters
 
@@ -14,18 +15,19 @@ with the requested model parameters and run length changes.
 - 1,500 stochastic single-field/link updates per NS update
 - normalization after every stochastic update
 - 50,000 NS updates per chain (`num_ns_meas=50001`)
-- ten fresh chains with distinct seeds 70421 through 70430
+- 50 fresh chains in total with distinct seeds 70421 through 70470
+  - initial batch: runs 0 through 9, seeds 70421 through 70430
+  - additional batch: runs 10 through 49, seeds 70431 through 70470
 
 For a 22x22 lattice, three update types give `3 * 22^2 = 1452`; 1,500
 stochastic updates is the rounded working value.
 
 ## UBELIX resources
 
-The job launches ten single-threaded tasks, one per chain, on `epyc2` with the
-`job_gratis` QoS. It requests 512 MB per task and a two-hour wall-time limit.
-This is substantially below the old N=21 request while retaining generous
-headroom for filesystem and node-performance variation. The ten chains yield
-500,000 NS updates in total.
+Both jobs use single-threaded tasks, one per chain, on `epyc2` with the
+`job_gratis` QoS. They request 512 MB per task and a two-hour wall-time limit.
+The initial launcher requests ten tasks; the additional launcher requests 40.
+Together, the 50 chains yield 2,500,000 NS updates.
 
 ## Build and submit
 
@@ -36,13 +38,22 @@ bash N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/build_cpn_ns_N4_u
 sbatch N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/run_ubelix.sh
 ```
 
+After the initial ten runs have finished, submit the additional 40 with:
+
+```bash
+sbatch N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/run_40_more_ubelix.sh
+```
+
 The build helper creates `cpn_ns_N4`, verifies its compiled value, and restores
 the existing `include/macro.h` and `cpn_ns`. The job performs another N=4 check
-and validates all ten configurations and seed uniqueness before starting.
+and each job validates its configurations and seed uniqueness before starting.
 
 Output is written below:
 
 ```text
-/scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_<JOB_ID>/run_<0..9>/
+/scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_<JOB_ID>/run_<RUN_ID>/
 ```
+
+The initial job uses run IDs 0 through 9. The additional job uses run IDs 10
+through 49. The job-specific parent directories keep all outputs separate.
 

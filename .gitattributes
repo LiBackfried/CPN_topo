@@ -1,0 +1,2 @@
+*.sh text eol=lf
+N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/run_* text eol=lf
