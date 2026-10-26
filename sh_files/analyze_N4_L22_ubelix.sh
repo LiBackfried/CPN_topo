@@ -12,7 +12,7 @@
 #SBATCH --mail-type=END,FAIL
 #SBATCH --output=analysis_N4_L22_%j.log
 
-# Analyze the 50 independent streams from the two N=4, L=22 production jobs.
+# Analyze the 100 independent streams from the four N=4, L=22 production jobs.
 # Optional positional argument: output directory. By default results are kept
 # inside the git checkout under analysis_results/.
 # Optional environment variables: N_BOOTSTRAP (default 500), BOOTSTRAP_SEED
@@ -33,10 +33,12 @@ scratch_root="/scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0
 input_roots=(
     "$scratch_root/job_19135775"
     "$scratch_root/job_19678209"
+    "$scratch_root/job_19692937"
+    "$scratch_root/job_19692936"
 )
-first_runs=(0 10)
-last_runs=(9 49)
-output_dir="${1:-$project_dir/analysis_results/ns_constraint_22_N4_beta0p7_50x50000_stoc1500/job_${SLURM_JOB_ID}}"
+first_runs=(0 10 50 75)
+last_runs=(9 49 74 99)
+output_dir="${1:-$project_dir/analysis_results/ns_constraint_22_N4_beta0p7_100x50000_stoc1500/job_${SLURM_JOB_ID}}"
 n_bootstrap="${N_BOOTSTRAP:-500}"
 bootstrap_seed="${BOOTSTRAP_SEED:-20261023}"
 
@@ -53,7 +55,7 @@ bootstrap_seed="${BOOTSTRAP_SEED:-20261023}"
     exit 1
 }
 
-# Fail before loading Python if any of the 50 stream outputs is incomplete.
+# Fail before loading Python if any of the 100 stream outputs is incomplete.
 for index in "${!input_roots[@]}"; do
     root="${input_roots[$index]}"
     for ((run = first_runs[index]; run <= last_runs[index]; run++)); do
@@ -83,7 +85,7 @@ python_bin="$(type -P python3 || type -P python || true)"
 echo "Python: $python_bin"
 
 mkdir -p "$output_dir"
-echo "Analyzing 50 streams from:"
+echo "Analyzing 100 streams from:"
 printf '  %s\n' "${input_roots[@]}"
 echo "Bootstrap replicates: $n_bootstrap (seed $bootstrap_seed)"
 echo "Output: $output_dir"
