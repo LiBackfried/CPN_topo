@@ -132,7 +132,9 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
                    label=Path(stream.name).name)
     ax[0].plot(np.linspace(0, max(map(lambda s: len(s.energy), streams)), len(data.energy)),
                data.observables["action_density"], color="black", label="combined")
-    ax[0].set(xlabel="nested-sampling step", ylabel="action density"); ax[0].legend(fontsize=7, ncol=2)
+    ax[0].set(xlabel="nested-sampling step", ylabel="action density")
+    if len(streams) <= 25:
+        ax[0].legend(fontsize=7, ncol=2)
     ax[1].hist([s.energy for s in streams], bins=50, density=True, alpha=.45)
     ax[1].set(xlabel="energy", ylabel="density")
     for a in ax: a.grid(alpha=.3)
