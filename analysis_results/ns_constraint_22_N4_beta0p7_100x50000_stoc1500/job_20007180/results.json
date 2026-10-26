@@ -1,0 +1,1138 @@
+{
+  "settings": {
+    "action_prefactor": 2.0,
+    "bootstrap_replicates": 500,
+    "seed": 20261023,
+    "n_live_effective": 5000
+  },
+  "runs": [
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_0",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_1",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_2",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_3",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_4",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_5",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_6",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_7",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_8",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775/run_9",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_10",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_11",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_12",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_13",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_14",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_15",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_16",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_17",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_18",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_19",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_20",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_21",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_22",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_23",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_24",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_25",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_26",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_27",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_28",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_29",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_30",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_31",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_32",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_33",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_34",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_35",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_36",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_37",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_38",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_39",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_40",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_41",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_42",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_43",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_44",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_45",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_46",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_47",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_48",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209/run_49",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_50",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_51",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_52",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_53",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_54",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_55",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_56",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_57",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_58",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_59",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_60",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_61",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_62",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_63",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_64",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_65",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_66",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_67",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_68",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_69",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_70",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_71",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_72",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_73",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937/run_74",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_75",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_76",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_77",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_78",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_79",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_80",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_81",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_82",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_83",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_84",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_85",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_86",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_87",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_88",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_89",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_90",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_91",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_92",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_93",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_94",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_95",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_96",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_97",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_98",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936/run_99",
+      "size": [
+        22,
+        22
+      ],
+      "n_live": 50,
+      "n_measurements": 50000,
+      "cooling_step": 50,
+      "beta": 0.7
+    }
+  ],
+  "estimates": {
+    "log_Z": -5.727892586854508e-14,
+    "mean_action_density": 0.8494014985715784,
+    "mean_energy": 1.6988029971431569,
+    "mean_G0": 7.051717979363782,
+    "mean_Gk": 5.5456094915030105,
+    "xi_L_squared": 3.352328839074986,
+    "xi_L": 1.8309366015990247,
+    "mean_Q_U": -0.010282843250977634,
+    "mean_Q_U_squared": 1.9602013275465358,
+    "chi_topological": 0.004049784278266967,
+    "mean_Q_z": -0.009922480125804056,
+    "mean_Q_plaquette": -0.01010687791661983
+  },
+  "bootstrap_standard_errors": {
+    "log_Z": 1.2634415222291205e-29,
+    "mean_action_density": 0.00026432814724825307,
+    "mean_energy": 0.0005286562944965061,
+    "mean_G0": 0.12946209356085017,
+    "mean_Gk": 0.08556352765221417,
+    "xi_L_squared": 0.36739817654482093,
+    "xi_L": 0.10066583785857892,
+    "mean_Q_U": 0.013110725223564122,
+    "mean_Q_U_squared": 0.030292413639476087,
+    "chi_topological": 6.258135710397217e-05,
+    "mean_Q_z": 0.013082197392024136,
+    "mean_Q_plaquette": 0.013024351647876332
+  }
+}
