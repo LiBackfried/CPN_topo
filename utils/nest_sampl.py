@@ -10,10 +10,45 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 
 Array = np.ndarray
+
+
+def read_summary(path: str | Path) -> dict[str, Array]:
+    """Read ``name: mean +/- error`` entries from a text file.
+
+    Each dictionary value is a two-element NumPy array containing the mean
+    and error, respectively.
+    """
+
+    result: dict[str, Array] = {}
+    with Path(path).open(encoding="utf-8") as summary_file:
+        for line_number, raw_line in enumerate(summary_file, start=1):
+            line = raw_line.strip()
+            if not line:
+                continue
+
+            name, colon, values = line.partition(":")
+            mean, separator, error = values.partition("+/-")
+            name = name.strip()
+            if not colon or not separator or not name:
+                raise ValueError(
+                    f"invalid summary entry on line {line_number}: {line!r}"
+                )
+            if name in result:
+                raise ValueError(f"duplicate summary key {name!r} on line {line_number}")
+
+            try:
+                result[name] = np.array([float(mean), float(error)], dtype=float)
+            except ValueError as exc:
+                raise ValueError(
+                    f"invalid numeric value on line {line_number}: {line!r}"
+                ) from exc
+
+    return result
 
 
 @dataclass(frozen=True)
