@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from utils.nest_sampl import CombinedNestedSampling, NestedSamplingStream
-from utils.nest_sampl import bootstrap_nested_sampling, combine_streams
+from utils.nest_sampl import bootstrap_nested_sampling, combine_streams, reweight_beta
 
 
 def arguments() -> argparse.Namespace:
@@ -31,6 +31,10 @@ def arguments() -> argparse.Namespace:
     p.add_argument("--seed", type=int)
     p.add_argument("--action-prefactor", type=float, default=2.0,
                    help="energy = prefactor * dati.dat[:,1] (default: 2)")
+    p.add_argument("--cpn-n", type=int, metavar="N",
+                   help="compile-time CP(N-1) value; required for beta reweighting")
+    p.add_argument("--target-beta", type=float,
+                   help="reweight only beta to this value, keeping theta fixed")
     p.add_argument("--cooling-step", type=int, help="default: final cooling step")
     p.add_argument("--no-bootstrap", action="store_true")
     p.add_argument("--save-bootstrap-samples", action="store_true",
@@ -100,20 +104,70 @@ def load_run(path: Path, prefactor: float, requested_cooling: int | None
     stream = NestedSamplingStream(energy, observables, n_live, str(path))
     info = {"path": str(path), "size": size, "n_live": n_live,
             "n_measurements": count, "cooling_step": cooling,
-            "beta": float(config.get("beta", ["nan"])[0])}
+            "beta": float(config.get("beta", ["nan"])[0]),
+            "theta": float(config.get("theta", ["0.0"])[0])}
     return stream, info
 
 
-def quantities(data: CombinedNestedSampling, lattice_size: int) -> dict[str, float]:
+def quantities(data: CombinedNestedSampling, lattice_size: int,
+               cpn_n: int | None = None, beta: float | None = None
+               ) -> dict[str, float]:
     g0, gk = data.mean("g0"), data.mean("gk")
     xi2 = (g0 / gk - 1.0) / (4.0 * np.sin(np.pi / lattice_size) ** 2)
-    q, q2 = data.mean("q_u"), float(np.sum(data.weight * data.observables["q_u"] ** 2))
-    return {"log_Z": data.log_z, "mean_action_density": data.mean("action_density"),
-            "mean_energy": data.mean("energy"), "mean_G0": g0, "mean_Gk": gk,
-            "xi_L_squared": xi2, "xi_L": np.sqrt(xi2) if xi2 >= 0 else np.nan,
-            "mean_Q_U": q, "mean_Q_U_squared": q2,
-            "chi_topological": (q2 - q*q) / lattice_size**2,
-            "mean_Q_z": data.mean("q_z"), "mean_Q_plaquette": data.mean("q_plaq")}
+    q_values = data.observables["q_u"]
+    q, q2 = data.mean("q_u"), data.weighted_sum(q_values ** 2)
+    q_variance = data.variance("q_u", mean=q)
+    action_density = data.mean("action_density")
+    result = {"mean_action_density": action_density,
+              "mean_energy": data.mean("energy"), "mean_G0": g0, "mean_Gk": gk,
+              "xi_L_squared": xi2, "xi_L": np.sqrt(xi2) if xi2 >= 0 else np.nan,
+              "mean_Q_U": q, "mean_Q_U_squared": q2,
+              "chi_topological": q_variance / lattice_size**2,
+              "mean_Q_z": data.mean("q_z"), "mean_Q_plaquette": data.mean("q_plaq")}
+    if (cpn_n is None) != (beta is None):
+        raise ValueError("cpn_n and beta must be provided together")
+    if cpn_n is not None:
+        mean_extensive_energy = 2.0 * cpn_n * lattice_size**2 * action_density
+        result["mean_extensive_energy"] = mean_extensive_energy
+        result["mean_symanzik_action"] = beta * mean_extensive_energy
+    return result
+
+
+def evaluate_at_beta(data: CombinedNestedSampling, lattice_size: int,
+                     source_beta: float, target_beta: float | None,
+                     cpn_n: int | None
+                     ) -> tuple[CombinedNestedSampling, dict[str, float]]:
+    """Evaluate observables at the source beta or at one beta-reweighted target."""
+
+    selected_beta = source_beta if target_beta is None else target_beta
+    selected = data
+    log_z_ratio = quadrature_ess = None
+    if target_beta is not None:
+        if cpn_n is None:
+            raise ValueError("cpn_n is required for beta reweighting")
+        selected, log_z_ratio, quadrature_ess = reweight_beta(
+            data, source_beta, target_beta, cpn_n, lattice_size**2
+        )
+
+    values = quantities(
+        selected,
+        lattice_size,
+        cpn_n=cpn_n,
+        beta=selected_beta if cpn_n is not None else None,
+    )
+    # These describe coverage of the source prior, not a physical partition
+    # function.  Keep log_Z temporarily as a compatibility alias.
+    values = {
+        "log_accumulated_prior_mass": data.log_z,
+        "log_Z": data.log_z,
+        "log_remaining_prior_mass": float(data.log_x[-1]),
+        "remaining_prior_mass": float(np.exp(data.log_x[-1])),
+        **values,
+    }
+    if log_z_ratio is not None:
+        values["log_Z_ratio"] = log_z_ratio
+        values["quadrature_effective_sample_size"] = quadrature_ess
+    return selected, values
 
 
 def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], output: Path,
@@ -122,7 +176,8 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
     fig, ax = plt.subplots(2, 1, figsize=(8, 8), constrained_layout=True)
     ax[0].plot(x, np.exp(data.log_weight_normalized)); ax[0].set_yscale("log")
     ax[0].set(xlabel=r"$-\log X$", ylabel="normalized weight")
-    ax[1].plot(x, data.log_z_curve); ax[1].set(xlabel=r"$-\log X$", ylabel=r"normalized $\log Z$")
+    ax[1].plot(x, data.log_z_curve)
+    ax[1].set(xlabel=r"$-\log X$", ylabel=r"$\log$ cumulative normalized weight")
     for a in ax: a.grid(alpha=.3)
     fig.savefig(output / "nested_sampling_weights_z.png", dpi=180); plt.close(fig)
 
@@ -158,23 +213,54 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
 
 def main() -> None:
     args = arguments()
+    if args.cpn_n is not None and args.cpn_n <= 0:
+        raise ValueError("--cpn-n must be positive")
+    if args.target_beta is not None:
+        if args.cpn_n is None:
+            raise ValueError("--cpn-n is required with --target-beta")
+        if not np.isfinite(args.target_beta) or args.target_beta < 0.0:
+            raise ValueError("--target-beta must be finite and non-negative")
     loaded = [load_run(p, args.action_prefactor, args.cooling_step) for p in discover_runs(args.run_roots)]
     streams, run_info = [x[0] for x in loaded], [x[1] for x in loaded]
     sizes = {tuple(x["size"]) for x in run_info}
     if len(sizes) != 1 or len(next(iter(sizes))) != 2 or len(set(next(iter(sizes)))) != 1:
         raise ValueError(f"runs must share one square lattice size; found {sizes}")
     length = next(iter(sizes))[0]
+    source_betas = {x["beta"] for x in run_info}
+    if len(source_betas) != 1 or not np.isfinite(next(iter(source_betas))):
+        raise ValueError(f"runs must share one finite source beta; found {source_betas}")
+    source_beta = next(iter(source_betas))
+    thetas = {x["theta"] for x in run_info}
+    if len(thetas) != 1 or not np.isfinite(next(iter(thetas))):
+        raise ValueError(f"runs must share one finite fixed theta; found {thetas}")
+    fixed_theta = next(iter(thetas))
+    selected_beta = source_beta if args.target_beta is None else args.target_beta
     combined = combine_streams(streams)
-    statistic = lambda data: quantities(data, length)
+    selected_combined, point_values = evaluate_at_beta(
+        combined, length, source_beta, args.target_beta, args.cpn_n
+    )
+
+    def statistic(data: CombinedNestedSampling) -> dict[str, float]:
+        return evaluate_at_beta(
+            data, length, source_beta, args.target_beta, args.cpn_n
+        )[1]
+
     if args.no_bootstrap:
-        values, errors, samples = statistic(combined), {}, {}
+        values, errors, samples = point_values, {}, {}
     else:
         values, errors, samples = bootstrap_nested_sampling(streams, statistic, args.bootstrap, args.seed)
 
     args.output.mkdir(parents=True, exist_ok=True)
     result = {"settings": {"action_prefactor": args.action_prefactor,
               "bootstrap_replicates": 0 if args.no_bootstrap else args.bootstrap,
-              "seed": args.seed, "n_live_effective": combined.n_live_effective},
+              "seed": args.seed, "n_live_effective": combined.n_live_effective,
+              "cpn_n": args.cpn_n, "source_beta": source_beta,
+              "target_beta": selected_beta,
+              "beta_reweighted": args.target_beta is not None,
+              "fixed_theta": fixed_theta},
+              "deprecated_estimate_aliases": {
+                  "log_Z": "log_accumulated_prior_mass"
+              },
               "runs": run_info, "estimates": values, "bootstrap_standard_errors": errors}
     (args.output / "results.json").write_text(json.dumps(result, indent=2, allow_nan=True) + "\n")
     with (args.output / "summary.txt").open("w", encoding="utf-8") as f:
@@ -184,8 +270,10 @@ def main() -> None:
         with (args.output / "bootstrap_samples.csv").open("w", newline="", encoding="utf-8") as f:
             keys = list(samples); writer = csv.writer(f); writer.writerow(["replicate", *keys])
             writer.writerows([i, *(samples[k][i] for k in keys)] for i in range(args.bootstrap))
-    plots(combined, streams, args.output, values, errors)
+    plots(selected_combined, streams, args.output, values, errors)
     print(f"Analyzed {len(streams)} runs ({len(combined.energy)} dead points).")
+    if args.target_beta is not None:
+        print(f"Reweighted beta {source_beta:g} -> {args.target_beta:g} (theta={fixed_theta:g} fixed).")
     print(f"Results written to {args.output.resolve()}")
 
 

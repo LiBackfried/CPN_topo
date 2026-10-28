@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+from scipy.special import logsumexp
 
 Array = np.ndarray
 
@@ -88,8 +89,60 @@ class CombinedNestedSampling:
     def weight(self) -> Array:
         return np.exp(self.log_weight_normalized)
 
+    def weighted_sum(self, values: Array) -> float:
+        """Return ``sum(weight * values)`` while recovering underflowed terms.
+
+        Direct products retain the best precision when signed observations
+        nearly cancel.  Terms whose products underflow to zero are accumulated
+        separately with signed log-sum-exp and then added back.
+        """
+
+        values = np.asarray(values, dtype=float)
+        if values.shape != self.log_weight_normalized.shape:
+            raise ValueError("values do not match the nested-sampling weights")
+        if not np.all(np.isfinite(values)):
+            raise ValueError("values must be finite")
+
+        with np.errstate(under="ignore"):
+            products = self.weight * values
+        total = float(np.sum(products))
+
+        underflowed = (products == 0.0) & (values != 0.0)
+        if np.any(underflowed):
+            log_absolute_tail, tail_sign = logsumexp(
+                self.log_weight_normalized[underflowed],
+                b=values[underflowed],
+                return_sign=True,
+            )
+            if tail_sign != 0.0:
+                total += float(tail_sign * np.exp(log_absolute_tail))
+        return total
+
     def mean(self, name: str) -> float:
-        return float(np.sum(self.weight * self.observables[name]))
+        return self.weighted_sum(self.observables[name])
+
+    def log_mean(self, name: str) -> float:
+        """Return the log mean of a non-negative observable.
+
+        Keeping the result in log space also represents means too small to
+        return as ordinary floating-point numbers.  Zero-valued measurements
+        are handled naturally; an all-zero observable has log mean ``-inf``.
+        """
+
+        values = np.asarray(self.observables[name], dtype=float)
+        if np.any(values < 0.0):
+            raise ValueError("log_mean requires a non-negative observable")
+        if not np.all(np.isfinite(values)):
+            raise ValueError("observable values must be finite")
+        return float(logsumexp(self.log_weight_normalized, b=values))
+
+    def variance(self, name: str, mean: float | None = None) -> float:
+        """Return a centered weighted variance for an observable."""
+
+        values = np.asarray(self.observables[name], dtype=float)
+        if mean is None:
+            mean = self.weighted_sum(values)
+        return self.weighted_sum((values - mean) ** 2)
 
 
 def combine_streams(streams: Sequence[NestedSamplingStream]) -> CombinedNestedSampling:
@@ -115,9 +168,10 @@ def combine_streams(streams: Sequence[NestedSamplingStream]) -> CombinedNestedSa
     }
     n_live_effective = sum(s.n_live for s in streams)
     log_t = -1.0 / n_live_effective
-    log_weight = np.arange(energy.size, dtype=float) * log_t + np.log1p(-np.exp(log_t))
+    log_delta_x = np.log(-np.expm1(log_t))
+    log_weight = np.arange(energy.size, dtype=float) * log_t + log_delta_x
     log_x = (np.arange(energy.size, dtype=float) + 1.0) * log_t
-    log_z = float(np.logaddexp.reduce(log_weight))
+    log_z = float(logsumexp(log_weight))
     return CombinedNestedSampling(
         energy=energy,
         observables=observables,
@@ -128,6 +182,65 @@ def combine_streams(streams: Sequence[NestedSamplingStream]) -> CombinedNestedSa
         log_z_curve=np.logaddexp.accumulate(log_weight) - log_z,
         n_live_effective=n_live_effective,
     )
+
+
+def reweight_beta(
+    data: CombinedNestedSampling,
+    source_beta: float,
+    target_beta: float,
+    cpn_n: int,
+    volume: int,
+) -> tuple[CombinedNestedSampling, float, float]:
+    """Reweight canonical quadrature weights from ``source_beta`` to ``target_beta``.
+
+    The measured action density is
+    ``epsilon = S_beta / (2 * beta * N * V)``, so the beta-independent
+    extensive energy is ``H = 2 * N * V * epsilon``.  Reweighting therefore
+    adds ``-(target_beta - source_beta) * H`` to every log weight.  All other
+    action parameters, including theta, are held fixed by construction.
+
+    Returns ``(reweighted_data, log_Z_ratio, quadrature_ess)``.  The effective
+    sample size describes concentration of deterministic quadrature weights;
+    it is not a count of independent Markov-chain samples.
+    """
+
+    if cpn_n <= 0:
+        raise ValueError("cpn_n must be positive")
+    if volume <= 0:
+        raise ValueError("volume must be positive")
+    if not np.isfinite(source_beta) or not np.isfinite(target_beta):
+        raise ValueError("source_beta and target_beta must be finite")
+    if "action_density" not in data.observables:
+        raise ValueError("beta reweighting requires the action_density observable")
+
+    action_density = np.asarray(data.observables["action_density"], dtype=float)
+    if action_density.shape != data.log_weight.shape:
+        raise ValueError("action_density does not match the nested-sampling weights")
+    if not np.all(np.isfinite(action_density)):
+        raise ValueError("action_density must be finite")
+
+    extensive_energy = 2.0 * cpn_n * volume * action_density
+    with np.errstate(over="ignore", invalid="ignore"):
+        log_beta_factor = -(target_beta - source_beta) * extensive_energy
+    if not np.all(np.isfinite(log_beta_factor)):
+        raise ValueError("non-finite beta-reweighting exponent")
+
+    log_weight = data.log_weight + log_beta_factor
+    log_z_ratio = float(logsumexp(log_weight))
+    log_weight_normalized = log_weight - log_z_ratio
+    log_quadrature_ess = -float(logsumexp(2.0 * log_weight_normalized))
+    quadrature_ess = float(np.exp(log_quadrature_ess))
+    reweighted = CombinedNestedSampling(
+        energy=data.energy,
+        observables=data.observables,
+        log_x=data.log_x,
+        log_weight=log_weight,
+        log_weight_normalized=log_weight_normalized,
+        log_z=log_z_ratio,
+        log_z_curve=np.logaddexp.accumulate(log_weight) - log_z_ratio,
+        n_live_effective=data.n_live_effective,
+    )
+    return reweighted, log_z_ratio, quadrature_ess
 
 
 def bootstrap_nested_sampling(

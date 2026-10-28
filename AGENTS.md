@@ -50,6 +50,13 @@ This repository contains C code for CP(N-1) simulations, stochastic nested sampl
 - `analyze_nested_sampling.py` accepts either individual run directories or parent directories whose immediate `run0`/`run_0`-style children contain `dati.dat`, `topo.dat`, and `input.conf`.
 - Combine independent streams by sorting all dead points in decreasing energy. The effective live-point count is the sum of the selected streams' `num_live_pts` values.
 - Never compare an unweighted mean of nested-sampling dead points with regular MCMC. Use the nested-sampling weights. Before presenting a formal canonical comparison, also confirm that the configured `beta` and live-point initialization match the intended prior/reweighting convention.
+- The current nested-sampling prior is already the normalized canonical ensemble at the configured source `beta`; no separate likelihood factor is applied at that same beta. The primary source-coverage output is `log_accumulated_prior_mass`, normally approximately zero. `log_Z` is retained only as a deprecated compatibility alias and is not the physical canonical partition function.
+- `dati.dat[:,1]` is the intensive action density `epsilon = S_beta / (2 * beta * N * V)`. The beta-independent extensive energy is `H = 2 * N * V * epsilon`, and the dimensionless Symanzik action is `S_beta = beta * H`. The Python observable named `energy` is currently `2 * epsilon`, so equivalently `H = N * V * energy` when the default action prefactor is used.
+- Reweighting changes beta only. For source `beta_0` and target `beta_1`, add `-(beta_1 - beta_0) * H` to each log quadrature weight. Theta and all other action parameters remain fixed; the analysis rejects mixed source betas or mixed theta values.
+- `N` is not stored in `input.conf` and cannot be inferred safely from the output data. Pass the executable's compile-time value with `--cpn-n N`; `--cpn-n` is mandatory with `--target-beta`. When supplied, the output includes `mean_extensive_energy` and `mean_symanzik_action`.
+- The analysis reports `log_remaining_prior_mass = log(X_final)` and `remaining_prior_mass = X_final` using the expected-shrinkage convention. Use the logarithmic value when the linear remainder underflows. Together, the accumulated and remaining source-prior masses should sum to one up to quadrature round-off.
+- Beta-reweighted output reports `log_Z_ratio = log[Z(beta_target) / Z(beta_source)]` separately from the source-prior coverage fields. It also reports `quadrature_effective_sample_size`; this measures concentration of deterministic quadrature weights and is not a count of independent Markov-chain samples.
+- Weight normalization and positive log means use log-sum-exp. Ordinary weighted sums retain representable linear products for cancellation accuracy and recover only underflowed products in signed log space. Compute variances from centered observations, as done for the topological susceptibility, rather than by subtracting two large moments.
 - Bootstrap whole independently seeded streams with replacement, not individual dead points. Each replicate must re-merge by energy and recompute weights; this preserves within-stream correlations. Report the sample standard deviation across replicates as the bootstrap error.
 - Raw bootstrap replicates are opt-in via `--save-bootstrap-samples`. Normal output is `summary.txt`, `results.json`, and four PNG plots.
 - Example local invocation:
@@ -60,11 +67,22 @@ This repository contains C code for CP(N-1) simulations, stochastic nested sampl
       --bootstrap 1000 --seed 1234
   ```
 
-- The ready UBELIX analysis wrapper is `sh_files/analyze_4x5000_ubelix.sh`. It resolves Python to an absolute path before `srun`, because a bare `python` command may disappear in the compute-task environment. Its defaults analyze the four known N=21 job folders, use 500 bootstrap replicates, and write to a job-specific directory under `analysis_results/` in the checkout.
+- Example beta-only reweighting invocation:
+
+  ```bash
+  python analyze_nested_sampling.py RUN_ROOT [RUN_ROOT ...] \
+      --output analysis_results/reweighted \
+      --bootstrap 1000 --seed 1234 \
+      --cpn-n 21 --target-beta 0.6001
+  ```
+
+- The analysis requires NumPy, SciPy, and Matplotlib. The UBELIX wrappers load `SciPy-bundle` and explicitly verify all three imports.
+- The ready UBELIX analysis wrappers are `sh_files/analyze_4x5000_ubelix.sh` for N=21 and `sh_files/analyze_N4_L22_ubelix.sh` for N=4. They pass their known compile-time `N`, resolve Python to an absolute path before `srun`, and accept an optional `TARGET_BETA` environment variable for beta-only reweighting. For example, `TARGET_BETA=0.6001 sbatch sh_files/analyze_4x5000_ubelix.sh`.
 
 ## Verification checklist
 
 - For config changes, verify the expected run count, distinct seeds, lattice/beta, `num_live_pts`, stochastic-update count, fresh/resume flags, and the `num_ns_meas - 1` update count.
 - For shell changes, run `bash -n` and retain preflight checks before launching `srun`.
-- For Python changes, run `python -m py_compile analyze_nested_sampling.py utils/nest_sampl.py` and a small analysis against available local sample data. Remove smoke-test outputs afterward.
+- For local Python verification on Windows, use the `fpaction2` Conda environment. If `conda` is not on `PATH`, invoke `C:\Users\libac\miniconda3\Scripts\conda.exe run -n fpaction2 python ...`.
+- For Python changes, run `python -m py_compile analyze_nested_sampling.py utils/nest_sampl.py tests/test_nest_sampl.py`, run `python -m unittest discover -s tests -v`, and perform a small analysis against available local sample data. For beta-reweighting changes, also exercise `--cpn-n` plus a nearby `--target-beta` and a small stream bootstrap. Remove smoke-test outputs afterward.
 - Check `git diff --check` and `git status --short`; preserve unrelated user changes and generated data.

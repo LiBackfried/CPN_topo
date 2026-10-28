@@ -15,7 +15,8 @@
 # Analyze the four 5000-update jobs (10 independent streams per job).
 # Optional positional argument: output directory. By default results are kept
 # inside the git checkout under analysis_results/.
-# Optional environment variables: N_BOOTSTRAP (default 1000), BOOTSTRAP_SEED
+# Optional environment variables: N_BOOTSTRAP (default 500), BOOTSTRAP_SEED,
+# and TARGET_BETA (reweights beta only; theta remains fixed).
 
 set -euo pipefail
 
@@ -39,6 +40,10 @@ input_roots=(
 output_dir="${1:-$project_dir/analysis_results/ns_constraint_72_N21_4x10x5000/job_${SLURM_JOB_ID}}"
 n_bootstrap="${N_BOOTSTRAP:-500}"
 bootstrap_seed="${BOOTSTRAP_SEED:-20261012}"
+beta_args=(--cpn-n 21)
+if [[ -n "${TARGET_BETA:-}" ]]; then
+    beta_args+=(--target-beta "$TARGET_BETA")
+fi
 
 [[ "$n_bootstrap" =~ ^[0-9]+$ && "$n_bootstrap" -ge 2 ]] || {
     echo "N_BOOTSTRAP must be an integer >= 2." >&2
@@ -74,8 +79,8 @@ python_bin="$(type -P python3 || type -P python || true)"
     echo "Check available versions with: module spider Python" >&2
     exit 1
 }
-"$python_bin" -c 'import matplotlib, numpy' || {
-    echo "The loaded UBELIX Python modules do not provide numpy and matplotlib." >&2
+"$python_bin" -c 'import matplotlib, numpy, scipy' || {
+    echo "The loaded UBELIX Python modules do not provide numpy, scipy, and matplotlib." >&2
     echo "Check available versions with: module spider SciPy-bundle matplotlib" >&2
     exit 1
 }
@@ -85,12 +90,14 @@ mkdir -p "$output_dir"
 echo "Analyzing 40 streams from:"
 printf '  %s\n' "${input_roots[@]}"
 echo "Bootstrap replicates: $n_bootstrap (seed $bootstrap_seed)"
+echo "Target beta: ${TARGET_BETA:-source beta 0.6}"
 echo "Output: $output_dir"
 
 srun --ntasks=1 --cpus-per-task=1 --export=ALL "$python_bin" "$project_dir/analyze_nested_sampling.py" \
     "${input_roots[@]}" \
     --output "$output_dir" \
     --bootstrap "$n_bootstrap" \
-    --seed "$bootstrap_seed"
+    --seed "$bootstrap_seed" \
+    "${beta_args[@]}"
 
 echo "Analysis complete. Summary: $output_dir/summary.txt"
