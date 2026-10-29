@@ -1,0 +1,20 @@
+Python: /software.9/software/Python/3.9.5-GCCcore-10.3.0/bin/python3
+Analyzing 200 streams from:
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19135775
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19678209
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692937
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_19692936
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_20008149
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_20008651
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_20010266
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_20008148
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_20388977
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_20388978
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_20389384
+  /scratch/network/users/lb25v444/out_data/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/job_20388976
+Bootstrap replicates: 500 (seed 20261023)
+Target beta: source beta 0.7
+Output: /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_22_N4_beta0p7_300x50000_stoc1500/job_20508089
+Analyzed 300 runs (15000000 dead points).
+Results written to /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_22_N4_beta0p7_300x50000_stoc1500/job_20508089
+Analysis complete. Summary: /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_22_N4_beta0p7_300x50000_stoc1500/job_20508089/summary.txt
