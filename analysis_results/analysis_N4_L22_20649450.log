@@ -19,3 +19,6 @@ Analyzing 400 streams from:
 Bootstrap replicates: 500 (seed 20261023)
 Target beta: source beta 0.7
 Output: /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_22_N4_beta0p7_400x50000_stoc1500/job_20649450
+Analyzed 400 runs (20000000 dead points).
+Results written to /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_22_N4_beta0p7_400x50000_stoc1500/job_20649450
+Analysis complete. Summary: /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/analysis_results/ns_constraint_22_N4_beta0p7_400x50000_stoc1500/job_20649450/summary.txt
