@@ -5,8 +5,8 @@
 #SBATCH --qos=job_gratis
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem-per-cpu=24G
-#SBATCH --time=04:00:00
+#SBATCH --mem-per-cpu=28G
+#SBATCH --time=06:00:00
 #SBATCH --chdir=/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo
 #SBATCH --mail-user=liane.backfried@unibe.ch
 #SBATCH --mail-type=END,FAIL
@@ -44,10 +44,14 @@ input_roots=(
     "$scratch_root/job_20388978"
     "$scratch_root/job_20389384"
     "$scratch_root/job_20388976"
+    "$scratch_root/job_20525014"
+    "$scratch_root/job_20525015"
+    "$scratch_root/job_20525016"
+    "$scratch_root/job_20525009"
 )
-first_runs=(0 10 50 75 100 125 150 175 200 225 250 275)
-last_runs=(9 49 74 99 124 149 174 199 224 249 274 299)
-output_dir="${1:-$project_dir/analysis_results/ns_constraint_22_N4_beta0p7_300x50000_stoc1500/job_${SLURM_JOB_ID}}"
+first_runs=(0 10 50 75 100 125 150 175 200 225 250 275 300 325 350 375)
+last_runs=(9 49 74 99 124 149 174 199 224 249 274 299 324 349 374 399)
+output_dir="${1:-$project_dir/analysis_results/ns_constraint_22_N4_beta0p7_400x50000_stoc1500/job_${SLURM_JOB_ID}}"
 n_bootstrap="${N_BOOTSTRAP:-500}"
 bootstrap_seed="${BOOTSTRAP_SEED:-20261023}"
 beta_args=(--cpn-n 4)
@@ -98,7 +102,7 @@ python_bin="$(type -P python3 || type -P python || true)"
 echo "Python: $python_bin"
 
 mkdir -p "$output_dir"
-echo "Analyzing 200 streams from:"
+echo "Analyzing 400 streams from:"
 printf '  %s\n' "${input_roots[@]}"
 echo "Bootstrap replicates: $n_bootstrap (seed $bootstrap_seed)"
 echo "Target beta: ${TARGET_BETA:-source beta 0.7}"
