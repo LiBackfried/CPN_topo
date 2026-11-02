@@ -5,7 +5,7 @@
 #SBATCH --qos=job_gratis
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem-per-cpu=28G
+#SBATCH --mem-per-cpu=44G
 #SBATCH --time=06:00:00
 #SBATCH --chdir=/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo
 #SBATCH --mail-user=liane.backfried@unibe.ch
@@ -48,10 +48,26 @@ input_roots=(
     "$scratch_root/job_20525015"
     "$scratch_root/job_20525016"
     "$scratch_root/job_20525009"
+    "$scratch_root/job_20684460"
+    "$scratch_root/job_20684461"
+    "$scratch_root/job_20684462"
+    "$scratch_root/job_20686257"
+    "$scratch_root/job_20687600"
+    "$scratch_root/job_20687618"
+    "$scratch_root/job_20687905"
+    "$scratch_root/job_20688780"
+    "$scratch_root/job_20689657"
+    "$scratch_root/job_20690092"
+    "$scratch_root/job_20690588"
+    "$scratch_root/job_20691674"
+    "$scratch_root/job_20691875"
+    "$scratch_root/job_20692744"
+    "$scratch_root/job_20692746"
+    "$scratch_root/job_20684452"
 )
-first_runs=(0 10 50 75 100 125 150 175 200 225 250 275 300 325 350 375)
-last_runs=(9 49 74 99 124 149 174 199 224 249 274 299 324 349 374 399)
-output_dir="${1:-$project_dir/analysis_results/ns_constraint_22_N4_beta0p7_400x50000_stoc1500/job_${SLURM_JOB_ID}}"
+first_runs=(0 10 50 75 100 125 150 175 200 225 250 275 300 325 350 375 400 425 450 475 500 525 550 575 600 625 650 675 700 725 750 775)
+last_runs=(9 49 74 99 124 149 174 199 224 249 274 299 324 349 374 399 424 449 474 499 524 549 574 599 624 649 674 699 724 749 774 799)
+output_dir="${1:-$project_dir/analysis_results/ns_constraint_22_N4_beta0p7_800x50000_stoc1500/job_${SLURM_JOB_ID}}"
 n_bootstrap="${N_BOOTSTRAP:-500}"
 bootstrap_seed="${BOOTSTRAP_SEED:-20261023}"
 beta_args=(--cpn-n 4)
@@ -102,7 +118,7 @@ python_bin="$(type -P python3 || type -P python || true)"
 echo "Python: $python_bin"
 
 mkdir -p "$output_dir"
-echo "Analyzing 400 streams from:"
+echo "Analyzing 800 streams from:"
 printf '  %s\n' "${input_roots[@]}"
 echo "Bootstrap replicates: $n_bootstrap (seed $bootstrap_seed)"
 echo "Target beta: ${TARGET_BETA:-source beta 0.7}"
