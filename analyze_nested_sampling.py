@@ -170,23 +170,35 @@ def evaluate_at_beta(data: CombinedNestedSampling, lattice_size: int,
     return selected, values
 
 
+def plot_indices(count: int, limit: int) -> np.ndarray:
+    """Sample plot points evenly by rank, including both endpoints."""
+    return np.linspace(0, count - 1, min(count, limit), dtype=np.intp)
+
+
 def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], output: Path,
           values: dict[str, float], errors: dict[str, float]) -> None:
-    x = -data.log_x
+    # Matplotlib copies the plotted data several times. Bound the size of the
+    # diagnostic traces independently of the full quadrature and bootstrap.
+    indices = plot_indices(len(data.energy), 20_000)
+    x = -data.log_x[indices]
     fig, ax = plt.subplots(2, 1, figsize=(8, 8), constrained_layout=True)
-    ax[0].plot(x, np.exp(data.log_weight_normalized)); ax[0].set_yscale("log")
+    ax[0].plot(x, np.exp(data.log_weight_normalized[indices])); ax[0].set_yscale("log")
     ax[0].set(xlabel=r"$-\log X$", ylabel="normalized weight")
-    ax[1].plot(x, data.log_z_curve)
+    ax[1].plot(x, data.log_z_curve[indices])
     ax[1].set(xlabel=r"$-\log X$", ylabel=r"$\log$ cumulative normalized weight")
     for a in ax: a.grid(alpha=.3)
     fig.savefig(output / "nested_sampling_weights_z.png", dpi=180); plt.close(fig)
 
     fig, ax = plt.subplots(2, 1, figsize=(8, 8), constrained_layout=True)
+    stream_limit = max(2, 100_000 // len(streams))
     for stream in streams:
-        ax[0].plot(stream.observables["action_density"], lw=.7, alpha=.6,
+        steps = plot_indices(len(stream.energy), stream_limit)
+        ax[0].plot(steps, stream.observables["action_density"][steps], lw=.7, alpha=.6,
                    label=Path(stream.name).name)
-    ax[0].plot(np.linspace(0, max(map(lambda s: len(s.energy), streams)), len(data.energy)),
-               data.observables["action_density"], color="black", label="combined")
+    longest_stream = max(len(stream.energy) for stream in streams)
+    combined_steps = indices * (longest_stream / max(1, len(data.energy) - 1))
+    ax[0].plot(combined_steps, data.observables["action_density"][indices],
+               color="black", label="combined")
     ax[0].set(xlabel="nested-sampling step", ylabel="action density")
     if len(streams) <= 25:
         ax[0].legend(fontsize=7, ncol=2)
@@ -196,8 +208,8 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
     fig.savefig(output / "action_energy.png", dpi=180); plt.close(fig)
 
     fig, ax = plt.subplots(2, 1, figsize=(8, 8), constrained_layout=True)
-    ax[0].plot(x, data.observables["g0"], lw=.6, label=r"$\tilde G(0)$")
-    ax[0].plot(x, data.observables["gk"], lw=.6, label=r"$\tilde G(k)$")
+    ax[0].plot(x, data.observables["g0"][indices], lw=.6, label=r"$\tilde G(0)$")
+    ax[0].plot(x, data.observables["gk"][indices], lw=.6, label=r"$\tilde G(k)$")
     ax[0].set(xlabel=r"$-\log X$", ylabel="correlator"); ax[0].legend()
     ax[1].errorbar([0], [values["xi_L"]], yerr=[errors.get("xi_L", 0)], fmt="o", capsize=5)
     ax[1].set(xticks=[0], xticklabels=[r"$\xi_L$"], ylabel=r"$\xi_L$")
@@ -206,7 +218,7 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
 
     fig, ax = plt.subplots(3, 1, figsize=(8, 10), constrained_layout=True)
     for a, key, label in zip(ax, ("q_u", "q_z", "q_plaq"), (r"$Q_U$", r"$Q_z$", r"$Q_{plaq}$")):
-        a.plot(x, data.observables[key], ".", ms=2, alpha=.55)
+        a.plot(x, data.observables[key][indices], ".", ms=2, alpha=.55)
         a.set(xlabel=r"$-\log X$", ylabel=label); a.grid(alpha=.3)
     fig.savefig(output / "topological_charge.png", dpi=180); plt.close(fig)
 
