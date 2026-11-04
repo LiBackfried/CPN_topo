@@ -175,12 +175,31 @@ def plot_indices(count: int, limit: int) -> np.ndarray:
     return np.linspace(0, count - 1, min(count, limit), dtype=np.intp)
 
 
+def weight_background(axis, edges: np.ndarray, mass: np.ndarray):
+    """Shade each x bin across the panel using its normalized quadrature mass."""
+    y_limits = axis.get_ylim()
+    shading = axis.pcolormesh(edges, [0, 1], mass[np.newaxis, :],
+                              transform=axis.get_xaxis_transform(), cmap="Purples",
+                              vmin=0, alpha=.5, zorder=0)
+    axis.set_ylim(y_limits)
+    return shading
+
+
 def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], output: Path,
           values: dict[str, float], errors: dict[str, float]) -> None:
     # Matplotlib copies the plotted data several times. Bound the size of the
     # diagnostic traces independently of the full quadrature and bootstrap.
-    indices = plot_indices(len(data.energy), 20_000)
+    count = len(data.energy)
+    indices = plot_indices(count, 20_000)
     x = -data.log_x[indices]
+    # Sum every dead point's weight into contiguous rank bins, including points
+    # omitted from the plotted traces. Both NS x-axes are linear in rank.
+    bin_bounds = np.linspace(0, count, min(count, 1000) + 1, dtype=np.intp)
+    bin_mass = np.exp(np.logaddexp.reduceat(data.log_weight_normalized, bin_bounds[:-1]))
+    rank_edges = bin_bounds - .5
+    x_edges = (rank_edges + 1) / data.n_live_effective
+    weight_label = "Normalized quadrature mass per bin"
+
     fig, ax = plt.subplots(2, 1, figsize=(8, 8), constrained_layout=True)
     ax[0].plot(x, np.exp(data.log_weight_normalized[indices])); ax[0].set_yscale("log")
     ax[0].set(xlabel=r"$-\log X$", ylabel="normalized weight")
@@ -196,7 +215,8 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
         ax[0].plot(steps, stream.observables["action_density"][steps], lw=.7, alpha=.6,
                    label=Path(stream.name).name)
     longest_stream = max(len(stream.energy) for stream in streams)
-    combined_steps = indices * (longest_stream / max(1, len(data.energy) - 1))
+    step_scale = longest_stream / max(1, count - 1)
+    combined_steps = indices * step_scale
     ax[0].plot(combined_steps, data.observables["action_density"][indices],
                color="black", label="combined")
     ax[0].set(xlabel="nested-sampling step", ylabel="action density")
@@ -204,6 +224,8 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
         ax[0].legend(fontsize=7, ncol=2)
     ax[1].hist([s.energy for s in streams], bins=50, density=True, alpha=.45)
     ax[1].set(xlabel="energy", ylabel="density")
+    shading = weight_background(ax[0], rank_edges * step_scale, bin_mass)
+    fig.colorbar(shading, ax=ax[0], label=weight_label)
     for a in ax: a.grid(alpha=.3)
     fig.savefig(output / "action_energy.png", dpi=180); plt.close(fig)
 
@@ -213,6 +235,8 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
     ax[0].set(xlabel=r"$-\log X$", ylabel="correlator"); ax[0].legend()
     ax[1].errorbar([0], [values["xi_L"]], yerr=[errors.get("xi_L", 0)], fmt="o", capsize=5)
     ax[1].set(xticks=[0], xticklabels=[r"$\xi_L$"], ylabel=r"$\xi_L$")
+    shading = weight_background(ax[0], x_edges, bin_mass)
+    fig.colorbar(shading, ax=ax[0], label=weight_label)
     for a in ax: a.grid(alpha=.3)
     fig.savefig(output / "correlation_length.png", dpi=180); plt.close(fig)
 
@@ -220,6 +244,8 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
     for a, key, label in zip(ax, ("q_u", "q_z", "q_plaq"), (r"$Q_U$", r"$Q_z$", r"$Q_{plaq}$")):
         a.plot(x, data.observables[key][indices], ".", ms=2, alpha=.55)
         a.set(xlabel=r"$-\log X$", ylabel=label); a.grid(alpha=.3)
+        shading = weight_background(a, x_edges, bin_mass)
+    fig.colorbar(shading, ax=ax, label=weight_label, aspect=35)
     fig.savefig(output / "topological_charge.png", dpi=180); plt.close(fig)
 
 
