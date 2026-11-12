@@ -4,6 +4,36 @@
 #include "../include/cpn_conf.h"
 #include <time.h>
 
+/* Q and chi' use the same densities and site order in each discretization. */
+static void measure_topology(CPN_Conf const * const conf, Geometry const * const geo,
+							 CPN_Param const * const param, double Q[3], double chi_p[3])
+{
+	double origin[3] = {0.0};
+	for (int j=0; j<3; j++)
+	{
+		Q[j] = 0.0;
+		chi_p[j] = 0.0;
+	}
+	for (long i=0; i<param->d_volume; i++)
+	{
+		double const d2 = square_distance(i, 0, param);
+		double const q[3] = {geo_topo_charge_U_density(conf, geo, i),
+							 geo_topo_charge_z_density(conf, geo, i),
+							 plaq_topo_charge_density(conf, geo, i)};
+		for (int j=0; j<3; j++)
+		{
+			Q[j] += q[j];
+			chi_p[j] += q[j] * d2;
+			if (i == 0) origin[j] = q[j];
+		}
+	}
+	for (int j=0; j<3; j++)
+	{
+		chi_p[j] *= origin[j];
+		chi_p[j] /= 4.0;
+	}
+}
+
 // measure local observables on the periodic copy
 void perform_measures_localobs(CPN_Conf * conf, Geometry const * const geo, 
                                CPN_Param const * const param, FILE *datafilep, FILE *topofilep, CPN_Conf *aux_conf)
@@ -19,11 +49,7 @@ void perform_measures_localobs(CPN_Conf * conf, Geometry const * const geo,
 	fflush(datafilep);
 
 	// compute topological observables of hot configuration
-	for (i=0; i<3; i++) // 1=geometric charge U, 2=geometric charge z, 3=non-geometric plaquette charge
-	{
-	Q[i] = topo_charge(conf, geo, param, i); // compute topological charge using i^th discretization
-	chi_p[i] = chi_prime(conf, geo, param, i); // compute chi' using i^th discretization
-	}	
+	measure_topology(conf, geo, param, Q, chi_p);
 	// print topological observable of hot configuration
 	fprintf(topofilep, "%ld %d", conf->update_index, cool_step);
 	for (i=0; i<3; i++) fprintf(topofilep, " %.16lf", Q[i]);
@@ -43,11 +69,7 @@ void perform_measures_localobs(CPN_Conf * conf, Geometry const * const geo,
 		if ( ( cool_step % param->d_coolevery ) == 0 ) // perform measures on cooled conf
 		{ 
 			// compute topological observables of cooled configuration
-			for (i=0; i<3; i++)
-			{
-				Q[i] = topo_charge(aux_conf, geo, param, i);
-				chi_p[i] = chi_prime(aux_conf, geo, param, i);
-			}
+			measure_topology(aux_conf, geo, param, Q, chi_p);
 			// print topological observable of cooled configuration
 			fprintf(topofilep, "%ld %d", conf->update_index, cool_step);
 			for (i=0; i<3; i++) fprintf(topofilep, " %.16lf", Q[i]);

@@ -39,13 +39,18 @@ python N4_volume_benchmark/scan_depth.py ../data_N4_UBELIX \
 
 ## Slurm pilot and planning estimates
 
+See [CP³ nested-sampling kernel timings](PERFORMANCE.md) for the optimized
+kernel's measured wall time at all five volumes. Run
+`bash N4_volume_benchmark/time_ubelix.sh` on UBELIX to submit matched timing
+pilots and generate a report. The L⁴ model below describes the original kernel.
+
 Keep `epyc2`, `gratis/job_gratis`, one task and one CPU per chain, and
 `--mem-per-cpu=512M` for the pilot. Use four independent chains per volume
 and preserve 50 live points, four microcanonical sweeps, `num_norm=1`, and
 the L=22 cooling settings. Start with `3 L²` stochastic proposals per NS
 update, keeping the rounded 1,500 at `L=22`. The pilot uses `num_ns_meas=101`.
 
-The current stochastic-update loop recomputes the energy over all `L²`
+The original stochastic-update loop recomputed the energy over all `L²`
 sites after every proposal. With `3 L²` proposals, that work grows as `L⁴`.
 The first timing estimate is `0.05 s × (L/22)^4` per NS update, rounded up
 from the observed L=22 maximum. The first depth estimate scales the L=22

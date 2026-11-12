@@ -2,6 +2,7 @@
 #define CPN_UPDATE_NESTSAMPL_C
 
 #include "../include/cpn_nestsampl.h"
+#include <float.h>
 
 static const double NS_ENERGY_TOLERANCE = 1.0e-9;
 
@@ -18,7 +19,7 @@ static void check_nested_sampling_energy(char const * const stage,
 {
 	double const energy_shift = energy_after - energy_before;
 
-	if(fabs(energy_shift) > NS_ENERGY_TOLERANCE)
+	if(!(fabs(energy_shift) <= NS_ENERGY_TOLERANCE))
 	{
 		fprintf(stderr,
 				"%s changed the energy beyond tolerance: before=%.17g "
@@ -92,14 +93,14 @@ void stochastic_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const para
 		// updates:
 		if (pr_field < 1./3.) // update z-field
 		{
-			acc_z += nestsampl_update_single_field_z(&(conf[0]), param, dead_param, geo, rng_state, x, pr_upd, &curr_E, tol);
+			acc_z += nestsampl_update_single_field_z(&(conf[0]), param, dead_param, geo, rng_state, x, pr_upd, &curr_E, tol, 0.0);
 			upd_z++;
 
 		} else {		// update U-field
 			if(pr_field < 2.0/3.0) mu=0; // update U_0 field
 			else mu=1; // update U_1 field
 
-			acc_U += nestsampl_update_single_link_U(&(conf[0]), param, dead_param, geo, rng_state, x, mu, pr_upd, &curr_E, tol);
+			acc_U += nestsampl_update_single_link_U(&(conf[0]), param, dead_param, geo, rng_state, x, mu, pr_upd, &curr_E, tol, 0.0);
 			upd_U++;
 		}
 	
@@ -149,6 +150,19 @@ void stochastic_hb_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const p
 	double curr_E;
 	double energy_before_microcanonical;
 	double const tol = NS_ENERGY_TOLERANCE;
+	double const volume = (double)param->d_volume;
+	int const proposals = param->d_stoc_single_site_upd;
+	/* For near-unit fields, the absolute sum of the weighted action terms
+	   divided by V is below 4, and the energy density is below 8 in
+	   magnitude. The guard covers 2V additions in each full energy sum,
+	   the O(N) arithmetic in each bond, and one density addition and two
+	   local evaluations per proposal. A local evaluation has at most
+	   eight bonds for z and three for a link.
+	   A length-two direction has self-bonds in the improved action, so
+	   its local site difference cannot be used for the cutoff decision. */
+	double const roundoff = (param->d_size[0] == 2 || param->d_size[1] == 2)
+		? INFINITY : DBL_EPSILON * (16.0 * volume + 64.0 * (N + 1)
+			+ proposals * (8.0 + 128.0 * (N + 1) / volume));
 
 	energy_before_microcanonical = energy_density(&(conf[0]), geo, param);
 	for(i=0; i<param->d_num_micro; i++)
@@ -160,7 +174,7 @@ void stochastic_hb_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const p
 								 energy_before_microcanonical, curr_E,
 								 dead_param->conf_energy);
 
-	for(i=0; i<param->d_stoc_single_site_upd; i++)
+	for(i=0; i<proposals; i++)
 	{
 		x = (long int) floor(rand_num(rng_state) * ((double)param->d_volume));
 		pr_field = rand_num(rng_state);
@@ -168,27 +182,34 @@ void stochastic_hb_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const p
 		if(pr_field < 1.0/3.0)
 		{
 			acc_z += nestsampl_update_single_field_z(&(conf[0]), param, dead_param,
-												 geo, rng_state, x, 1.0, &curr_E, tol);
+												 geo, rng_state, x, 1.0, &curr_E, tol, roundoff);
 			upd_z++;
 		}
 		else
 		{
 			mu = (pr_field < 2.0/3.0) ? 0 : 1;
 			acc_U += nestsampl_update_single_link_U(&(conf[0]), param, dead_param,
-												geo, rng_state, x, mu, 1.0, &curr_E, tol);
+												geo, rng_state, x, mu, 1.0, &curr_E, tol, roundoff);
 			upd_U++;
 		}
+	}
 
-		double const energy_before_normalization = curr_E;
-
-		if ((conf[0]).update_index % param->d_num_norm == 0)
-			normalize_replicas(&(conf[0]), param);
-		(conf[0]).update_index++;
-		curr_E = energy_density(&(conf[0]), geo, param);
-
-		check_nested_sampling_energy("Stochastic-update normalization/recomputation",
-									 energy_before_normalization, curr_E,
-									 dead_param->conf_energy);
+	/* Heatbath proposals normalize the changed field or link themselves.
+	   Coalesce scheduled lattice normalizations into one after the batch
+	   to remove norm drift from the microcanonical sweeps. */
+	long const offset = conf[0].update_index % param->d_num_norm;
+	long const until_normalization = (param->d_num_norm - offset) % param->d_num_norm;
+	if (proposals > until_normalization)
+	{
+		normalize_CPN_conf(&conf[0], param);
+	}
+	if (proposals > 0)
+	{
+		conf[0].update_index += proposals;
+		double const full_E = energy_density(&conf[0], geo, param);
+		check_nested_sampling_energy("Heatbath batch normalization/recomputation",
+									 curr_E, full_E, dead_param->conf_energy);
+		curr_E = full_E;
 	}
 
 	live_param[dead_param->conf_label].conf_energy = curr_E;
@@ -198,14 +219,30 @@ void stochastic_hb_nested_sampl_update(CPN_Conf *conf, CPN_Param const * const p
 	*u_acceptance_rate = (upd_U > 0) ? ((double)acc_U / (double)upd_U) : 0.0;
 }
 
+/* The proposal is still installed here. Recompute on that configuration
+   when roundoff could change the decision at the tolerated cutoff. */
+static int accept_trial_energy(CPN_Conf const * const conf, CPN_Param const * const param,
+							   Geometry const * const geo, double *curr_E, double delta,
+							   double limit, double roundoff)
+{
+	double trial_E = *curr_E + delta / (double)param->d_volume;
+	if (roundoff > 0.0 && !(fabs(trial_E - limit) > roundoff))
+		trial_E = energy_density(conf, geo, param);
+	if (trial_E < limit)
+	{
+		*curr_E = trial_E;
+		return 1;
+	}
+	return 0;
+}
 
 
 int nestsampl_update_single_field_z(CPN_Conf *conf, CPN_Param const * const param, 
 									NS_Param *dead_param, Geometry const * const geo, 
 									RNG_Param *rng_state, long const n, double const which_update,
-									double *curr_E, double tol)
+									double *curr_E, double tol, double roundoff)
 {
-	double local_old, local_new, trial_E;
+	double local_old, local_new;
 	cmplx z_old[N] __attribute__((aligned(DOUBLE_ALIGN)));
 	vector_equal(z_old, conf->z[n]);
 
@@ -219,24 +256,19 @@ int nestsampl_update_single_field_z(CPN_Conf *conf, CPN_Param const * const para
 	// unnorm. local energy contribution after single field update
 	local_new = local_energy_z(conf, geo, n);
 
-	// check updated energy density and compare to the overall nest sampl constraint
-	trial_E = *curr_E + (local_new - local_old) / (double)param->d_volume;
-
-	if (trial_E < dead_param->conf_energy - tol) {
-		*curr_E = trial_E;
+	if (accept_trial_energy(conf, param, geo, curr_E, local_new - local_old,
+							dead_param->conf_energy - tol, roundoff))
 		return 1;
-	} else {
-		vector_equal(conf->z[n], z_old);
-		return 0;
-	}
+	vector_equal(conf->z[n], z_old);
+	return 0;
 }						
 
 int nestsampl_update_single_link_U(CPN_Conf *conf, CPN_Param const * const param, 
 									NS_Param *dead_param, Geometry const * const geo, 
 									RNG_Param *rng_state, long const n, int const mu, double const which_update,
-									double *curr_E, double tol)
+									double *curr_E, double tol, double roundoff)
 {
-	double local_old, local_new, trial_E;
+	double local_old, local_new;
 	cmplx U_old = conf->U[n][mu];
 
 	// initial local energy contribution (unnormalized! <-> no 1/V)
@@ -249,16 +281,11 @@ int nestsampl_update_single_link_U(CPN_Conf *conf, CPN_Param const * const param
 	// unnorm. local energy contribution after single field update
 	local_new = local_energy_U(conf, geo, n, mu);
 
-	// check updated energy density and compare to the overall nest sampl constraint
-	trial_E = *curr_E + (local_new - local_old) / (double)param->d_volume;
-
-	if (trial_E < dead_param->conf_energy - tol) {
-		*curr_E = trial_E;
+	if (accept_trial_energy(conf, param, geo, curr_E, local_new - local_old,
+							dead_param->conf_energy - tol, roundoff))
 		return 1;
-	} else {
-		conf->U[n][mu] = U_old;
-		return 0;
-	}
+	conf->U[n][mu] = U_old;
+	return 0;
 }
 
 

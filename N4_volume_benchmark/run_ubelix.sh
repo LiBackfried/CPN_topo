@@ -42,8 +42,8 @@ if [[ -n $parent ]]; then
     [[ $(<"$parent/lattice") == "$L" && $(<"$parent/tasks") == "$SLURM_NTASKS" ]] ||
         fail 'Use the same L and task count as the parent job.'
     executable="$parent/cpn_ns_N4"
-    [[ ! -v NS_STOC && ! -v NS_INIT_SWEEPS && ! -v NS_INIT_SPACING ]] ||
-        fail 'A continuation inherits its stochastic update count and initialization settings.'
+    [[ ! -v NS_STOC && ! -v NS_INIT_SWEEPS && ! -v NS_INIT_SPACING && ! -v NS_SEED_BASE ]] ||
+        fail 'A continuation inherits its stochastic update count, initialization settings and RNG state.'
 fi
 [[ -r $template && -x $executable ]] || fail 'Submit from CPN_topo after building cpn_ns_N4 with the existing N=4 helper.'
 module load OpenSSL/1.1
@@ -56,9 +56,10 @@ init_spacing=${NS_INIT_SPACING:-8}
 for value in "$stoc" "$init_sweeps" "$init_spacing"; do
     [[ $value =~ ^[1-9][0-9]{0,6}$ ]] || fail 'Use positive integers for NS_STOC, NS_INIT_SWEEPS and NS_INIT_SPACING.'
 done
-seed_base=$((100000000 + 32 * SLURM_JOB_ID))
-if [[ -z $parent ]] && (( seed_base + SLURM_NTASKS >= 2147483399 )); then
-    fail 'Job-derived seeds exceed the ran2 seed range.'
+if (( ! resume )); then
+    seed_base=${NS_SEED_BASE:-$((100000000 + 32 * SLURM_JOB_ID))}
+    [[ $seed_base =~ ^[1-9][0-9]{0,9}$ ]] && (( seed_base + SLURM_NTASKS < 2147483399 )) ||
+        fail 'Use a positive seed base with all task seeds inside the ran2 range.'
 fi
 
 mkdir -p "$(dirname "$output_root")"

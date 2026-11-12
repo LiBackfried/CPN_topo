@@ -115,27 +115,7 @@ void real_main(char *input_file_name)
 		load_live_proposal(&(conf[0]), &param, new_label);
 		proposal_energy = live_param[new_label].conf_energy;
 
-		// also update the energy of the former dead config with that of the proposed new config and save proposal into dead slot
-		live_param[dead_param.conf_label].conf_energy = live_param[new_label].conf_energy;
-		write_live_conf(&(conf[0]), &param, &dead_param);
-
-
-		/* 2) 	update the proposed conf according to overrel + heatbath MC steps => then check if the nested sampling constraint holds 
-	    		if the constraint is not fulfilled the updates are looped
-		*/
-		// nested_sampling_update(conf, &param, live_param, &dead_param, &geo, &rng_state);
-		// what we have at this point: conf has the replacement live for the dead; and live_param[dead] = new energy
-		
-		// save new live in place of old dead
-		// write_live_conf(&(conf[0]), &param, &dead_param);
-		
-		// // combine the acceptance rate measurements and writing of the live TODO: move below the dead param? or we want to explicitly see the energy of the proposal! such that we can gauge where in the distribution we are...!
-		// acc_rate = nested_sampling_updat_w_accrate(conf, &param, live_param, &dead_param, &geo, &rng_state,
-		// 												 &u_candidates_per_angle, &z_candidates_per_angle);
-
-		// Perform stochastic single-field/link updates and record their constraint acceptance rates.
-		// stochastic_nested_sampl_update(conf, &param, live_param, &dead_param, &geo, &rng_state,
-		// 									 &z_acceptance_rate, &u_acceptance_rate);
+		/* 2) Update the proposal in memory and write the verified replacement. */
 		stochastic_hb_nested_sampl_update(conf, &param, live_param, &dead_param, &geo, &rng_state,
 											&z_acceptance_rate, &u_acceptance_rate);
  		// we might actually be more interested in the proposal's original energy? no but the dead energy should also be good, since this is the benchmark!
