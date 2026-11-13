@@ -37,7 +37,7 @@ restore_project_state() {
 }
 trap restore_project_state EXIT
 
-sed -E 's/^#define N [0-9]+$/#define N 4/' "$header_backup" > "$header"
+sed -E 's/^#define N [0-9]+[[:space:]]*$/#define N 4/' "$header_backup" > "$header"
 grep -q '^#define N 4$' "$header" || {
     echo "Could not set N=4 in $header" >&2
     exit 1

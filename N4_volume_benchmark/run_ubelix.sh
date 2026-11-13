@@ -119,14 +119,15 @@ for ((run = 0; run < SLURM_NTASKS; run++)); do
     seen_seeds[$seed]=1
 done
 
-export output_root
 echo "L=$L, $SLURM_NTASKS chains, $updates updates per chain in $output_root"
-srun --ntasks="$SLURM_NTASKS" --cpus-per-task=1 --cpu-bind=cores --kill-on-bad-exit=1 /bin/bash -c '
+# Export the loaded module environment and pass the run path as a task argument.
+srun --export=ALL --ntasks="$SLURM_NTASKS" --cpus-per-task=1 --cpu-bind=cores --kill-on-bad-exit=1 /bin/bash -c '
     set -euo pipefail
+    output_root=$1
     cd "$output_root/run_$SLURM_PROCID"
     hostname > node.txt
     awk -F ": " "/^model name/ {print \$2; exit}" /proc/cpuinfo >> node.txt
     LC_ALL=C /usr/bin/time -f "elapsed_seconds=%e\nuser_seconds=%U\nsystem_seconds=%S\nmax_rss_kib=%M" \
         -o timing.txt "$output_root/cpn_ns_N4" input.conf > stdout.log 2> stderr.log
-'
+' bash "$output_root"
 touch "$output_root/completed"
