@@ -1,5 +1,7 @@
 """Read regular CPN Monte Carlo runs and estimate errors by binning."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass, replace
 from pathlib import Path
 

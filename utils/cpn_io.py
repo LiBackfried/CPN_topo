@@ -1,5 +1,7 @@
 """Common input-file and run-directory helpers for CP(N-1) analysis."""
 
+from __future__ import annotations
+
 import re
 from pathlib import Path
 

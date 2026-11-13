@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Plot regular CPN MCMC histories and binning diagnostics for a job directory."""
 
+from __future__ import annotations
+
 import argparse
 import csv
 import sys
@@ -23,7 +25,7 @@ LABELS = (r"$\langle\epsilon\rangle$", r"$\langle Q_U\rangle$", r"$\langle Q_U^2
 def plot_histories(chains: list[MCMCChain], retained: list[MCMCChain], burn_in: int,
                    output: Path, title: str) -> None:
     fig, axes = plt.subplots(len(chains), 2, squeeze=False, sharex=True,
-                             figsize=(11, 2.6 * len(chains)), layout="constrained")
+                             figsize=(11, 2.6 * len(chains)), constrained_layout=True)
     for chain, kept, (action_ax, charge_ax) in zip(chains, retained, axes):
         color = "C0"
         action_ax.plot(chain.steps, chain.action_density, color=color, linewidth=0.7)
@@ -46,7 +48,7 @@ def plot_histories(chains: list[MCMCChain], retained: list[MCMCChain], burn_in: 
 
 
 def plot_action_histogram(chains: list[MCMCChain], output: Path, title: str) -> None:
-    fig, ax = plt.subplots(figsize=(7, 4.5), layout="constrained")
+    fig, ax = plt.subplots(figsize=(7, 4.5), constrained_layout=True)
     bins = np.histogram_bin_edges(np.concatenate([chain.action_density for chain in chains]), bins=60)
     for chain in chains:
         ax.hist(chain.action_density, bins=bins, density=True, histtype="step", label=chain.path.name)
@@ -61,7 +63,7 @@ def write_binning(chains: list[MCMCChain], min_blocks: int, output: Path, title:
     if len(chains) > 1:
         groups.append(("pooled", chains))
     stride = chains[0].meas_every
-    fig, axes = plt.subplots(2, 3, figsize=(12, 6.5), layout="constrained")
+    fig, axes = plt.subplots(2, 3, figsize=(12, 6.5), constrained_layout=True)
     axes = axes.ravel()
     with (output / "binning.csv").open("w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
