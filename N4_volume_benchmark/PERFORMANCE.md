@@ -107,6 +107,43 @@ differences of at most `1.5e-10`.
 
 ## UBELIX timing
 
+The completed UBELIX timing campaign measured these rates on AMD EPYC 7742
+nodes. Each row uses four seed-matched pairs of 200- and 2,000-update runs
+per build. Rates are median wall seconds per update, estimated from the
+elapsed-time difference between the two lengths.
+
+| L | Baseline s/update | Updated s/update | Measured speedup |
+| ---: | ---: | ---: | ---: |
+| 22 | 0.045250 | 0.005600 | 8.08× |
+| 38 | 0.345186 | 0.014661 | 23.54× |
+| 66 | — | 0.045886 | — |
+| 90 | — | 0.077683 | — |
+| 120 | — | 0.143100 | — |
+
+At the measured L=38 rate, adding 3,000 updates per chain to the completed
+2,000-update job takes about 44 seconds of loop wall time. This estimate
+excludes checkpoint copying and launch overhead and assumes a comparable
+update rate at the next depth. A 10-minute request gives headroom for the
+first continuation.
+
+```bash
+manifest=/path/to/completed/cpn_ns_timing.XXXXXX/jobs.tsv
+parent=$(awk -F '\t' '$1 == "updated" && $2 == 38 && $3 == 2000 {print $5}' "$manifest")
+if [[ -n $parent && -f "$parent/completed" ]]; then
+    campaign=$(dirname "$(dirname "$(dirname "$parent")")")
+    NS_SCRATCH="$campaign" sbatch --ntasks=4 --time=00:10:00 \
+        N4_volume_benchmark/run_ubelix.sh 38 3000 "$parent"
+else
+    echo 'The manifest must point to a completed updated L=38 2,000-update job.' >&2
+fi
+```
+
+After the continuation finishes, pass its job directory to `scan_depth.py`
+and compare the shared prefixes up to 5,000 updates at the target betas.
+Pass only the leaf directory because the scanner follows the parent links.
+
+### Reproduce the timing campaign
+
 From a UBELIX login node, open the checkout containing the optimized C
 sources and run the timing script. It snapshots the current working-tree
 sources, builds N=4 executables in isolated scratch directories, and submits
