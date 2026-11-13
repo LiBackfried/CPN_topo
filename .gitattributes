@@ -1,3 +1,4 @@
 *.sh text eol=lf
 N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/run_* text eol=lf
 N4_L22_runs/mcmc_22_N4_beta0p7_3x1M/*.conf text eol=lf
+N4_volume_benchmark/mcmc_38_N4_beta1p0_3x100k/*.conf text eol=lf

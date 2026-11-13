@@ -176,9 +176,9 @@ checkpoint about 2.3 MB per chain.
 
 4. **Calibrate the energy range and compare volumes.** Run independent direct
    MCMC at `0.7, 0.8, 0.9, 1.0` on L=38, then on any larger volume under
-   consideration, using the existing N=4 `cpn` build and
-   `N4_L22_runs/mcmc_22_N4_beta0p7_3x1M` inputs as a template. Change the
-   volume, beta and seeds, and keep theta and observable definitions fixed.
+   consideration. The [L=38, beta=1.0 MCMC setup](mcmc_38_N4_beta1p0_3x100k/README.md)
+   is ready to submit. For the other ensembles, change the volume, beta and
+   seeds, and keep theta and observable definitions fixed.
    Estimate equilibration and autocorrelation separately for energy and Q.
    Check that the NS common cutoff extends below the low-energy tail of the
    direct target histogram (start with its 1st percentile) and compare the
