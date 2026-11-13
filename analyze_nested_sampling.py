@@ -10,7 +10,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import re
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +18,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+from utils.cpn_io import discover_runs, read_config
 from utils.nest_sampl import CombinedNestedSampling, NestedSamplingStream
 from utils.nest_sampl import bootstrap_nested_sampling, combine_streams, reweight_beta
 
@@ -40,31 +40,6 @@ def arguments() -> argparse.Namespace:
     p.add_argument("--save-bootstrap-samples", action="store_true",
                    help="write every bootstrap replicate to bootstrap_samples.csv")
     return p.parse_args()
-
-
-def read_config(path: Path) -> dict[str, list[str]]:
-    result = {}
-    for line in path.read_text(encoding="utf-8").splitlines():
-        fields = line.split("#", 1)[0].split()
-        if fields:
-            result[fields[0]] = fields[1:]
-    return result
-
-
-def discover_runs(roots: list[Path]) -> list[Path]:
-    runs = []
-    for root in roots:
-        root = root.expanduser().resolve()
-        if (root / "dati.dat").is_file():
-            found = [root]
-        else:
-            found = [p for p in root.iterdir()
-                     if p.is_dir() and re.fullmatch(r"run_?\d+", p.name)]
-            found.sort(key=lambda p: int(re.search(r"\d+$", p.name).group()))
-        if not found:
-            raise FileNotFoundError(f"no run directories found under {root}")
-        runs.extend(found)
-    return list(dict.fromkeys(runs))
 
 
 def table(path: Path) -> np.ndarray:

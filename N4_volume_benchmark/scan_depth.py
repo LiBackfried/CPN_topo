@@ -14,7 +14,8 @@ import numpy as np
 from scipy.special import logsumexp
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from analyze_nested_sampling import discover_runs, evaluate_at_beta, read_config
+from analyze_nested_sampling import evaluate_at_beta
+from utils.cpn_io import discover_runs, read_config
 from utils.nest_sampl import NestedSamplingStream, bootstrap_nested_sampling, combine_streams
 
 SOURCE_BETA = 0.7
