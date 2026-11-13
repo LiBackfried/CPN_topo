@@ -114,7 +114,7 @@ for build in "${variants[@]}"; do
         for updates in "$short" "$long"; do
             # A task gets the same seed at both lengths and with both builds.
             seed_base=$((70600 + 32 * lattice))
-            job=$(env -u NS_STOC -u NS_INIT_SWEEPS -u NS_INIT_SPACING \
+            job=$(env -u NS_STOC -u NS_INIT_SWEEPS -u NS_INIT_SPACING -u NS_EXECUTABLE \
                 NS_SCRATCH="$campaign" NS_SEED_BASE="$seed_base" \
                 sbatch --parsable --export=ALL --ntasks="$chains" --cpus-per-task=1 \
                 --time=00:30:00 --job-name="ns_${build}_L${lattice}_${updates}" \

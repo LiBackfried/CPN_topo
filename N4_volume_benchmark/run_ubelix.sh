@@ -29,10 +29,11 @@ parent=${3:-}
 resume=0
 project_dir=${SLURM_SUBMIT_DIR:?Submit from the CPN_topo repository root.}
 template="$project_dir/N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500/run_0"
-executable="$project_dir/cpn_ns_N4"
+executable=${NS_EXECUTABLE:-$project_dir/cpn_ns_N4}
 scratch=${NS_SCRATCH:-/scratch/network/users/lb25v444/out_data}
 output_root="$scratch/ns_N4_beta0p7_volume_benchmark/L${L}/job_${SLURM_JOB_ID}"
 [[ $scratch == /* ]] || fail 'NS_SCRATCH must be an absolute path.'
+[[ $executable == /* ]] || fail 'NS_EXECUTABLE must be an absolute path.'
 [[ -x /usr/bin/time ]] || fail 'GNU time is required at /usr/bin/time.'
 
 if [[ -n $parent ]]; then
@@ -42,8 +43,9 @@ if [[ -n $parent ]]; then
     [[ $(<"$parent/lattice") == "$L" && $(<"$parent/tasks") == "$SLURM_NTASKS" ]] ||
         fail 'Use the same L and task count as the parent job.'
     executable="$parent/cpn_ns_N4"
-    [[ ! -v NS_STOC && ! -v NS_INIT_SWEEPS && ! -v NS_INIT_SPACING && ! -v NS_SEED_BASE ]] ||
-        fail 'A continuation inherits its stochastic update count, initialization settings and RNG state.'
+    [[ ! -v NS_STOC && ! -v NS_INIT_SWEEPS && ! -v NS_INIT_SPACING &&
+       ! -v NS_SEED_BASE && ! -v NS_EXECUTABLE ]] ||
+        fail 'A continuation inherits its executable, stochastic update count, initialization settings and RNG state.'
 fi
 [[ -r $template && -x $executable ]] || fail 'Submit from CPN_topo after building cpn_ns_N4 with the existing N=4 helper.'
 module load OpenSSL/1.1

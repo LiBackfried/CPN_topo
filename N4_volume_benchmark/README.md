@@ -117,6 +117,15 @@ checkpoint about 2.3 MB per chain.
 
 ## Measure depth before scaling production
 
+For the independent L=38 comparison at β=1.0, run
+`bash N4_volume_benchmark/fresh_L38_12_ubelix.sh` on UBELIX. It submits three
+fresh four-chain jobs with 35,000 updates per chain and job-derived seeds.
+It uses the saved executable from job `22120845` and prints two commands
+with the actual job directories to produce `L38_depth_fresh12.csv` and
+`L38_depth_combined16.csv`. The 16-chain scan follows the original job's
+continuation history. Use `NS_SCRATCH` if the original job lives under a
+different scratch base.
+
 1. **Extend L=38 first.** Inspect prefixes around 5k, 10k, 20k, and 35k–40k
    cumulative updates per chain, adapting the next segment length to actual
    timing and coverage. For example, after a successful 100-update L=38 job,
