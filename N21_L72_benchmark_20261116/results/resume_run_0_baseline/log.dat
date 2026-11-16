@@ -1,0 +1,36 @@
++----------------------------------------------+
+|          Simulation details for cpn          |
++----------------------------------------------+
+
+Theory: 2d CP^{N-1} model with N = 21
+
+Input parameters read from file input.conf
+
+Lattice size: 72 x 72
+Number of live points: 50
+Number of nest.sampling steps: 21
+Simulation started from stored conf read from file conf.dat
+
+beta:  0.6000000000
+theta: 0.0000000000
+
+Over-relaxation/over-heat-bath ratio: 4 / 1
+Initial heatbath measures taken every: 8
+Conf normalized every: 1
+Conf saved every: 1
+
+Max num of cooling steps: 50
+Topo obs measured every 5 cooling steps
+
+Rng initializated from last rng state read from file rng_state.dat (seed = 16774)
+
+Little endian machine
+
+Heatbath init start: Mon Nov 16 11:01:40 2026
+Heatbath init end:   Mon Nov 16 11:01:40 2026
+Heatbath init time:  0.00463 seconds
+
+Simulation start: Mon Nov 16 11:01:40 2026
+Simulation end:   Mon Nov 16 11:02:42 2026
+Simulation time:  61.65115 seconds
+

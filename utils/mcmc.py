@@ -11,7 +11,7 @@ from .cpn_io import discover_runs, read_config
 
 
 OBSERVABLES = ("mean_action_density", "mean_Q_U", "mean_Q_U_squared",
-               "chi_topological", "xi_L_squared")
+               "chi_topological", "xi_L_squared", "mean_G0", "mean_Gk")
 
 
 @dataclass(frozen=True)
@@ -118,7 +118,7 @@ def _observables(means: np.ndarray, size: tuple[int, int], q_origin: float) -> n
     chi_top = (q_centered_sq - q_centered**2) / np.prod(size)
     ratio = np.divide(g0, gk, out=np.full_like(g0, np.nan), where=gk != 0)
     xi_sq = (ratio - 1) / (4 * np.sin(np.pi / min(size))**2)
-    return np.column_stack((action, q, q_sq, chi_top, xi_sq))
+    return np.column_stack((action, q, q_sq, chi_top, xi_sq, g0, gk))
 
 
 @dataclass(frozen=True)

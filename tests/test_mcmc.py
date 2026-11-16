@@ -29,7 +29,7 @@ class BinningTests(unittest.TestCase):
         def statistics(rows):
             q, g0, gk = rows.T
             xi_sq = (g0.mean() / gk.mean() - 1) / (4 * np.sin(np.pi / 38)**2)
-            return [q.var() / 38**2, xi_sq]
+            return [q.var() / 38**2, xi_sq, g0.mean(), gk.mean()]
 
         expected_samples = np.array([statistics(np.delete(data, [i, i + 1], axis=0))
                                      for i in range(0, 8, 2)])

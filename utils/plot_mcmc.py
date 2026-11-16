@@ -19,7 +19,7 @@ from utils.mcmc import OBSERVABLES, MCMCChain, binning_analysis, load_ensemble
 
 
 LABELS = (r"$\langle\epsilon\rangle$", r"$\langle Q_U\rangle$", r"$\langle Q_U^2\rangle$",
-          r"$\chi_{\mathrm{top}}$", r"$\xi_L^2$")
+          r"$\chi_{\mathrm{top}}$", r"$\xi_L^2$", r"$\langle G_0\rangle$", r"$\langle G_k\rangle$")
 
 
 def plot_histories(chains: list[MCMCChain], retained: list[MCMCChain], burn_in: int,
@@ -63,7 +63,7 @@ def write_binning(chains: list[MCMCChain], min_blocks: int, output: Path, title:
     if len(chains) > 1:
         groups.append(("pooled", chains))
     stride = chains[0].meas_every
-    fig, axes = plt.subplots(2, 3, figsize=(12, 6.5), constrained_layout=True)
+    fig, axes = plt.subplots(2, 4, figsize=(15, 6.5), constrained_layout=True)
     axes = axes.ravel()
     with (output / "binning.csv").open("w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)

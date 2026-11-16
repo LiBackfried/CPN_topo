@@ -1,0 +1,77 @@
+configure.ac:3: installing './compile'
+configure.ac:2: installing './install-sh'
+configure.ac:2: installing './missing'
+Makefile.am: installing './depcomp'
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of gcc... gcc3
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for openssl/md5.h... no
+configure: WARNING:
+
+|---------------------------------------------------------------------------------------------|
+|                                                                                             |
+|   ***WARNING: Header openssl/md5.h not found. No hash will be given to configurations!***   |
+|                                                                                             |
+|---------------------------------------------------------------------------------------------|
+
+
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+depbase=`echo src/cpn_ns.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT src/cpn_ns.o -MD -MP -MF $depbase.Tpo -c -o src/cpn_ns.o src/cpn_ns.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/rng.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/rng.o -MD -MP -MF $depbase.Tpo -c -o lib/rng.o lib/rng.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/cpn_cmplx_op.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/cpn_cmplx_op.o -MD -MP -MF $depbase.Tpo -c -o lib/cpn_cmplx_op.o lib/cpn_cmplx_op.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/cpn_conf_def.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/cpn_conf_def.o -MD -MP -MF $depbase.Tpo -c -o lib/cpn_conf_def.o lib/cpn_conf_def.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/cpn_meas.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/cpn_meas.o -MD -MP -MF $depbase.Tpo -c -o lib/cpn_meas.o lib/cpn_meas.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/cpn_update.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/cpn_update.o -MD -MP -MF $depbase.Tpo -c -o lib/cpn_update.o lib/cpn_update.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/cpn_param.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/cpn_param.o -MD -MP -MF $depbase.Tpo -c -o lib/cpn_param.o lib/cpn_param.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/geometry.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/geometry.o -MD -MP -MF $depbase.Tpo -c -o lib/geometry.o lib/geometry.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/endianness.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/endianness.o -MD -MP -MF $depbase.Tpo -c -o lib/endianness.o lib/endianness.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo lib/cpn_update_nestsampl.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+gcc -DHAVE_CONFIG_H -I.    -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror  -MT lib/cpn_update_nestsampl.o -MD -MP -MF $depbase.Tpo -c -o lib/cpn_update_nestsampl.o lib/cpn_update_nestsampl.c &&\
+mv -f $depbase.Tpo $depbase.Po
+gcc -std=c99 -O3 -Wall -Wextra -pedantic -Wconversion -Werror    -o cpn_ns ./src/cpn_ns.o ./lib/rng.o ./lib/cpn_cmplx_op.o ./lib/cpn_conf_def.o ./lib/cpn_meas.o ./lib/cpn_update.o ./lib/cpn_param.o ./lib/geometry.o ./lib/endianness.o ./lib/cpn_update_nestsampl.o -lm 

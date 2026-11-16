@@ -20,7 +20,8 @@ from utils.nest_sampl import NestedSamplingStream, bootstrap_nested_sampling, co
 
 SOURCE_BETA = 0.7
 N = 4
-STATISTICS = ("mean_action_density", "xi_L_squared", "chi_topological", "log_Z_ratio")
+STATISTICS = ("mean_action_density", "xi_L_squared", "chi_topological", "log_Z_ratio",
+              "mean_G0", "mean_Gk")
 OBSERVABLES = ("action_density", "g0", "gk", "q_u", "q_z", "q_plaq")
 
 

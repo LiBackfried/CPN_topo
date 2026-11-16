@@ -121,10 +121,51 @@ For the independent L=38 comparison at β=1.0, run
 `bash N4_volume_benchmark/fresh_L38_12_ubelix.sh` on UBELIX. It submits three
 fresh four-chain jobs with 35,000 updates per chain and job-derived seeds.
 It uses the saved executable from job `22120845` and prints two commands
-with the actual job directories to produce `L38_depth_fresh12.csv` and
-`L38_depth_combined16.csv`. The 16-chain scan follows the original job's
+with the actual job directories to produce `N4_L38_res/L38_depth_fresh12.csv`
+and `N4_L38_res/L38_depth_combined16.csv`. The 16-chain scan follows the original job's
 continuation history. Use `NS_SCRATCH` if the original job lives under a
 different scratch base.
+
+### L=38 correlation-length cross-check at β=1.0
+
+`scan_depth.py` now includes `mean_G0` and `mean_Gk` with stream-bootstrap
+errors. Both correlators are already stored in `dati.dat`. Reanalyze the
+existing 16-chain sample and the direct MCMC job to get their separate
+estimates. In the Bash block below, set `fresh_jobs` to the three job
+directories printed for the original 12-chain campaign.
+
+```bash
+module load Python SciPy-bundle matplotlib
+scratch="${NS_SCRATCH:-/scratch/network/users/lb25v444/out_data}"
+base="$scratch/ns_N4_beta0p7_volume_benchmark/L38"
+fresh_jobs=("$base/job_JOB1" "$base/job_JOB2" "$base/job_JOB3")
+mkdir -p N4_L38_res
+python N4_volume_benchmark/scan_depth.py "${fresh_jobs[@]}" "$base/job_22120845" \
+    --updates 30000 --targets 1.0 --bootstrap 200 > N4_L38_res/L38_correlators_combined16.csv
+
+mcmc="$scratch/mcmc_38_N4_beta1p0_3x100k/job_22121710"
+python utils/plot_mcmc.py "$mcmc" --burn-in 20000 \
+    --output N4_L38_res/mcmc_correlators_burn20000
+awk -F, '$1=="pooled" && $2==128 && ($5=="mean_G0" || $5=="mean_Gk" || $5=="xi_L_squared")' \
+    N4_L38_res/mcmc_correlators_burn20000/binning.csv
+```
+
+From the UBELIX repository root, submit the proposal-count sensitivity run:
+
+```bash
+bash N4_volume_benchmark/fresh_L38_2xstoc_ubelix.sh
+```
+
+This uses the saved executable from job `22120845` to start twelve
+independent chains at source β=0.7 with 8,664 stochastic proposals per NS
+update and 35,000 NS updates per chain. It requests 45 minutes for each of
+three four-chain jobs. After completion, run the analysis block printed by
+the script. It compares 30,000 and 35,000 updates at β=1.0 and writes
+`N4_L38_res/L38_depth_2xstoc12.csv`. Compare the 35,000-update rows from
+the two NS scans with the pooled MCMC row for each observable. The two NS
+proposal counts define separate ensembles.
+
+### Volume and depth plan
 
 1. **Extend L=38 first.** Inspect prefixes around 5k, 10k, 20k, and 35k–40k
    cumulative updates per chain, adapting the next segment length to actual
