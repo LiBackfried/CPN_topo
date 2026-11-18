@@ -206,6 +206,46 @@ Pull `N4_L38_res/action_bins_32bins/` after completion. Its `stoc4332/` and
 16-bin summaries in `N4_L38_res/action_bins/`. Omitting the final bin-count
 argument uses the original 16-bin analysis and output paths.
 
+#### Add twelve more 8,664-proposal chains and analyze all ensembles
+
+From the repository root on UBELIX, run:
+
+```bash
+bash N4_volume_benchmark/fresh_L38_2xstoc_ubelix.sh --more
+```
+
+This submits three four-chain jobs with 35,000 NS updates per chain, source
+β=0.7, and 8,664 proposals per update. It uses job-derived seeds and the
+saved executable from job `22120845`. It also submits an analysis batch
+with an `afterok` dependency on all three new jobs. The existing doubled
+jobs are `22320950`, `22320951` and `22320952`.
+
+The helper prints and records a unique output directory such as
+`N4_L38_res/extra8664.ABCDEF/` inside the repository. The simulation files
+go to `$NS_SCRATCH/ns_N4_beta0p7_volume_benchmark/L38/job_<ID>/` with the
+usual scratch default. All CSVs, plots, and the analysis Slurm log go to
+the repository output directory. It contains:
+
+- `new_jobs.tsv`, `analysis_job_id.txt` and `analyze_command.txt` for the
+  submitted job IDs, data locations and analysis retry command.
+- `depth_fresh12.csv`, `depth_previous12.csv`, `depth_combined24.csv` and
+  `depth_baseline16.csv`, each comparing 30,000 and 35,000 updates at
+  target β=0.8, 0.9 and 1.0 with 200 stream-bootstrap replicates.
+- `action_bins32/fresh12/`, `previous12/`, `combined24/` and `baseline16/`,
+  each with `comparison.png`, `bins.csv` and `summary.csv` against the
+  same direct MCMC sample at β=1.0.
+- `mcmc_burn20000/` with the MCMC histories, histogram, and binning analysis
+  including `mean_G0` and `mean_Gk`.
+- `completed`, created after every analysis succeeds.
+
+The first three NS analyses use 8,664 proposals. `baseline16` uses the
+four original chains from leaf job `22120845` and the twelve from
+`22133588`, `22133589` and `22133590`, each with 4,332 proposals. The
+combined doubled-proposal estimate uses 24 independent chains. The
+new batch is also analyzed alone to check its agreement with the previous
+twelve chains. Each simulation job requests 45 minutes, and the dependent
+analysis job requests two hours on one CPU.
+
 ### Volume and depth plan
 
 1. **Extend L=38 first.** Inspect prefixes around 5k, 10k, 20k, and 35k–40k
