@@ -1,9 +1,11 @@
 # CP³ volume and reweighting benchmark on UBELIX
 
 For the seven-point beta scan comparing L22 with the 8,664-proposal L38
-ensemble, including available direct MCMC references, see
+ensemble and optional L66, including available direct MCMC references, see
 [VOLUME_BETA_SCAN.md](VOLUME_BETA_SCAN.md). Submit from the repository with
 `bash N4_volume_benchmark/submit_volume_beta_scan_ubelix.sh`.
+Prefix with `INCLUDE_L66=1` to include the twelve completed L66 streams and
+save the three-volume analysis under repository `N4_L66_res/`.
 
 The prepared L66 campaign, runtime measurements, submission commands and
 analysis-output convention are documented in [N4_L66_res/README.md](../N4_L66_res/README.md).

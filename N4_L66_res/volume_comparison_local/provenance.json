@@ -1,0 +1,47 @@
+{
+  "inputs": [
+    {
+      "path": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L66_res\\volume_comparison_local\\L22\\beta_scan.csv",
+      "sha256": "48164b973a0217a5274152cb5059afc4248d6b5e8f1f926c328f307087ade83f"
+    },
+    {
+      "path": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L38_res\\extra8664.m3YXfE\\depth_combined24.csv",
+      "sha256": "d5356a58b9f6d38b8e8c6246be26af8000c98248f68e9d1dc438f27bcc8751c3"
+    },
+    {
+      "path": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L66_res\\comparison_22587511\\depth.csv",
+      "sha256": "799a03d249914bbd5fe82f382f9d442d3d27b87ba37ee6841b8f332ea26ffdb9"
+    },
+    {
+      "path": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L38_res\\extra8664.m3YXfE\\mcmc_burn20000\\binning.csv",
+      "sha256": "552c8dc189ffefd6b48133bfe861fe81ac6764e45a3e209d2c2438b88b35e9fa"
+    },
+    {
+      "path": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L66_res\\comparison_22587511\\mcmc_burn20000\\binning.csv",
+      "sha256": "37aef587ce853d0450ae2cabdc4975fe873847a48b5860440ca6bf703890d34f"
+    },
+    {
+      "path": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L66_res\\reference_targets.csv",
+      "sha256": "4559d32c31307412b8cbfad71dc732a731f9fe57210b85ad081ef11506ceee93"
+    }
+  ],
+  "missing_L38_betas": [
+    0.7,
+    0.75,
+    0.85,
+    0.95
+  ],
+  "NS_errors": "whole-stream bootstrap; L22 regenerated from local 25-stream subset",
+  "MCMC_errors": "saved pooled jackknife, burn-in 20000 MC steps, bins of 128 measurements",
+  "xi_errors": "first-order propagation of xi_squared SE for all methods/volumes",
+  "proposal_counts": {
+    "22": 1500,
+    "38": 8664,
+    "66": 26136
+  },
+  "limitations": [
+    "No interpolation or invented bootstrap replicates for missing summaries",
+    "Different NS proposal counts and sample sizes across volumes",
+    "Finite depth and constrained-chain mixing bias excluded from errors"
+  ]
+}

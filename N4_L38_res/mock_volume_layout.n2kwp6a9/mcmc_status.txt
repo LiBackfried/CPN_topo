@@ -1,0 +1,2 @@
+L22 MCMC: MOCK_L22_MCMC (direct beta 0.7)
+L38 MCMC: MOCK_L38_MCMC (direct beta 1.0)

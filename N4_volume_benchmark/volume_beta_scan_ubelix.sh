@@ -11,13 +11,17 @@
 # selected there. Run data are read from scratch; all results stay in the repo.
 set -euo pipefail
 [[ -n "${SLURM_JOB_ID:-}" ]] || { echo "Submit this worker with sbatch." >&2; exit 1; }
-[[ $# -eq 3 ]] || { echo "Usage: sbatch $0 {22|38|compare} PROJECT_DIR OUTPUT_DIR" >&2; exit 1; }
+[[ $# -eq 3 ]] || { echo "Usage: sbatch $0 {22|38|66|compare} PROJECT_DIR OUTPUT_DIR" >&2; exit 1; }
+# sbatch --mem supplies SLURM_MEM_PER_NODE for this allocation. Drop stale
+# per-CPU/GPU values exported from a parent allocation before invoking srun.
+unset SLURM_MEM_PER_CPU SLURM_MEM_PER_GPU
 mode="$1"
 project_dir="$(realpath "$2")"
 output_dir="$(realpath "$3")"
 case "$output_dir/" in
     "$project_dir/N4_L38_res/"*) ;;
-    *) echo "Output must be under repository N4_L38_res/." >&2; exit 1 ;;
+    "$project_dir/N4_L66_res/"*) ;;
+    *) echo "Output must be under repository N4_L38_res/ or N4_L66_res/." >&2; exit 1 ;;
 esac
 cd "$project_dir"
 scratch_root="${VOLUME_DATA_ROOT:-/scratch/network/users/lb25v444/out_data}"
@@ -39,6 +43,14 @@ if [[ "$mode" == compare ]]; then
         mcmc_args+=(--mcmc-l38 "$MCMC_L38_DIR")
     elif [[ -d "$scratch_root/mcmc_38_N4_beta1p0_3x100k/job_22121710" ]]; then
         mcmc_args+=(--mcmc-l38 "$scratch_root/mcmc_38_N4_beta1p0_3x100k/job_22121710")
+    fi
+    if [[ "${INCLUDE_L66:-0}" == 1 ]]; then
+        mcmc_args+=(--l66 "$output_dir/L66/beta_scan.csv")
+        if [[ -n "${MCMC_L66_DIR:-}" ]]; then
+            mcmc_args+=(--mcmc-l66 "$MCMC_L66_DIR")
+        elif [[ -d "$scratch_root/mcmc_66_N4_beta0p9_3x100k/job_22587511" ]]; then
+            mcmc_args+=(--mcmc-l66 "$scratch_root/mcmc_66_N4_beta0p9_3x100k/job_22587511")
+        fi
     fi
     srun --ntasks=1 --cpus-per-task=1 --export=ALL "$python_bin" \
         "$project_dir/N4_volume_benchmark/plot_volume_betas.py" \
@@ -72,6 +84,15 @@ case "$mode" in
         expected_chains=24
         available_chains=24
         stoc=8664
+        ;;
+    66)
+        group="$scratch_root/ns_N4_beta0p7_volume_benchmark/L66"
+        jobs=(22587433 22587434 22587435)
+        first=(0 0 0)
+        last=(3 3 3)
+        expected_chains=12
+        available_chains=12
+        stoc=26136
         ;;
     *) echo "Unknown mode: $mode" >&2; exit 1 ;;
 esac

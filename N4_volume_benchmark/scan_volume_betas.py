@@ -14,12 +14,12 @@ import numpy as np
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from N4_volume_benchmark.scan_depth import common_prefix, load_ns_ensemble, target_diagnostics
+from N4_volume_benchmark.plot_beta_weights import BETAS, plot_single_run_weights
 from analyze_nested_sampling import evaluate_at_beta
 from utils.cpn_io import discover_runs
 from utils.nest_sampl import bootstrap_nested_sampling, combine_streams
 
 
-BETAS = (0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0)
 QUANTITIES = ("mean_action_density", "mean_G0", "mean_Gk", "mean_Q_U", "mean_Q_U_squared",
               "mean_Q_z", "mean_Q_plaquette", "mean_energy", "mean_extensive_energy",
               "mean_symanzik_action", "chi_topological", "xi_L_squared", "xi_L",
@@ -66,6 +66,10 @@ def analyze(roots, bootstrap, seed, output, expected_lattice=None, expected_stoc
         raise ValueError(f"expected {expected_stoc} stochastic proposals, found {stoc}")
     if expected_chains is not None and len(chains) != expected_chains:
         raise ValueError(f"expected {expected_chains} independent chains, found {len(chains)}")
+    # Use one full, deterministically selected stream, with its own live count.
+    # This diagnostic is separate from the merged common-support estimator.
+    plot_single_run_weights(chains[0][:, 0], lattice, int(config["num_live_pts"][0]), output,
+                            run=selected[0], rng_seed=int(config["rng_seed"][0]))
     depth = min(len(chain) - 1 for chain in chains)
     streams = common_prefix(chains, depth, int(config["num_live_pts"][0]))
 

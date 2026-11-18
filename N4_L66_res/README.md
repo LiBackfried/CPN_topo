@@ -1,5 +1,30 @@
 # L66 campaign and analysis outputs
 
+The shared seven-beta L22/L38/L66 reweighting workflow is now available:
+
+```bash
+INCLUDE_L66=1 bash N4_volume_benchmark/submit_volume_beta_scan_ubelix.sh
+```
+
+It uses existing NS jobs `22587433`, `22587434`, `22587435` and the direct
+beta=0.9 MCMC reference `22587511` when available. Results, normalized-weight
+overlays and three-volume comparisons are saved to a new repository
+`N4_L66_res/volume_scan.XXXXXX/`. Passing a completed L22/L38 scan directory
+as the optional argument reuses those analyses. See
+[VOLUME_BETA_SCAN.md](../N4_volume_benchmark/VOLUME_BETA_SCAN.md) for commands,
+resource overrides and the handling of unresolved low-beta xi.
+
+Copied completed NS and MCMC comparison analyses are now available in
+`campaign.HP4pX0/` and `comparison_22587511/`. See
+[RESULTS_REVIEW.md](RESULTS_REVIEW.md) for the matched beta=0.9 comparison,
+depth checks through beta=1.0 and unresolved low-beta correlation lengths.
+
+The local L22/L38/L66 comparison is in
+[volume_comparison_local/README.md](volume_comparison_local/README.md), with
+[findings](volume_comparison_local/FINDINGS.md) and
+[six-panel plot](volume_comparison_local/volume_dependence.png). It uses
+25 local L22 streams and leaves the four locally missing L38 betas as gaps.
+
 Save all future L66 analysis here, including submission manifests, depth
 scans, MCMC plots/binning and NS/MCMC comparisons. Simulation checkpoints
 and raw measurements remain on UBELIX scratch. Nothing was submitted by
@@ -11,8 +36,9 @@ N=4 Table III; its original paper was not identified from the image.
 On 2026-11-18 the user reported MCMC job **22587511** (L66, beta=0.9)
 and NS simulation job IDs **22587433, 22587434, 22587435**
 (source beta=0.7), with dependent analysis job **22587436**.
-Submission and job roles are user-confirmed; remote Slurm state and
-completion have not been checked. These are also recorded in
+Submission and job roles are user-confirmed; copied analysis directories
+now contain completion markers. Remote Slurm state has not been checked.
+The job IDs are also recorded in
 `reported_jobs_20261118.tsv`.
 
 The three NS simulation jobs contain four streams each, for **12 independent
@@ -46,7 +72,7 @@ with table 3.039(12). The error on the square root is propagated to first
 order from the saved xi_L² bootstrap error. At beta=0.9 that L38 ensemble
 gives xi_L²=30.1873(1.2667), near the L66 target 29.1384(2375), but these
 are different volumes. The direct L66 run provides the matching-volume test.
-No L66 physics-production result is claimed here.
+Completed L66 estimates and their limitations are in `RESULTS_REVIEW.md`.
 
 ## Initial NS setup
 

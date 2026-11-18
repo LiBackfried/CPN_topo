@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare N=4 L22/L38 beta scans and optional direct MCMC ensembles."""
+"""Compare N=4 L22/L38 and optional L66 beta scans and direct MCMC ensembles."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 import sys
+from itertools import combinations
 from pathlib import Path
 
 import matplotlib
@@ -20,6 +21,9 @@ from N4_volume_benchmark.scan_volume_betas import BETAS, QUANTITIES
 from utils.cpn_io import discover_runs, read_config
 from utils.mcmc import OBSERVABLES, binning_analysis, load_ensemble
 
+PROPOSALS = {22: 1500, 38: 8664, 66: 26136}
+VOLUME_STYLES = ((22, "o", "-"), (38, "^", "--"), (66, "s", ":"))
+
 
 def read_scan(path, lattice):
     with path.open(newline="", encoding="utf-8") as file:
@@ -27,7 +31,7 @@ def read_scan(path, lattice):
     if (len(rows) != len(BETAS) or any(row["L"] != lattice for row in rows)
             or not np.allclose(sorted(row["target_beta"] for row in rows), BETAS, rtol=0, atol=1e-12)):
         raise ValueError(f"Expected the seven requested betas for L={lattice} in {path}")
-    expected_stoc = 1500 if lattice == 22 else 8664
+    expected_stoc = PROPOSALS[lattice]
     if any(row["stochastic_proposals"] != expected_stoc for row in rows):
         raise ValueError(f"Expected {expected_stoc} stochastic proposals in {path}")
     return [{"method": "NS", **row} for row in sorted(rows, key=lambda row: row["target_beta"])]
@@ -94,9 +98,13 @@ def mcmc_point(root, lattice, burn_in, block_size, output):
 
 
 def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
-            mcmc_l22_search=None, burn_in=20000, block_size=128):
+            mcmc_l22_search=None, burn_in=20000, block_size=128, l66=None, mcmc_l66=None):
     output.mkdir(parents=True, exist_ok=True)
     rows = read_scan(l22, 22) + read_scan(l38, 38)
+    if l66 is not None:
+        rows.extend(read_scan(l66, 66))
+    elif mcmc_l66 is not None:
+        raise ValueError("L66 MCMC requires an L66 NS scan")
     status = []
     if mcmc_l22 is None and mcmc_l22_search is not None:
         candidates = sorted(path for path in mcmc_l22_search.glob("job_*") if complete_mcmc_root(path))
@@ -105,11 +113,14 @@ def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
         else:
             status.append(f"L22 MCMC: found {len(candidates)} completed candidates under {mcmc_l22_search}; "
                           "set MCMC_L22_DIR explicitly to include a reference.")
-    for lattice, root in ((22, mcmc_l22), (38, mcmc_l38)):
+    references = [(22, mcmc_l22), (38, mcmc_l38)]
+    if l66 is not None:
+        references.append((66, mcmc_l66))
+    for lattice, root in references:
         if root is not None:
             rows.append(mcmc_point(root, lattice, burn_in, block_size, output))
             status.append(f"L{lattice} MCMC: {root} (direct beta {rows[-1]['target_beta']})")
-        elif lattice == 38 or mcmc_l22_search is None:
+        elif lattice != 22 or mcmc_l22_search is None:
             status.append(f"L{lattice} MCMC: no directory supplied.")
 
     comparison = []
@@ -118,6 +129,8 @@ def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
         for key in QUANTITIES:
             if f"{key}_bootstrap_se" in row:
                 clean[f"{key}_se"] = row[f"{key}_bootstrap_se"]
+        clean["xi_status"] = ("undefined" if not np.isfinite(row["xi_L_over_L"]) else
+                              "undefined_error" if not np.isfinite(row["xi_L_over_L_bootstrap_se"]) else "finite")
         comparison.append(clean)
     fields = list(dict.fromkeys(key for row in comparison for key in row))
     with (output / "volume_comparison.csv").open("w", newline="", encoding="utf-8") as file:
@@ -129,15 +142,22 @@ def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
     common = ("mean_action_density", "mean_G0", "mean_Gk", "mean_Q_U",
               "mean_Q_U_squared", "chi_topological", "xi_L_squared", "xi_L_over_L")
     shifts, checks = [], []
-    for beta in BETAS:
-        small = next(row for row in comparison if row["method"] == "NS" and row["L"] == 22 and row["target_beta"] == beta)
-        large = next(row for row in comparison if row["method"] == "NS" and row["L"] == 38 and row["target_beta"] == beta)
-        for key in common:
-            shifts.append({"target_beta": beta, "observable": key,
-                           "L22": small[key], "L22_se": small[f"{key}_se"],
-                           "L38": large[key], "L38_se": large[f"{key}_se"],
-                           "L38_minus_L22": large[key] - small[key],
-                           "difference_se": np.hypot(small[f"{key}_se"], large[f"{key}_se"])})
+    volumes = sorted({int(row["L"]) for row in comparison if row["method"] == "NS"})
+    for smaller, larger in combinations(volumes, 2):
+        for beta in BETAS:
+            small = next(row for row in comparison if row["method"] == "NS" and row["L"] == smaller and row["target_beta"] == beta)
+            large = next(row for row in comparison if row["method"] == "NS" and row["L"] == larger and row["target_beta"] == beta)
+            for key in common:
+                difference = {"target_beta": beta, "observable": key, "L_small": smaller, "L_large": larger,
+                              "small_value": small[key], "small_se": small[f"{key}_se"],
+                              "large_value": large[key], "large_se": large[f"{key}_se"],
+                              "large_minus_small": large[key] - small[key],
+                              "difference_se": np.hypot(small[f"{key}_se"], large[f"{key}_se"])}
+                if (smaller, larger) == (22, 38):
+                    difference.update(L22=small[key], L22_se=small[f"{key}_se"],
+                                      L38=large[key], L38_se=large[f"{key}_se"],
+                                      L38_minus_L22=large[key] - small[key])
+                shifts.append(difference)
     for mc in (row for row in comparison if row["method"] == "MCMC"):
         ns = next((row for row in comparison if row["method"] == "NS" and row["L"] == mc["L"]
                    and np.isclose(row["target_beta"], mc["target_beta"], rtol=0, atol=1e-12)), None)
@@ -153,12 +173,13 @@ def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
     for name, table in (("volume_shifts.csv", shifts), ("ns_mcmc_comparison.csv", checks)):
         if table:
             with (output / name).open("w", newline="", encoding="utf-8") as file:
-                writer = csv.DictWriter(file, fieldnames=list(table[0]))
+                writer = csv.DictWriter(file, fieldnames=list(dict.fromkeys(key for row in table for key in row)))
                 writer.writeheader()
                 writer.writerows(table)
     (output / "mcmc_status.txt").write_text("\n".join(status) + "\n", encoding="utf-8")
     (output / "comparison_settings.json").write_text(json.dumps({
-        "l22_scan": str(l22), "l38_scan": str(l38), "burn_in_MC_steps": burn_in,
+        "l22_scan": str(l22), "l38_scan": str(l38), "l66_scan": str(l66) if l66 else None,
+        "burn_in_MC_steps": burn_in,
         "block_size_measurements": block_size, "mcmc_error": "blocked delete-one-bin jackknife",
         "mcmc_xi_error": "delta method from xi_squared jackknife error",
         "ns_error": "whole-independent-stream bootstrap; same draws across betas",
@@ -171,7 +192,7 @@ def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
     fig, axes = plt.subplots(2, 3, figsize=(13, 7.5), constrained_layout=True)
     for ax, (key, label) in zip(axes.flat, panels):
         for method, color in (("NS", "crimson"), ("MCMC", "royalblue")):
-            for lattice, marker, style in ((22, "o", "-"), (38, "^", "--")):
+            for lattice, marker, style in VOLUME_STYLES:
                 group = [row for row in comparison if row["method"] == method and row["L"] == lattice]
                 if not group:
                     continue
@@ -180,13 +201,24 @@ def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
                             markerfacecolor=color if method == "NS" else "white",
                             linestyle=style if method == "NS" else "none", capsize=3,
                             label=f"{method}, L={lattice}")
+                if key == "xi_L_over_L":
+                    for row in group:
+                        if not np.isfinite(row[key]):
+                            ax.text(row["target_beta"], 0.025, f"?{lattice}", color=color, fontsize=8,
+                                    ha="center", transform=ax.get_xaxis_transform())
+                        elif not np.isfinite(row[f"{key}_se"]):
+                            ax.annotate("?", (row["target_beta"], row[key]), xytext=(3, 5),
+                                        textcoords="offset points", color=color, fontsize=9)
         ax.set(xlabel=r"$\beta$", ylabel=label, xticks=BETAS)
         ax.grid(alpha=0.2)
     axes[0, 0].legend(fontsize=9)
     chain_counts = {int(row["L"]): int(row["chains"]) for row in rows if row["method"] == "NS"}
-    fig.suptitle("N=4 volume comparison; NS source beta=0.7\n"
-                 f"L22: {chain_counts[22]} chains, 1500 proposals; "
-                 f"L38: {chain_counts[38]} chains, 8664 proposals per NS update")
+    title = ("N=4 volume comparison; NS source beta=0.7\n" +
+             "; ".join(f"L{lattice}: {chain_counts[lattice]} chains, {PROPOSALS[lattice]} proposals"
+                       for lattice in volumes) + " per NS update")
+    if any(row["xi_status"] != "finite" for row in comparison):
+        title += "\n?L = undefined correlation length at volume L; ? = undefined error"
+    fig.suptitle(title, fontsize=11 if l66 is not None else 12)
     for suffix in ("png", "pdf"):
         fig.savefig(output / f"volume_dependence.{suffix}", dpi=180)
     plt.close(fig)
@@ -195,8 +227,10 @@ def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
     for ax, (key, label) in zip(axes, (("last_tenth_target_mass", "Weight in final 10% of common ranks"),
                                        ("stream_weight_ess", "Effective number of weighted streams"),
                                        ("quadrature_ess", "Quadrature ESS (not independent samples)"))):
-        for lattice, marker, style in ((22, "o", "-"), (38, "^", "--")):
+        for lattice, marker, style in VOLUME_STYLES:
             group = [row for row in rows if row["method"] == "NS" and row["L"] == lattice]
+            if not group:
+                continue
             ax.plot(BETAS, [row[key] for row in group], color="crimson", marker=marker,
                     linestyle=style, label=f"L={lattice}")
         ax.set(xlabel=r"$\beta$", ylabel=label, xticks=BETAS)
@@ -214,9 +248,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--l22", required=True, type=Path)
     parser.add_argument("--l38", required=True, type=Path)
+    parser.add_argument("--l66", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--mcmc-l22", type=Path)
     parser.add_argument("--mcmc-l38", type=Path)
+    parser.add_argument("--mcmc-l66", type=Path)
     parser.add_argument("--mcmc-l22-search", type=Path)
     parser.add_argument("--burn-in", type=int, default=20000)
     parser.add_argument("--block-size", type=int, default=128)
@@ -225,7 +261,7 @@ def main():
         parser.error("require nonnegative burn-in and positive block size")
     try:
         compare(args.l22, args.l38, args.output, args.mcmc_l22, args.mcmc_l38,
-                args.mcmc_l22_search, args.burn_in, args.block_size)
+                args.mcmc_l22_search, args.burn_in, args.block_size, args.l66, args.mcmc_l66)
     except (ValueError, OSError) as exc:
         parser.error(str(exc))
 

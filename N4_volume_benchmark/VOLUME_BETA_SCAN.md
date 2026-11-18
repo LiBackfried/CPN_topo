@@ -1,4 +1,53 @@
-# N=4: L22/L38 volume comparison over beta
+# N=4: L22/L38/L66 volume comparison over beta
+
+To include L66, run from the UBELIX repository root:
+
+```bash
+INCLUDE_L66=1 bash N4_volume_benchmark/submit_volume_beta_scan_ubelix.sh
+```
+
+This submits **four analysis jobs**: the L22, L38 and L66 scans, followed by
+their dependent comparison. All outputs go to a new repository directory
+`N4_L66_res/volume_scan.XXXXXX/`, with per-volume `L22/`, `L38/`, `L66/`
+subdirectories. Simulation data remain on scratch. No new simulation is run.
+
+If a completed seven-beta L22/L38 scan already exists, pass it to reuse its
+two analysis subdirectories and submit only L66 plus the comparison:
+
+```bash
+INCLUDE_L66=1 bash N4_volume_benchmark/submit_volume_beta_scan_ubelix.sh \
+    "$PWD/N4_L38_res/volume_scan.ACTUAL_COMPLETED_SUFFIX"
+```
+
+Both input subdirectories must contain completed `beta_scan.csv` files.
+The reused directories are copied into the new output; their inputs are
+preserved, and `settings.txt` records the source directory. Reused jobs are
+identified in `jobs.tsv`. This option does not resume unfinished bootstraps.
+
+L66 uses the **12 completed streams** in NS jobs `22587433`, `22587434`,
+`22587435`: source beta=0.7, theta=0, 50 live points, **26,136 stochastic
+proposals per update**, **110,000 updates per stream**. Each job has four
+streams. Copied earlier L66 depth scans already cover all seven betas; this
+option integrates that dataset into the shared analysis, adds the normalized
+weight overlays, and directly bootstraps xi and xi/L consistently with the
+new L22/L38 scans. It retains full depth for the reweighting to beta=1.0.
+
+The L66 MCMC reference is beta=0.9, three chains in job `22587511` under
+`/scratch/network/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/`.
+It is included when present, or can be overridden with `MCMC_L66_DIR`.
+The same burn-in and block-size settings apply to all MCMC references.
+
+L66 defaults request **8 GiB / four hours**, configurable with
+`L66_SCAN_MEM` and `L66_SCAN_TIME`. These are provisional resource requests.
+The three-volume plots use circles for L22, triangles for L38 and squares
+for L66. NS remains crimson and MCMC royalblue. The difference table includes
+all three volume pairs. Signed xi-squared values are preserved; undefined
+square roots are marked `?66` on the xi/L plot rather than replaced with zero.
+`xi_status` and the finite-bootstrap fractions record undefined estimates
+or errors. Prior L66 low-beta xi-squared results at 0.7 and 0.75 are unresolved;
+see [RESULTS_REVIEW.md](../N4_L66_res/RESULTS_REVIEW.md).
+
+Without `INCLUDE_L66=1`, the original two-volume workflow below is unchanged.
 
 From the UBELIX repository root, run:
 
@@ -18,6 +67,7 @@ The selected NS ensembles are:
 |---|---|---|---|---|
 | 22 | 0.7 | 1,500 | 100 selected from 800 | 50,000 updates |
 | 38 | 0.7 | 8,664 | 24 | 35,000 updates |
+| 66 (optional) | 0.7 | 26,136 | 12 | 110,000 updates |
 
 L22 selects 100 run directories without replacement from the 800 candidates
 listed in `sh_files/analyze_N4_L22_ubelix.sh`. Selection is uniform using
@@ -75,10 +125,22 @@ Errors for MCMC xi and xi/L use the delta method from the xi-squared error.
 - `L22/inputs.json`, `L38/inputs.json`: exact selected inputs, candidate count,
   selection seed, settings, depth, bootstrap seed. `selected_runs.txt` records
   the selected paths before expensive I/O and bootstrap.
+- `L22/normalized_weights_single_run.png` and `.pdf`, and the same under `L38/`:
+  one independently seeded NS stream per volume, overlaying all seven beta
+  curves. Each curve is normalized to sum to one over the full single stream,
+  using that stream's own live-point count. The first selected stream is used
+  deterministically, and is identified in the title and accompanying JSON.
+  `_log.png`/`.pdf` variants show base-10 log weights, including underflowed
+  tails. The full weights, log weights, ranks and action densities are saved
+  in `normalized_weights_single_run.npz`; no points are thinned. Displayed x
+  ranges contain at least 99.99% of each curve's mass. These single-stream
+  diagnostics are separate from the common-support merged observable estimates.
 - `volume_comparison.csv`: both volumes and available MCMC references, with
   errors uniformly named `*_se` (bootstrap for NS; blocked jackknife for MCMC).
-- `volume_shifts.csv`: L38 minus L22 for each beta and common observable,
-  with independent-volume statistical errors added in quadrature.
+- `volume_shifts.csv`: differences for each available volume pair, beta and
+  common observable, with independent-volume statistical errors added in
+  quadrature. `L_small`, `L_large` identify the pair; L38-minus-L22 legacy
+  columns are retained for that pair.
 - `ns_mcmc_comparison.csv`: NS minus direct MCMC at matching volume/beta,
   including combined statistical errors; written when references are available.
 - `volume_dependence.png` and `.pdf`: action density, xi/L, topological
@@ -88,6 +150,12 @@ Errors for MCMC xi and xi/L use the delta method from the xi-squared error.
 - `mcmc_L22_binning.csv`, `mcmc_L38_binning.csv` when raw references exist.
 - `jobs.tsv`, `resources.tsv`, `settings.txt`, `comparison_settings.json`,
   `mcmc_status.txt`, job logs.
+
+The same weight, NS and MCMC outputs extend to `L66/` and `mcmc_L66_binning.csv`
+when the third volume is enabled. Existing three-volume plots can be rebuilt
+with the usual `plot_volume_betas.py` invocation plus
+`--l66 "$result_dir/L66/beta_scan.csv"` and, when available,
+`--mcmc-l66 /scratch/network/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511`.
 
 NS errors resample whole independent chains, remerge by energy, and recompute
 weights in each replicate. The same replicate selection is shared across all
@@ -104,7 +172,7 @@ left undefined rather than discarding those replicates.
 Defaults are 200 stream bootstraps, L22 16 GB / 4 hours for 100 streams,
 L38 8 GB / 4 hours,
 comparison 16 GB / 2 hours. These are resource requests, not timing measurements.
-The large L22 analysis reads 800 full streams and is the expensive stage.
+The default L22 analysis loads 100 full streams and is the expensive stage.
 Override `N_BOOTSTRAP`, `BOOTSTRAP_SEED`, `L22_SCAN_TIME`, `L38_SCAN_TIME`,
 `L22_SCAN_MEM`, `L38_SCAN_MEM`, `COMPARISON_SCAN_MEM`, `COMPARISON_SCAN_TIME`
 as needed. Memory settings use Slurm units, e.g. `16G`. The resource requests
@@ -158,7 +226,46 @@ fails after submitting only part of the workflow.
 References: [Slurm per-user TRES runtime limits](https://slurm.schedmd.com/sacctmgr.html#OPT_MaxTRESRunMinsPU)
 and [UBELIX free-tier resource accounting](https://knowit.unibe.ch/en/docs/hpc/costs/freetier/).
 
+### srun rejects conflicting memory environment variables
+
+The synced logs in `N4_L38_res/volume_scan.vK9cR3/` show that scans
+`22603540` and `22603541` failed before Python started:
+`SLURM_MEM_PER_CPU, SLURM_MEM_PER_GPU, and SLURM_MEM_PER_NODE are mutually exclusive`.
+The comparison submission was `22603542`, dependent on both scans succeeding.
+The launcher now clears inherited memory settings before `sbatch`; the worker
+also clears per-CPU/GPU settings before `srun`, retaining the per-node memory
+setting supplied by its own allocation.
+
+For this failed workflow, after updating the two shell scripts on UBELIX:
+
+```bash
+sacct -j 22603540,22603541,22603542 --format=JobID,State,ExitCode
+scancel 22603542
+unset SLURM_MEM_PER_CPU SLURM_MEM_PER_GPU SLURM_MEM_PER_NODE
+L22_MAX_STREAMS=100 L22_SCAN_MEM=16G L22_SCAN_TIME=04:00:00 \
+    bash N4_volume_benchmark/submit_volume_beta_scan_ubelix.sh
+```
+
+The cancellation removes the old dependent comparison if it remains pending;
+it may already have been canceled automatically. Existing failed-run records
+are preserved, and the new submission uses a fresh results directory.
+
 The submit helper prints a `sacct` command with the actual three job IDs.
+Weight overlays are generated before the bootstrap in new scan jobs. To add
+them to an existing scan without rerunning the ensemble analysis, use:
+
+```bash
+module load Python SciPy-bundle matplotlib
+result_dir="$PWD/N4_L38_res/volume_scan.ACTUAL_SUFFIX"
+python N4_volume_benchmark/plot_beta_weights.py --analysis "$result_dir/L22"
+python N4_volume_benchmark/plot_beta_weights.py --analysis "$result_dir/L38"
+```
+
+Each command reads just the first selected full stream from `inputs.json`
+(or `selected_runs.txt` if the ensemble bootstrap has not finished). It follows
+continuation history when present. A specific run can also be plotted with
+`--run /absolute/run/path --output /absolute/repository/output/path`.
+
 For a completed scan, plots can be regenerated without repeating bootstraps:
 
 ```bash

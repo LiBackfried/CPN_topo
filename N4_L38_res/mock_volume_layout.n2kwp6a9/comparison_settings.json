@@ -1,0 +1,9 @@
+{
+  "l22_scan": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L38_res\\mock_volume_layout.n2kwp6a9\\MOCK_L22.csv",
+  "l38_scan": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L38_res\\mock_volume_layout.n2kwp6a9\\MOCK_L38.csv",
+  "burn_in_MC_steps": 20000,
+  "block_size_measurements": 128,
+  "mcmc_error": "blocked delete-one-bin jackknife",
+  "mcmc_xi_error": "delta method from xi_squared jackknife error",
+  "ns_error": "whole-independent-stream bootstrap; same draws across betas"
+}
