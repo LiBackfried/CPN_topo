@@ -1,0 +1,121 @@
+{
+  "runs": [
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_3"
+  ],
+  "available_chains": 12,
+  "max_streams": null,
+  "stream_selection_seed": 20261118,
+  "config": {
+    "size": [
+      "66",
+      "66"
+    ],
+    "beta": [
+      "0.7"
+    ],
+    "theta": [
+      "0.0"
+    ],
+    "num_MC_step": [
+      "20"
+    ],
+    "meas_every": [
+      "8"
+    ],
+    "num_micro": [
+      "4"
+    ],
+    "num_norm": [
+      "1"
+    ],
+    "save_conf_every": [
+      "1"
+    ],
+    "num_cool_step": [
+      "50"
+    ],
+    "meas_cool_every": [
+      "5"
+    ],
+    "rng_seed": [
+      "822797856"
+    ],
+    "num_replica": [
+      "1"
+    ],
+    "defect_size": [
+      "0"
+    ],
+    "hierarc_upd": [
+      "0"
+    ],
+    "grid_step": [
+      "1"
+    ],
+    "grid_max": [
+      "100"
+    ],
+    "num_single_site_stoc_upd": [
+      "26136"
+    ],
+    "num_live_pts": [
+      "50"
+    ],
+    "save_dead": [
+      "0"
+    ],
+    "conf_file": [
+      "conf.dat"
+    ],
+    "data_file": [
+      "dati.dat"
+    ],
+    "topo_file": [
+      "topo.dat"
+    ],
+    "live_energy_file": [
+      "live_energy.dat"
+    ],
+    "log_file": [
+      "log.dat"
+    ],
+    "rng_state_file": [
+      "rng_state.dat"
+    ],
+    "swap_acc_file": [
+      "swap_acc.dat"
+    ],
+    "swap_track_file": [
+      "swap_track.dat"
+    ],
+    "topo_potential_file": [
+      "topo_potential"
+    ],
+    "multicanonic_acc_file": [
+      "multicanonic_acc.dat"
+    ]
+  },
+  "bootstrap": 200,
+  "seed": 20261118,
+  "depth": 110000,
+  "betas": [
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ]
+}

@@ -1,0 +1,12 @@
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_0
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_1
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_2
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_3
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_0
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_1
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_2
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_3
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_0
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_1
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_2
+/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_3

@@ -1,0 +1,10 @@
+{
+  "l22_scan": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L66_res/volume_scan.T1n611/L22/beta_scan.csv",
+  "l38_scan": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L66_res/volume_scan.T1n611/L38/beta_scan.csv",
+  "l66_scan": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L66_res/volume_scan.T1n611/L66/beta_scan.csv",
+  "burn_in_MC_steps": 20000,
+  "block_size_measurements": 128,
+  "mcmc_error": "blocked delete-one-bin jackknife",
+  "mcmc_xi_error": "delta method from xi_squared jackknife error",
+  "ns_error": "whole-independent-stream bootstrap; same draws across betas"
+}
