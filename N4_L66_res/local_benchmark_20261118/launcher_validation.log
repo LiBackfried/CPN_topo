@@ -1,0 +1,8 @@
+Submitted 9001: four L66 streams, 110000 updates, 26136 proposals/update
+Submitted 9002: four L66 streams, 110000 updates, 26136 proposals/update
+Submitted 9003: four L66 streams, 110000 updates, 26136 proposals/update
+Analysis job 9004; outputs and submission records: /tmp/cpn-L66-launchers.1otXvE6N/project/N4_L66_res/campaign.558xTG
+L=66, 4 chains, 110000 updates per chain in /tmp/cpn-L66-launchers.1otXvE6N/scratch/ns_N4_beta0p7_volume_benchmark/L66/job_9001
+Launching three L=66, beta=0.9 chains in /tmp/cpn-L66-launchers.1otXvE6N/scratch/mcmc_66_N4_beta0p9_3x100k/job_9010
+Saved L66 analysis in /tmp/cpn-L66-launchers.1otXvE6N/project/N4_L66_res/check
+Passed shell/LF checks, mock submission/dependencies, generated NS settings/seeds, MCMC rows, output reuse, failure guards, analysis argument routing and output containment. Artifacts: /tmp/cpn-L66-launchers.1otXvE6N

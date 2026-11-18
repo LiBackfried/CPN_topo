@@ -10,7 +10,9 @@
 
 set -euo pipefail
 fail() { echo "$*" >&2; exit 1; }
-[[ $# == 4 ]] || fail "Usage: sbatch $0 NEW_JOB1 NEW_JOB2 NEW_JOB3 OUTPUT_DIRECTORY"
+[[ $# == 4 || $# == 5 ]] || fail "Usage: sbatch $0 NEW_JOB1 NEW_JOB2 NEW_JOB3 OUTPUT_DIRECTORY [8664|12996]"
+stoc=${5:-8664}
+[[ $stoc == 8664 || $stoc == 12996 ]] || fail 'Use 8664 or 12996 proposals per update.'
 repo=$(git -C "${SLURM_SUBMIT_DIR:?Submit from the CPN_topo repository root.}" rev-parse --show-toplevel)
 cd "$repo"
 [[ -f N4_volume_benchmark/compare_action_bins.py ]] || fail 'Submit from the CPN_topo repository root.'
@@ -27,6 +29,12 @@ baseline=("$base/job_22133588" "$base/job_22133589" "$base/job_22133590" "$base/
 previous=("$base/job_22320950" "$base/job_22320951" "$base/job_22320952")
 fresh=()
 declare -A seen=([22320950]=1 [22320951]=1 [22320952]=1 [22133588]=1 [22133589]=1 [22133590]=1 [22120845]=1)
+if (( stoc == 12996 )); then
+    for id in 22583507 22583508 22583509; do
+        previous+=("$base/job_$id")
+        seen[$id]=1
+    done
+fi
 for id in "${@:1:3}"; do
     [[ $id =~ ^[0-9]+$ && ! -v seen[$id] ]] || fail 'Use three distinct fresh job IDs.'
     seen[$id]=1
@@ -36,25 +44,35 @@ combined=("${previous[@]}" "${fresh[@]}")
 for dir in "$mcmc" "${baseline[@]}" "${combined[@]}"; do
     [[ -f "$dir/completed" ]] || fail "Incomplete job: $dir"
 done
-for dir in "${combined[@]}"; do
-    [[ $(<"$dir/tasks") == 4 && $(<"$dir/lattice") == 38 ]] || fail "Expected four L=38 chains in $dir"
-    for run in 0 1 2 3; do
-        awk '$1=="num_single_site_stoc_upd" {stoc=$2}
-             $1=="num_ns_meas" {meas=$2} $1=="start" {start=$2} $1=="rng_start" {rng=$2}
-             END {exit !(stoc==8664 && meas==35001 && start==1 && rng==0)}' "$dir/run_$run/input.conf" ||
-            fail "Expected a fresh 35,000-update 8,664-proposal chain in $dir/run_$run"
+check_fresh_jobs() {
+    local expected=$1 dir run
+    shift
+    for dir in "$@"; do
+        [[ $(<"$dir/tasks") == 4 && $(<"$dir/lattice") == 38 ]] || fail "Expected four L=38 chains in $dir"
+        for run in 0 1 2 3; do
+            awk -v expected="$expected" '$1=="num_single_site_stoc_upd" {stoc=$2}
+                 $1=="num_ns_meas" {meas=$2} $1=="start" {start=$2} $1=="rng_start" {rng=$2}
+                 END {exit !(stoc==expected && meas==35001 && start==1 && rng==0)}' "$dir/run_$run/input.conf" ||
+                fail "Expected a fresh 35,000-update $expected-proposal chain in $dir/run_$run"
+        done
     done
-done
+}
+check_fresh_jobs 8664 "${previous[@]}"
+check_fresh_jobs "$stoc" "${fresh[@]}"
 module load Python SciPy-bundle matplotlib
 python_exec=$(command -v python)
 "$python_exec" -c 'import numpy, scipy, matplotlib'
 echo "Writing all analysis outputs to $output"
-for group in fresh12 previous12 combined24 baseline16; do
+groups=(fresh12 previous12 combined24 baseline16)
+if (( stoc == 12996 )); then groups=(stoc12996_12 stoc8664_24 baseline16); fi
+for group in "${groups[@]}"; do
     case $group in
         fresh12) roots=("${fresh[@]}") ;;
         previous12) roots=("${previous[@]}") ;;
         combined24) roots=("${combined[@]}") ;;
         baseline16) roots=("${baseline[@]}") ;;
+        stoc12996_12) roots=("${fresh[@]}") ;;
+        stoc8664_24) roots=("${previous[@]}") ;;
     esac
     # Publish a CSV after the Python analysis succeeds.
     srun --export=ALL "$python_exec" N4_volume_benchmark/scan_depth.py "${roots[@]}" \

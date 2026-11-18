@@ -1,5 +1,9 @@
 # CP³ volume and reweighting benchmark on UBELIX
 
+The prepared L66 campaign, runtime measurements, submission commands and
+analysis-output convention are documented in [N4_L66_res/README.md](../N4_L66_res/README.md).
+It uses 26,136 proposals per update and saves analysis in repository `N4_L66_res/`.
+
 Run nested sampling at `N=4`, `beta=0.7`, `theta=0` and reweight each lattice
 separately to `beta=0.8, 0.9, 1.0`. Start with a 100-update timing pilot at
 `L=22, 38, 66, 90, 120`. Extend `L=38` first to measure reweighting depth on a
@@ -245,6 +249,39 @@ combined doubled-proposal estimate uses 24 independent chains. The
 new batch is also analyzed alone to check its agreement with the previous
 twelve chains. Each simulation job requests 45 minutes, and the dependent
 analysis job requests two hours on one CPU.
+
+#### Increase L=38 to 12,996 stochastic proposals per update
+
+To test a further increase of 4,332 proposals per NS update, run:
+
+```bash
+bash N4_volume_benchmark/fresh_L38_2xstoc_ubelix.sh --stoc12996
+```
+
+The helper submits twelve independent fresh chains in three four-chain
+jobs at source β=0.7, with 12,996 proposals per NS update and 35,000 NS
+updates per chain. Each simulation job requests one hour. It uses the
+saved executable from job `22120845` and independent job-derived seeds.
+A dependent two-hour analysis job starts after all three simulations
+finish successfully.
+
+All analysis outputs and submission records go into a new directory
+`N4_L38_res/stoc12996.XXXXXX/` in the repository. Simulation data goes to
+the usual scratch base. The analysis produces:
+
+- `depth_stoc12996_12.csv` for the new twelve chains.
+- `depth_stoc8664_24.csv` for the existing doubled-proposal jobs `22320950`,
+  `22320951`, `22320952`, `22583507`, `22583508` and `22583509`.
+- `depth_baseline16.csv` for the sixteen 4,332-proposal chains.
+- `action_bins32/` with the three corresponding comparisons against direct
+  MCMC job `22121710`, and `mcmc_burn20000/` with its binning results.
+
+Each depth scan compares 30,000 and 35,000 cumulative updates at target
+β=0.8, 0.9 and 1.0 with 200 stream-bootstrap replicates. The 32-bin
+comparisons use target β=1.0. The NS proposal settings remain separate
+ensembles in all analyses. Pull the printed repository output directory
+when its `completed` marker appears. Use the saved `analyze_command.txt`
+to retry the analysis if needed.
 
 ### Volume and depth plan
 

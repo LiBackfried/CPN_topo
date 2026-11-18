@@ -14,6 +14,7 @@ Unknown job IDs are left explicit.
 | Original NS depth study | 38 | 0.7 | 4 | 35,000 cumulative NS updates | `22097065`, `22118868`, `22119560`, `22120845`; earlier pilot ID unknown | Produced; these are successive segments of the same four streams |
 | Fresh NS, 4,332 stochastic proposals/update | 38 | 0.7 | 12 | 35,000 NS updates | `22133588`, `22133589`, `22133590` | Produced; four streams per job |
 | NS with doubled proposals, 8,664/update | 38 | 0.7 | 12 | 35,000 NS updates | `22320950`, `22320951`, `22320952` | Produced; four streams per job |
+| Additional NS with doubled proposals, 8,664/update | 38 | 0.7 | 12 submitted | 35,000 NS updates requested | `22583507`, `22583508`, `22583509` | Submission confirmed by user; four streams per job; completion unverified |
 | Direct MCMC reference | 38 | 1.0 | 3 | 1,000,000 MC steps = 100,000 measurements | `22121710` | Produced; saved MCMC analyses available |
 | NS timing campaign, original and optimized code | 22, 38 | 0.7 | 4 per job | 200 and 2,000 NS updates | Successful campaign IDs not recovered | Completed timing report available |
 | NS timing campaign, optimized code | 66, 90, 120 | 0.7 | 4 per job | 200 and 2,000 NS updates | Successful campaign IDs not recovered | Timing pilots produced; no larger-volume physics production identified |
@@ -136,12 +137,35 @@ and `L38_depth_combined16.csv` also remain in the checkout root.
 | 38 | Fresh, 4,332 proposals/update | `22133588`, `22133589`, `22133590` | 12 | `N4_L38_res/L38_depth_fresh12.csv` |
 | 38 | Original four + fresh twelve, 4,332 proposals/update | `22120845` plus the three IDs above | 16 total, overlapping the preceding datasets | `N4_L38_res/L38_depth_combined16.csv`, `L38_correlators_combined16.csv` |
 | 38 | Fresh, 8,664 proposals/update | `22320950`, `22320951`, `22320952` | 12 | `N4_L38_res/L38_depth_2xstoc12.csv` |
+| 38 | Additional fresh, 8,664 proposals/update | `22583507`, `22583508`, `22583509` | 12 submitted | Dependent analysis job `22583510`; outputs expected under `N4_L38_res/extra8664.m3YXfE/` |
 
-All these streams reached 35,000 updates each. Baseline-proposal scans cover
+The produced streams reached 35,000 updates each. Baseline-proposal scans cover
 target beta 0.8, 0.9, and 1.0; the doubled-proposal export covers target beta
 1.0. There are 28 independent L=38 NS streams in total: 4 original + 12 fresh
 at 4,332 proposals, and 12 fresh at 8,664 proposals. Continuations and pooled
 analyses do not add independent streams.
+
+On 2026-11-18 the user confirmed submission of twelve additional independent
+streams in jobs `22583507`, `22583508`, and `22583509`, each requesting
+35,000 updates at 8,664 proposals per NS update. Their simulation data paths
+are `job_<ID>/run_<0..3>/` under the common UBELIX base above. If all twelve
+complete, the doubled-proposal pool will contain 24 streams and the total
+across both L=38 proposal settings will be 40 independent streams.
+
+Analysis job `22583510` was submitted with an `afterok` dependency on all
+three new simulation jobs. It analyzes the new twelve, previous twelve,
+combined 24 doubled-proposal streams, baseline sixteen streams, and direct
+MCMC reference. Its analysis and submission records are saved in the Git
+checkout at:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L38_res/extra8664.m3YXfE/
+```
+
+That directory contains the submission manifest and retry command. Expected
+analysis outputs include `depth_fresh12.csv`, `depth_previous12.csv`,
+`depth_combined24.csv`, `depth_baseline16.csv`, `action_bins32/`, and
+`mcmc_burn20000/`. Completion of these four new jobs has not been verified.
 
 The saved 16-bin comparisons in `N4_L38_res/action_bins/stoc4332/` and
 `stoc8664/` reuse these ensembles and MCMC job `22121710`. The 32-bin
