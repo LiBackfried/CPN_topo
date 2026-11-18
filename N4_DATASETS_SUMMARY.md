@@ -6,6 +6,15 @@ launchers, and previous chats. It records historical production evidence;
 current UBELIX file availability and Slurm state were not checked remotely.
 Unknown job IDs are left explicit.
 
+The completed seven-beta L22/L38/L66 analysis is now copied to
+`N4_L66_res/volume_scan.T1n611/`: analysis jobs `22622025`, `22622026`,
+`22622027`, and combined comparison `22622028`. It uses 100 selected L22
+streams, 24 L38 streams at 8,664 proposals/update, and 12 L66 streams at
+26,136 proposals/update. All seven requested betas and three direct MCMC
+references are present. The copied comparison identifies the previously
+unknown L22 MCMC job as **21347214**. See the adjacent `RESULTS_REVIEW.md`
+for numerical checks and limitations. Remote Slurm state was not queried.
+
 ## Overview
 
 | Dataset | L | Simulation beta | Independent streams/chains | Length per stream/chain | UBELIX simulation job IDs | Evidence/status |
@@ -14,13 +23,13 @@ Unknown job IDs are left explicit.
 | Original NS depth study | 38 | 0.7 | 4 | 35,000 cumulative NS updates | `22097065`, `22118868`, `22119560`, `22120845`; earlier pilot ID unknown | Produced; these are successive segments of the same four streams |
 | Fresh NS, 4,332 stochastic proposals/update | 38 | 0.7 | 12 | 35,000 NS updates | `22133588`, `22133589`, `22133590` | Produced; four streams per job |
 | NS with doubled proposals, 8,664/update | 38 | 0.7 | 12 | 35,000 NS updates | `22320950`, `22320951`, `22320952` | Produced; four streams per job |
-| Additional NS with doubled proposals, 8,664/update | 38 | 0.7 | 12 submitted | 35,000 NS updates requested | `22583507`, `22583508`, `22583509` | Submission confirmed by user; four streams per job; completion unverified |
+| Additional NS with doubled proposals, 8,664/update | 38 | 0.7 | 12 | 35,000 NS updates | `22583507`, `22583508`, `22583509` | Produced; combined 24-stream analysis copied in `volume_scan.T1n611` |
 | Direct MCMC reference | 38 | 1.0 | 3 | 1,000,000 MC steps = 100,000 measurements | `22121710` | Produced; saved MCMC analyses available |
-| L66 NS, 26,136 proposals/update | 66 | 0.7 | 12 submitted | 110,000 NS updates requested | `22587433`, `22587434`, `22587435` | User-confirmed simulation jobs; four streams per job; dependent analysis job `22587436`; completion unverified |
-| L66 direct MCMC reference | 66 | 0.9 | 3 requested | 1,000,000 MC steps = 100,000 measurements | `22587511` | User-reported submission; completion unverified |
+| L66 NS, 26,136 proposals/update | 66 | 0.7 | 12 | 110,000 NS updates | `22587433`, `22587434`, `22587435` | Produced; copied campaign and seven-beta analyses available |
+| L66 direct MCMC reference | 66 | 0.9 | 3 | 1,000,000 MC steps = 100,000 measurements | `22587511` | Produced; copied MCMC binning and matched comparisons available |
 | NS timing campaign, original and optimized code | 22, 38 | 0.7 | 4 per job | 200 and 2,000 NS updates | Successful campaign IDs not recovered | Completed timing report available |
 | NS timing campaign, optimized code | 66, 90, 120 | 0.7 | 4 per job | 200 and 2,000 NS updates | Successful campaign IDs not recovered | Timing pilots produced; distinct from the newly submitted L66 campaign |
-| Regular MCMC production setup | 22 | 0.7 | 3 planned | 10,000,000 MC steps = 1,000,000 measurements | Unknown | Inputs and launcher prepared; completed UBELIX data not confirmed in reviewed records |
+| Regular MCMC production | 22 | 0.7 | 3 | 10,000,000 MC steps = 1,000,000 measurements | `21347214` | Produced; identified and analyzed by comparison job `22622028` |
 
 NS production uses 50 live points per stream. The L=22 production has 1,500
 stochastic proposals per NS update; the original and fresh L=38 streams have
@@ -197,9 +206,9 @@ see `N4_L66_res/README.md` and `reported_jobs_20261118.tsv` there.
 
 | L | Beta | UBELIX simulation job ID | Dataset and location | Status |
 | ---: | ---: | --- | --- | --- |
-| 66 | 0.9 | `22587511` | `/scratch/network/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511/run_<0..2>/` | User-reported submission; three chains requested; completion unverified |
+| 66 | 0.9 | `22587511` | `/scratch/network/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511/run_<0..2>/` | Produced; copied binning and matched NS comparison available |
 | 38 | 1.0 | `22121710` | `/scratch/network/users/lb25v444/out_data/mcmc_38_N4_beta1p0_3x100k/job_22121710/run_<0..2>/` | Produced: three chains, 100,000 measurements each before cuts |
-| 22 | 0.7 | Unknown | Planned base `/scratch/network/users/lb25v444/out_data/mcmc_22_N4_beta0p7_3x1M/`; setup in `N4_L22_runs/mcmc_22_N4_beta0p7_3x1M/` | Prepared: three chains with 1,000,000 measurements each; UBELIX completion unconfirmed |
+| 22 | 0.7 | `21347214` | `/scratch/network/users/lb25v444/out_data/mcmc_22_N4_beta0p7_3x1M/job_21347214/run_<0..2>/` | Produced; copied pooled binning and NS comparison in `N4_L66_res/volume_scan.T1n611/` |
 
 L=38 analysis copies are in `N4_L38_res/mcmc_analysis/`,
 `mcmc_analysis_burn20000/`, and `mcmc_correlators_burn20000/`. The latter two

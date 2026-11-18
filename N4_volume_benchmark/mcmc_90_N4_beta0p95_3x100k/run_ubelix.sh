@@ -1,0 +1,68 @@
+#!/bin/bash
+#SBATCH --job-name=N4L90_b095_mcmc
+#SBATCH --account=gratis
+#SBATCH --partition=epyc2
+#SBATCH --qos=job_gratis
+#SBATCH --ntasks=3
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=512M
+#SBATCH --time=12:00:00
+#SBATCH --no-requeue
+set -euo pipefail
+export LC_ALL=C
+fail() { echo "$*" >&2; exit 1; }
+[[ $# == 0 ]] || fail "Usage: sbatch $0"
+[[ ${SLURM_JOB_ID:-} =~ ^[0-9]+$ && ${SLURM_NTASKS:-} == 3 &&
+   ${SLURM_CPUS_PER_TASK:-} == 1 ]] || fail 'Submit with sbatch and request three tasks with one CPU each.'
+project=${SLURM_SUBMIT_DIR:?Submit from the CPN_topo repository root.}
+group=mcmc_90_N4_beta0p95_3x100k
+config_dir="$project/N4_volume_benchmark/$group"
+executable="$project/cpn_N4"
+scratch=${NS_SCRATCH:-/scratch/network/users/lb25v444/out_data}
+[[ $scratch == /* ]] || fail 'NS_SCRATCH must be an absolute path.'
+[[ -x $executable && -x /usr/bin/time ]] || fail 'Build cpn_N4 with the N=4 MCMC helper first; GNU time is also required.'
+module load OpenSSL/1.1
+info=$("$executable" 2>&1 || true)
+grep -Fxq 'Compiled with N = 4' <<< "$info" || fail 'cpn_N4 did not report N=4.'
+expected_settings=(
+    'size 90 90' 'beta 0.95' 'theta 0.0'
+    'num_MC_step 1000000' 'meas_every 10' 'num_micro 4' 'num_norm 1'
+    'save_conf_every 1000' 'num_cool_step 50' 'meas_cool_every 5'
+    'start 1' 'rng_start 0' 'num_replica 1' 'defect_size 0' 'hierarc_upd 0'
+    'conf_file conf.dat' 'data_file dati.dat' 'topo_file topo.dat'
+    'log_file log.dat' 'rng_state_file rng_state.dat'
+)
+declare -A seen_seeds=()
+for run in 0 1 2; do
+    config="$config_dir/run_$run.conf"
+    [[ -r $config ]] || fail "Missing config $config"
+    diff -u <(printf '%s\n' "${expected_settings[@]}" | sort) \
+        <(awk '{sub(/#.*/, ""); if (NF && $1!="rng_seed") {$1=$1; print}}' "$config" | sort) || fail "Unexpected settings in $config"
+    seed=$(awk '$1=="rng_seed" {print $2}' "$config")
+    [[ $seed =~ ^[1-9][0-9]{0,9}$ ]] && (( seed < 2147483399 )) && [[ ! -v seen_seeds[$seed] ]] || fail "Invalid or duplicate RNG seed in $config"
+    seen_seeds[$seed]=1
+done
+output="$scratch/$group/job_${SLURM_JOB_ID}"
+mkdir -p "$(dirname "$output")"
+mkdir "$output"  # Refuse output reuse, including manual requeues.
+cp "$executable" "$output/cpn_N4"
+printf '90\n' > "$output/lattice"
+printf '3\n' > "$output/tasks"
+sha256sum "$output/cpn_N4" > "$output/executable_sha256.txt"
+for run in 0 1 2; do
+    mkdir "$output/run_$run"
+    cp "$config_dir/run_$run.conf" "$output/run_$run/input.conf"
+done
+echo "Launching three L90 beta=0.95 chains, 1000000 steps / 100000 measurements each: $output"
+srun --ntasks=3 --cpus-per-task=1 --cpu-bind=cores --kill-on-bad-exit=1 --export=ALL /bin/bash -c '
+    set -euo pipefail
+    cd "$1/run_$SLURM_PROCID"
+    hostname > node.txt
+    awk -F ": " "/^model name/ {print \$2; exit}" /proc/cpuinfo >> node.txt
+    /usr/bin/time -f "elapsed_seconds=%e\nuser_seconds=%U\nsystem_seconds=%S\nmax_rss_kib=%M" \
+        -o timing.txt "$1/cpn_N4" input.conf > stdout.log 2> stderr.log
+    awk "NF && \$1 !~ /^#/ {n++} END {exit (n != 100000)}" dati.dat
+    awk "NF && \$1 !~ /^#/ {n++} END {exit (n != 1100000)}" topo.dat
+    [[ -s conf.dat && -s rng_state.dat ]]
+' bash "$output"
+touch "$output/completed"
