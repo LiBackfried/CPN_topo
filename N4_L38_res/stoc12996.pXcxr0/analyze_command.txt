@@ -1,0 +1,1 @@
+sbatch --export=ALL --job-name=ns_L38_stoc12996_analysis --dependency=afterok:22587309:22587310:22587311 N4_volume_benchmark/analyze_L38_more8664_ubelix.sh 22587309 22587310 22587311 /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L38_res/stoc12996.pXcxr0 12996

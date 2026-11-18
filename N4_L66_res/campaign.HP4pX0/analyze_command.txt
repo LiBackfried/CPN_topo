@@ -1,0 +1,1 @@
+sbatch --export=ALL --dependency=afterok:22587433:22587434:22587435 N4_volume_benchmark/analyze_L66_ubelix.sh 22587433 22587434 22587435 /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L66_res/campaign.HP4pX0
