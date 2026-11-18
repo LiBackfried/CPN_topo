@@ -14,7 +14,7 @@ for path in "${MCMC_L22_DIR:-}" "${MCMC_L38_DIR:-}"; do
 done
 mkdir -p "$project_dir/N4_L38_res"
 output_dir="$(mktemp -d "$project_dir/N4_L38_res/volume_scan.XXXXXX")"
-common=(--parsable --chdir="$project_dir" --export=ALL)
+common=(--parsable --nodes=1 --chdir="$project_dir" --export=ALL)
 printf 'Outputs and submission records: %s\n' "$output_dir"
 printf 'stage\tjob_id\n' > "$output_dir/jobs.tsv"
 printf 'N_BOOTSTRAP=%s\nBOOTSTRAP_SEED=%s\nMCMC_BURN_IN=%s\nMCMC_BLOCK_SIZE=%s\nMCMC_L22_DIR=%s\nMCMC_L38_DIR=%s\nVOLUME_DATA_ROOT=%s\n' \
