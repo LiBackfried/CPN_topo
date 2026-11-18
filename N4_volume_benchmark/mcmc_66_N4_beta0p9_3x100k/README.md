@@ -1,5 +1,8 @@
 # Direct CP³ reference, L=66, beta=0.9
 
+User-reported UBELIX simulation job: **22587511** (2026-11-18).
+Completion and current Slurm state have not been checked remotely.
+
 Three fresh, independently seeded N=4 chains, theta=0. Each has 1,000,000
 MC steps, measurements every 10 steps (100,000 raw measurements), four
 microcanonical sweeps, normalization every step, and 50 cooling steps

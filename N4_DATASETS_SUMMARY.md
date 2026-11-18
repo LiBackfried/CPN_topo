@@ -16,8 +16,10 @@ Unknown job IDs are left explicit.
 | NS with doubled proposals, 8,664/update | 38 | 0.7 | 12 | 35,000 NS updates | `22320950`, `22320951`, `22320952` | Produced; four streams per job |
 | Additional NS with doubled proposals, 8,664/update | 38 | 0.7 | 12 submitted | 35,000 NS updates requested | `22583507`, `22583508`, `22583509` | Submission confirmed by user; four streams per job; completion unverified |
 | Direct MCMC reference | 38 | 1.0 | 3 | 1,000,000 MC steps = 100,000 measurements | `22121710` | Produced; saved MCMC analyses available |
+| L66 NS, 26,136 proposals/update | 66 | 0.7 | 12 submitted | 110,000 NS updates requested | `22587433`, `22587434`, `22587435` | User-confirmed simulation jobs; four streams per job; dependent analysis job `22587436`; completion unverified |
+| L66 direct MCMC reference | 66 | 0.9 | 3 requested | 1,000,000 MC steps = 100,000 measurements | `22587511` | User-reported submission; completion unverified |
 | NS timing campaign, original and optimized code | 22, 38 | 0.7 | 4 per job | 200 and 2,000 NS updates | Successful campaign IDs not recovered | Completed timing report available |
-| NS timing campaign, optimized code | 66, 90, 120 | 0.7 | 4 per job | 200 and 2,000 NS updates | Successful campaign IDs not recovered | Timing pilots produced; no larger-volume physics production identified |
+| NS timing campaign, optimized code | 66, 90, 120 | 0.7 | 4 per job | 200 and 2,000 NS updates | Successful campaign IDs not recovered | Timing pilots produced; distinct from the newly submitted L66 campaign |
 | Regular MCMC production setup | 22 | 0.7 | 3 planned | 10,000,000 MC steps = 1,000,000 measurements | Unknown | Inputs and launcher prepared; completed UBELIX data not confirmed in reviewed records |
 
 NS production uses 50 live points per stream. The L=22 production has 1,500
@@ -172,10 +174,30 @@ The saved 16-bin comparisons in `N4_L38_res/action_bins/stoc4332/` and
 analysis is prepared in `N4_volume_benchmark/analyze_L38_action_bins_ubelix.sh`;
 no completed `N4_L38_res/action_bins_32bins/` output was found locally.
 
+## L=66: submitted campaign
+
+On 2026-11-18 the user confirmed MCMC job `22587511`, NS simulation jobs
+`22587433`, `22587434`, `22587435`, and dependent analysis job `22587436`.
+Completion and current Slurm state have not been checked remotely. The
+three NS simulation jobs have four streams each, for twelve independent
+streams; the analysis job contributes no simulation streams.
+The intended simulation setup is N=4, L=66, source beta=0.7,
+50 live points, 26,136 proposals/update and 110,000 updates per stream.
+Reweighting targets extend through beta=1.0. The direct reference has
+beta=0.9, three chains and 100,000 raw measurements per chain.
+
+NS simulation data use
+`/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_<ID>/run_<0..3>/`.
+MCMC data use
+`/scratch/network/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511/run_<0..2>/`.
+All L66 analysis outputs and job records belong in repository `N4_L66_res/`;
+see `N4_L66_res/README.md` and `reported_jobs_20261118.tsv` there.
+
 ## Direct MCMC
 
 | L | Beta | UBELIX simulation job ID | Dataset and location | Status |
 | ---: | ---: | --- | --- | --- |
+| 66 | 0.9 | `22587511` | `/scratch/network/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511/run_<0..2>/` | User-reported submission; three chains requested; completion unverified |
 | 38 | 1.0 | `22121710` | `/scratch/network/users/lb25v444/out_data/mcmc_38_N4_beta1p0_3x100k/job_22121710/run_<0..2>/` | Produced: three chains, 100,000 measurements each before cuts |
 | 22 | 0.7 | Unknown | Planned base `/scratch/network/users/lb25v444/out_data/mcmc_22_N4_beta0p7_3x1M/`; setup in `N4_L22_runs/mcmc_22_N4_beta0p7_3x1M/` | Prepared: three chains with 1,000,000 measurements each; UBELIX completion unconfirmed |
 

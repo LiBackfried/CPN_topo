@@ -6,6 +6,31 @@ and raw measurements remain on UBELIX scratch. Nothing was submitted by
 the assistant. `reference_targets.csv` transcribes the user's attached
 N=4 Table III; its original paper was not identified from the image.
 
+## Reported UBELIX job IDs
+
+On 2026-11-18 the user reported MCMC job **22587511** (L66, beta=0.9)
+and NS simulation job IDs **22587433, 22587434, 22587435**
+(source beta=0.7), with dependent analysis job **22587436**.
+Submission and job roles are user-confirmed; remote Slurm state and
+completion have not been checked. These are also recorded in
+`reported_jobs_20261118.tsv`.
+
+The three NS simulation jobs contain four streams each, for **12 independent
+streams** in total. The user confirmed that **22587436 is the dependent
+analysis job**; it contributes no simulation streams. Check, for example:
+
+```bash
+sacct -j 22587433,22587434,22587435,22587436,22587511 \
+    --format=JobID,JobName%35,State,AllocCPUS,Elapsed,ExitCode
+```
+
+The expected MCMC data directory is
+`/scratch/network/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511/`.
+NS simulation jobs use
+`/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_<ID>/`;
+the dependent analysis uses the repository `N4_L66_res/campaign.XXXXXX/`
+directory recorded by the driver.
+
 ## Targets and existing analysis
 
 The matching L66, beta=0.9 table row has xi_L=5.398(22), xi_L²=29.1384(2375)
