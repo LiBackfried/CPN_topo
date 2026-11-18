@@ -183,8 +183,10 @@ def compare(l22, l38, output, mcmc_l22=None, mcmc_l38=None,
         ax.set(xlabel=r"$\beta$", ylabel=label, xticks=BETAS)
         ax.grid(alpha=0.2)
     axes[0, 0].legend(fontsize=9)
+    chain_counts = {int(row["L"]): int(row["chains"]) for row in rows if row["method"] == "NS"}
     fig.suptitle("N=4 volume comparison; NS source beta=0.7\n"
-                 "L22: 1500 proposals; L38: 8664 proposals per NS update")
+                 f"L22: {chain_counts[22]} chains, 1500 proposals; "
+                 f"L38: {chain_counts[38]} chains, 8664 proposals per NS update")
     for suffix in ("png", "pdf"):
         fig.savefig(output / f"volume_dependence.{suffix}", dpi=180)
     plt.close(fig)

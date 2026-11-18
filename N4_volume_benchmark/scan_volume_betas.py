@@ -32,9 +32,32 @@ def beta_quantities(data, lattice, beta):
     return {key: estimates[key] for key in QUANTITIES}
 
 
+def select_runs(paths, max_streams=None, selection_seed=20261118):
+    """Choose paths without replacement before inspecting their measurements."""
+    paths = sorted(paths, key=lambda path: path.as_posix())
+    if selection_seed < 0:
+        raise ValueError("stream selection seed must be nonnegative")
+    if max_streams is None:
+        return paths
+    if max_streams < 2 or max_streams > len(paths):
+        raise ValueError(f"stream count must be between 2 and {len(paths)}")
+    indices = np.sort(np.random.default_rng(selection_seed).choice(
+        len(paths), size=max_streams, replace=False))
+    return [paths[index] for index in indices]
+
+
 def analyze(roots, bootstrap, seed, output, expected_lattice=None, expected_stoc=None,
-            expected_chains=None):
-    config, chains = load_ns_ensemble(roots)
+            expected_chains=None, max_streams=None, selection_seed=20261118,
+            expected_available_chains=None):
+    candidates = discover_runs(roots)
+    if expected_available_chains is not None and len(candidates) != expected_available_chains:
+        raise ValueError(f"expected {expected_available_chains} available chains, found {len(candidates)}")
+    selected = select_runs(candidates, max_streams, selection_seed)
+    output.mkdir(parents=True, exist_ok=True)
+    # Save provenance before expensive I/O/bootstrap, including for a timed-out job.
+    (output / "selected_runs.txt").write_text("\n".join(map(str, selected)) + "\n", encoding="utf-8")
+    print(f"Loading {len(selected)} of {len(candidates)} candidate streams", flush=True)
+    config, chains = load_ns_ensemble(selected)
     lattice = int(config["size"][0])
     stoc = int(config["num_single_site_stoc_upd"][0])
     if expected_lattice is not None and lattice != expected_lattice:
@@ -72,7 +95,8 @@ def analyze(roots, bootstrap, seed, output, expected_lattice=None, expected_stoc
         writer.writerows(rows)
     temporary.replace(output / "beta_scan.csv")
     (output / "inputs.json").write_text(json.dumps({
-        "runs": [str(p) for p in discover_runs(roots)], "config": config,
+        "runs": [str(p) for p in selected], "available_chains": len(candidates),
+        "max_streams": max_streams, "stream_selection_seed": selection_seed, "config": config,
         "bootstrap": bootstrap, "seed": seed, "depth": depth, "betas": BETAS,
     }, indent=2), encoding="utf-8")
     print(f"Wrote L={lattice} beta scan from {len(chains)} streams at {depth} updates to {output}")
@@ -87,12 +111,16 @@ def main():
     p.add_argument("--expected-lattice", type=int)
     p.add_argument("--expected-stoc", type=int)
     p.add_argument("--expected-chains", type=int)
+    p.add_argument("--expected-available-chains", type=int)
+    p.add_argument("--max-streams", type=int, help="Select this many streams before loading measurements")
+    p.add_argument("--stream-selection-seed", type=int, default=20261118)
     args = p.parse_args()
     if args.bootstrap < 2 or args.seed < 0:
         p.error("require at least two bootstrap replicates and nonnegative seed")
     try:
         analyze(args.roots, args.bootstrap, args.seed, args.output,
-                args.expected_lattice, args.expected_stoc, args.expected_chains)
+                args.expected_lattice, args.expected_stoc, args.expected_chains,
+                args.max_streams, args.stream_selection_seed, args.expected_available_chains)
     except (ValueError, OSError) as exc:
         p.error(str(exc))
 

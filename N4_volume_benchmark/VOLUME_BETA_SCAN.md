@@ -16,11 +16,16 @@ The selected NS ensembles are:
 
 | L | Source beta | Proposals per NS update | Independent chains | Depth per chain |
 |---|---|---|---|---|
-| 22 | 0.7 | 1,500 | 800 | 50,000 updates |
+| 22 | 0.7 | 1,500 | 100 selected from 800 | 50,000 updates |
 | 38 | 0.7 | 8,664 | 24 | 35,000 updates |
 
-L22 uses exactly the 800 run directories listed in
-`sh_files/analyze_N4_L22_ubelix.sh`. L38 uses four chains from each job
+L22 selects 100 run directories without replacement from the 800 candidates
+listed in `sh_files/analyze_N4_L22_ubelix.sh`. Selection is uniform using
+`STREAM_SELECTION_SEED=20261118` and sorted candidate paths, before reading
+measurements. It is independent of measured observables and reproducible
+across retries. Only selected streams are loaded and bootstrapped.
+The launcher checks that all candidate files exist before starting the scan.
+`L22_MAX_STREAMS` changes the selected count (2 to 800). L38 uses four chains from each job
 `22320950`, `22320951`, `22320952`, `22583507`, `22583508`, `22583509`.
 The scans require the selected chains to be complete, independently seeded,
 N=4, theta=0, and to share settings within each volume. They use the full
@@ -67,7 +72,9 @@ Errors for MCMC xi and xi/L use the delta method from the xi-squared error.
 
 - `L22/beta_scan.csv`, `L38/beta_scan.csv`: point estimates, whole-stream
   bootstrap standard errors, finite-bootstrap fractions, and support diagnostics.
-- `L22/inputs.json`, `L38/inputs.json`: exact inputs, settings, depth, bootstrap seed.
+- `L22/inputs.json`, `L38/inputs.json`: exact selected inputs, candidate count,
+  selection seed, settings, depth, bootstrap seed. `selected_runs.txt` records
+  the selected paths before expensive I/O and bootstrap.
 - `volume_comparison.csv`: both volumes and available MCMC references, with
   errors uniformly named `*_se` (bootstrap for NS; blocked jackknife for MCMC).
 - `volume_shifts.csv`: L38 minus L22 for each beta and common observable,
@@ -79,7 +86,8 @@ Errors for MCMC xi and xi/L use the delta method from the xi-squared error.
   circles/solid lines identify L22, triangles/dashed lines L38.
 - `coverage_diagnostics.png`: edge mass, stream-weight ESS, quadrature ESS.
 - `mcmc_L22_binning.csv`, `mcmc_L38_binning.csv` when raw references exist.
-- `jobs.tsv`, `settings.txt`, `comparison_settings.json`, `mcmc_status.txt`, job logs.
+- `jobs.tsv`, `resources.tsv`, `settings.txt`, `comparison_settings.json`,
+  `mcmc_status.txt`, job logs.
 
 NS errors resample whole independent chains, remerge by energy, and recompute
 weights in each replicate. The same replicate selection is shared across all
@@ -93,11 +101,62 @@ on the expected NS shrinkage estimate and can be loose. Finite-bootstrap
 fractions flag undefined square roots of negative xi-squared; such errors are
 left undefined rather than discarding those replicates.
 
-Defaults are 200 stream bootstraps, L22 64 GB / 24 hours, L38 8 GB / 4 hours,
+Defaults are 200 stream bootstraps, L22 16 GB / 4 hours for 100 streams,
+L38 8 GB / 4 hours,
 comparison 16 GB / 2 hours. These are resource requests, not timing measurements.
 The large L22 analysis reads 800 full streams and is the expensive stage.
-Override `N_BOOTSTRAP`, `BOOTSTRAP_SEED`, `L22_SCAN_TIME`, `L38_SCAN_TIME` as needed.
+Override `N_BOOTSTRAP`, `BOOTSTRAP_SEED`, `L22_SCAN_TIME`, `L38_SCAN_TIME`,
+`L22_SCAN_MEM`, `L38_SCAN_MEM`, `COMPARISON_SCAN_MEM`, `COMPARISON_SCAN_TIME`
+as needed. Memory settings use Slurm units, e.g. `16G`. The resource requests
+are provisional; the smaller L22 ensemble reads one eighth of the former
+800-stream data volume. Selecting fewer independent streams trades statistical
+precision for lower analysis cost, while preserving full depth and all betas.
+For example, explicitly request the reduced setup with:
+
+```bash
+L22_MAX_STREAMS=100 L22_SCAN_MEM=16G L22_SCAN_TIME=04:00:00 \
+    bash N4_volume_benchmark/submit_volume_beta_scan_ubelix.sh
+```
+
+For a full 800-stream analysis, increase the memory allowance explicitly,
+e.g. `L22_MAX_STREAMS=800 L22_SCAN_MEM=64G`; check the memory-time policy below.
 `VOLUME_DATA_ROOT` changes the scratch base for all input families.
+
+### Submission rejected with MaxMemoryRunMinsPerUser
+
+This reason refers to the per-user memory-times-requested-runtime limit,
+including running jobs. The original L22 request of 64 GiB for 24 hours
+was rejected on UBELIX. The revised 100-stream request uses 16 GiB for four
+hours, reducing this budget from 1,536 to 64 GiB-hours. This is a submission
+budget adjustment, not a measured four-hour completion time or a guarantee
+of acceptance under the user's current limit.
+
+An older launcher accepts a time override, but selecting fewer streams
+requires updating all three files `submit_volume_beta_scan_ubelix.sh`,
+`volume_beta_scan_ubelix.sh`, and `scan_volume_betas.py`. A time-only retry
+of the older 800-stream setup keeps its 64 GiB memory allowance:
+
+```bash
+L22_SCAN_TIME=04:00:00 bash N4_volume_benchmark/submit_volume_beta_scan_ubelix.sh
+```
+
+To inspect the actual live policy and other jobs consuming the allowance:
+
+```bash
+sacctmgr show qos job_gratis format=Name,MaxTRESRunMinsPU%80
+squeue -u "$USER" -o "%.18i %.10T %.12m %.12l %j"
+```
+
+If this is still rejected, use those outputs to size the request; the error
+alone does not reveal the numerical cap. Waiting helps when other running
+jobs consume the allowance. Lowering RAM requires checking actual peak usage;
+lowering the time limit can cause a timeout. The beta scan currently writes
+its CSV after all bootstrap replicates complete, so a timeout requires
+repeating that scan. `jobs.tsv` records accepted submissions if the helper
+fails after submitting only part of the workflow.
+
+References: [Slurm per-user TRES runtime limits](https://slurm.schedmd.com/sacctmgr.html#OPT_MaxTRESRunMinsPU)
+and [UBELIX free-tier resource accounting](https://knowit.unibe.ch/en/docs/hpc/costs/freetier/).
 
 The submit helper prints a `sacct` command with the actual three job IDs.
 For a completed scan, plots can be regenerated without repeating bootstraps:

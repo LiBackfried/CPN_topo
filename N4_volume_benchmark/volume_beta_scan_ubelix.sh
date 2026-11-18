@@ -49,6 +49,7 @@ if [[ "$mode" == compare ]]; then
 fi
 
 roots=()
+selection_args=()
 case "$mode" in
     22)
         group="$scratch_root/ns_constraint_22_N4_beta0p7_10x50000_stoc1500"
@@ -58,7 +59,9 @@ case "$mode" in
               20689657 20690092 20690588 20691674 20691875 20692744 20692746 20684452)
         first=(0 10 50 75 100 125 150 175 200 225 250 275 300 325 350 375 400 425 450 475 500 525 550 575 600 625 650 675 700 725 750 775)
         last=(9 49 74 99 124 149 174 199 224 249 274 299 324 349 374 399 424 449 474 499 524 549 574 599 624 649 674 699 724 749 774 799)
-        expected_chains=800
+        available_chains=800
+        expected_chains="${L22_MAX_STREAMS:-100}"
+        selection_args=(--max-streams "$expected_chains" --stream-selection-seed "${STREAM_SELECTION_SEED:-20261118}")
         stoc=1500
         ;;
     38)
@@ -67,6 +70,7 @@ case "$mode" in
         first=(0 0 0 0 0 0)
         last=(3 3 3 3 3 3)
         expected_chains=24
+        available_chains=24
         stoc=8664
         ;;
     *) echo "Unknown mode: $mode" >&2; exit 1 ;;
@@ -80,10 +84,11 @@ for index in "${!jobs[@]}"; do
         roots+=("$path")
     done
 done
-[[ "${#roots[@]}" -eq "$expected_chains" ]]
+[[ "${#roots[@]}" -eq "$available_chains" ]]
 mkdir -p "$output_dir/L$mode"
 srun --ntasks=1 --cpus-per-task=1 --export=ALL "$python_bin" \
     "$project_dir/N4_volume_benchmark/scan_volume_betas.py" "${roots[@]}" \
     --output "$output_dir/L$mode" --bootstrap "${N_BOOTSTRAP:-200}" \
     --seed "${BOOTSTRAP_SEED:-20261118}" --expected-lattice "$mode" \
-    --expected-stoc "$stoc" --expected-chains "$expected_chains"
+    --expected-stoc "$stoc" --expected-chains "$expected_chains" \
+    --expected-available-chains "$available_chains" "${selection_args[@]}"

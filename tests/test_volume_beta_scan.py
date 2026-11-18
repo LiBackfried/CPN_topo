@@ -1,17 +1,18 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import csv
+import json
 import unittest
 
 import numpy as np
 
-from N4_volume_benchmark.scan_volume_betas import BETAS, analyze, beta_quantities
+from N4_volume_benchmark.scan_volume_betas import BETAS, analyze, beta_quantities, select_runs
 from N4_volume_benchmark.plot_volume_betas import compare, complete_mcmc_root, read_scan
 from utils.nest_sampl import NestedSamplingStream, combine_streams
 
 
-def make_ns(root, lattice, stoc):
-    for seed in (1, 2):
+def make_ns(root, lattice, stoc, seeds=(1, 2)):
+    for seed in seeds:
         path = root / f"run_{seed}"
         path.mkdir(parents=True)
         count = 41
@@ -44,6 +45,25 @@ def make_mc(root, lattice, beta):
 
 
 class VolumeScanTests(unittest.TestCase):
+    def test_subsets_are_reproducible_and_unselected_measurements_are_not_loaded(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            make_ns(root / "raw", 22, 1500, seeds=range(1, 7))
+            candidates = sorted((root / "raw").iterdir())
+            selected = select_runs(candidates, 3, 123)
+            self.assertEqual(selected, select_runs(list(reversed(candidates)), 3, 123))
+            self.assertEqual(len(set(selected)), 3)
+            for path in set(candidates) - set(selected):
+                (path / "log.dat").write_text("unselected data must never be loaded")
+            analyze([root / "raw"], 3, 1234, root / "output", 22, 1500, 3,
+                    max_streams=3, selection_seed=123, expected_available_chains=6)
+            provenance = json.loads((root / "output/inputs.json").read_text())
+            self.assertEqual([Path(path) for path in provenance["runs"]], selected)
+            self.assertEqual(provenance["available_chains"], 6)
+            self.assertTrue(all(row["chains"] == 3 for row in read_scan(root / "output/beta_scan.csv", 22)))
+            with self.assertRaisesRegex(ValueError, "between 2 and 6"):
+                select_runs(candidates, 7)
+
     def test_beta_weights_and_volume_normalization_against_explicit_sum(self):
         epsilon = np.array([0.8, 0.7, 0.6])
         q = np.array([-1.0, 0.0, 2.0])
