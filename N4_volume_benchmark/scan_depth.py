@@ -165,6 +165,25 @@ def scan(chains: Sequence[np.ndarray], lattice: int, n_live: int, args) -> list[
     return [row for group in rows for row in group]
 
 
+def load_ns_ensemble(run_roots: list[Path]) -> tuple[dict, tuple[np.ndarray, ...]]:
+    configs, chains = zip(*(load_chain(path) for path in discover_runs(run_roots)))
+    if len(chains) < 2:
+        raise ValueError("At least two independently seeded chains are required")
+    seeds = {int(config["rng_seed"][0]) for config in configs}
+    if len(seeds) != len(chains) or min(seeds) < 1:
+        raise ValueError("Use one leaf per independent positive seed; do not pass its ancestors as other inputs")
+    lattice, other_extent = map(int, configs[0]["size"])
+    if lattice != other_extent:
+        raise ValueError("Expected a square lattice")
+    for config in configs:
+        if (float(config["beta"][0]), float(config["theta"][0])) != (SOURCE_BETA, 0.0):
+            raise ValueError("Expected source beta 0.7 and theta 0")
+        if {k: v for k, v in config.items() if k != "rng_seed"} != {
+                k: v for k, v in configs[0].items() if k != "rng_seed"}:
+            raise ValueError("Compare ensembles with different settings in separate scans")
+    return configs[0], chains
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run_roots", type=Path, nargs="+", help="Leaf job roots or independent run directories")
@@ -180,23 +199,11 @@ def main() -> None:
     if len(set(args.targets)) != len(args.targets):
         parser.error("Specify each target beta only once")
 
-    configs, chains = zip(*(load_chain(path) for path in discover_runs(args.run_roots)))
-    if len(chains) < 2:
-        parser.error("At least two independently seeded chains are required")
-    seeds = {int(config["rng_seed"][0]) for config in configs}
-    if len(seeds) != len(chains) or min(seeds) < 1:
-        parser.error("Use one leaf per independent positive seed; do not pass its ancestors as other inputs")
-    lattice, other_extent = map(int, configs[0]["size"])
-    if lattice != other_extent:
-        parser.error("Expected a square lattice")
-    for config in configs:
-        if (float(config["beta"][0]), float(config["theta"][0])) != (SOURCE_BETA, 0.0):
-            parser.error("Expected source beta 0.7 and theta 0")
-        if {k: v for k, v in config.items() if k != "rng_seed"} != {
-                k: v for k, v in configs[0].items() if k != "rng_seed"}:
-            parser.error("Compare ensembles with different settings in separate scans")
-
-    rows = scan(chains, lattice, int(configs[0]["num_live_pts"][0]), args)
+    try:
+        config, chains = load_ns_ensemble(args.run_roots)
+    except ValueError as exc:
+        parser.error(str(exc))
+    rows = scan(chains, int(config["size"][0]), int(config["num_live_pts"][0]), args)
     writer = csv.DictWriter(sys.stdout, fieldnames=list(rows[0]), lineterminator="\n")
     writer.writeheader()
     writer.writerows(rows)

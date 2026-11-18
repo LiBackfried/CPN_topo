@@ -165,6 +165,42 @@ the script. It compares 30,000 and 35,000 updates at β=1.0 and writes
 the two NS scans with the pooled MCMC row for each observable. The two NS
 proposal counts define separate ensembles.
 
+#### Compare correlators at matched action density
+
+Use the completed files from both NS ensembles and MCMC job `22121710`.
+From the UBELIX repo root, look up the three completed doubled-proposal jobs
+if you need their IDs:
+
+```bash
+sacct -X -S 2026-11-13 -n -P --format=JobIDRaw,JobName%30,State \
+    | awk -F'|' '$2 ~ /^ns_L38_2xstoc_[123]$/ && $3 == "COMPLETED"'
+```
+
+Replace `DOUBLED_JOB1` through `DOUBLED_JOB3` with the numeric IDs:
+
+```bash
+sbatch N4_volume_benchmark/analyze_L38_action_bins_ubelix.sh DOUBLED_JOB1 DOUBLED_JOB2 DOUBLED_JOB3
+```
+
+The batch analyzes the two NS settings separately against the same MCMC
+reference. It uses 35,000 NS updates per chain, reweights to β=1.0, and
+uses the 20,000-step MCMC burn-in cut with 128-measurement jackknife blocks.
+The 16 bin intervals are set by MCMC quantiles over its central 99%
+of sampled action density and are held fixed during resampling. Each NS
+bootstrap draw remerges and reweights whole streams.
+
+Pull `N4_L38_res/action_bins/` after the analysis finishes. Both `stoc4332/`
+and `stoc8664/` contain `comparison.png`, `bins.csv` and `summary.csv`.
+`bins.csv` reports the target mass and conditional correlator means for
+each method and bin. In `summary.csv`, `within_bin` combines the conditional
+differences using the average bin masses, while `bin_weight` combines the
+mass differences using the average conditional means. These terms sum to
+the NS-minus-MCMC difference over the common range after renormalizing
+there. Add `outside_range_effect` to recover the difference over the full
+sampled range. The three terms are correlated. Check the dependence on bin
+width with `--bins` if steep variation inside a bin could explain a
+conditional difference.
+
 ### Volume and depth plan
 
 1. **Extend L=38 first.** Inspect prefixes around 5k, 10k, 20k, and 35k–40k
