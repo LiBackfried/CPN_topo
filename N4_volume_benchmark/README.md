@@ -167,19 +167,12 @@ proposal counts define separate ensembles.
 
 #### Compare correlators at matched action density
 
-Use the completed files from both NS ensembles and MCMC job `22121710`.
-From the UBELIX repo root, look up the three completed doubled-proposal jobs
-if you need their IDs:
+Use the files from both NS ensembles and MCMC job `22121710`. The three
+doubled-proposal jobs are `22320950`, `22320951`, and `22320952`, as supplied
+by the user on 2026-11-18. From the UBELIX repo root, submit the analysis:
 
 ```bash
-sacct -X -S 2026-11-13 -n -P --format=JobIDRaw,JobName%30,State \
-    | awk -F'|' '$2 ~ /^ns_L38_2xstoc_[123]$/ && $3 == "COMPLETED"'
-```
-
-Replace `DOUBLED_JOB1` through `DOUBLED_JOB3` with the numeric IDs:
-
-```bash
-sbatch N4_volume_benchmark/analyze_L38_action_bins_ubelix.sh DOUBLED_JOB1 DOUBLED_JOB2 DOUBLED_JOB3
+sbatch N4_volume_benchmark/analyze_L38_action_bins_ubelix.sh 22320950 22320951 22320952
 ```
 
 The batch analyzes the two NS settings separately against the same MCMC
@@ -200,6 +193,18 @@ there. Add `outside_range_effect` to recover the difference over the full
 sampled range. The three terms are correlated. Check the dependence on bin
 width with `--bins` if steep variation inside a bin could explain a
 conditional difference.
+
+To repeat the comparison with 32 bins, submit:
+
+```bash
+sbatch N4_volume_benchmark/analyze_L38_action_bins_ubelix.sh 22320950 22320951 22320952 32
+```
+
+Pull `N4_L38_res/action_bins_32bins/` after completion. Its `stoc4332/` and
+`stoc8664/` subdirectories each contain `comparison.png`, `bins.csv` and
+`summary.csv`. Compare the `within_bin` and `bin_weight` terms with the
+16-bin summaries in `N4_L38_res/action_bins/`. Omitting the final bin-count
+argument uses the original 16-bin analysis and output paths.
 
 ### Volume and depth plan
 

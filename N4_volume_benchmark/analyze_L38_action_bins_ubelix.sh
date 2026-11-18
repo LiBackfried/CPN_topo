@@ -12,7 +12,9 @@ set -euo pipefail
 
 fail() { echo "$*" >&2; exit 1; }
 
-[[ $# == 3 ]] || fail "Usage: sbatch $0 DOUBLED_JOB1 DOUBLED_JOB2 DOUBLED_JOB3"
+[[ $# == 3 || $# == 4 ]] || fail "Usage: sbatch $0 DOUBLED_JOB1 DOUBLED_JOB2 DOUBLED_JOB3 [bins]"
+bins=${4:-16}
+[[ $bins =~ ^[1-9][0-9]{0,8}$ ]] && (( bins >= 2 )) || fail 'Use an integer bin count of at least two.'
 cd "${SLURM_SUBMIT_DIR:?Submit from the CPN_topo repository root.}"
 [[ -f N4_volume_benchmark/compare_action_bins.py ]] || fail 'Submit from the CPN_topo repository root.'
 scratch=${NS_SCRATCH:-/scratch/network/users/lb25v444/out_data}
@@ -22,7 +24,7 @@ mcmc="$scratch/mcmc_38_N4_beta1p0_3x100k/job_22121710"
 baseline=("$base/job_22133588" "$base/job_22133589" "$base/job_22133590" "$base/job_22120845")
 doubled=()
 declare -A seen=()
-for job in "$@"; do
+for job in "${@:1:3}"; do
     [[ $job =~ ^[0-9]+$ && ! -v seen[$job] ]] || fail 'Supply three distinct doubled-proposal job IDs.'
     seen[$job]=1
     dir="$base/job_$job"
@@ -40,7 +42,9 @@ module load Python SciPy-bundle matplotlib
 python_exec=$(command -v python)
 "$python_exec" -c 'import numpy, scipy, matplotlib'
 output=N4_L38_res/action_bins
+if (( bins != 16 )); then output="${output}_${bins}bins"; fi
+echo "Comparing both NS ensembles with $bins action bins. Output directory: $output"
 srun --export=ALL "$python_exec" N4_volume_benchmark/compare_action_bins.py \
-    --mcmc "$mcmc" --ns "${baseline[@]}" --output "$output/stoc4332"
+    --mcmc "$mcmc" --ns "${baseline[@]}" --bins "$bins" --output "$output/stoc4332"
 srun --export=ALL "$python_exec" N4_volume_benchmark/compare_action_bins.py \
-    --mcmc "$mcmc" --ns "${doubled[@]}" --output "$output/stoc8664"
+    --mcmc "$mcmc" --ns "${doubled[@]}" --bins "$bins" --output "$output/stoc8664"
