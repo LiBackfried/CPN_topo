@@ -1,0 +1,4 @@
+reported_date	kind	job_id	reported_status	dependency	expected_directory	campaign_directory	source
+2026-11-19	ns	22780262	submitted	-	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22780262	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/campaign.op3KHS	user_submission_output
+2026-11-19	mcmc	22780263	submitted	-	/scratch/network/users/lb25v444/out_data/mcmc_120_N4_beta1p0_3x100k/job_22780263	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/campaign.op3KHS	user_submission_output
+2026-11-19	analysis	22780264	queued	afterok:22780262:22780263	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/screen_ns22780262_mc22780263_analysis_22780264	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/campaign.op3KHS	user_submission_output

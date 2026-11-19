@@ -8,11 +8,31 @@ On 2026-11-19 the user reported successful completion (`ExitCode=0:0`) of:
 | 22635195 | Four NS streams, N=4, source beta=0.7, 48,600 proposals/update, planned 80k updates/stream | 4 | 01:58:04 |
 
 The user subsequently reported continuation job **22779059**, adding 60k
-updates to job 22635195 for an expected cumulative 140k. Completion of that
-continuation and submission of its dependent analysis have not been confirmed.
+updates to job 22635195 for an expected cumulative 140k. On 2026-11-19
+the user reported that **all L90 jobs are done**. The continuation's
+completion is therefore user-reported. Two completed analysis directories
+are now copied locally: **22779028** for the original **80k NS job
+22635195**, and **22803861** for continuation **22779059**, through
+**140k cumulative updates**. Both contain `completed` markers and saved
+NS/MCMC summaries and plots.
 
-These are user-reported Slurm results; raw files, completion markers and remote
-Slurm state have not been inspected locally. The analysis launcher checks
+The review is in [RESULTS_REVIEW.md](RESULTS_REVIEW.md). At beta=0.95,
+120k and 140k estimates agree to numerical precision and the final-tenth
+weight at 140k is 1.18e-19, supporting 140k for the observed depth screens.
+At beta=1.0 it remains 78.4%, so that target needs more depth. The
+beta=0.95 NS/MCMC susceptibility difference is about 2.1 combined SE;
+additional independent streams and mixing checks remain priorities.
+
+The continuation and eight additional streams, all to **210k**, are now
+prepared. Run `bash N4_volume_benchmark/extend_L90_12x210k_ubelix.sh` on
+UBELIX to submit the three NS jobs and dependent twelve-stream analysis.
+See [EXTEND_210K_12_STREAMS.md](EXTEND_210K_12_STREAMS.md) for checkpoints,
+seeds, runtime requests, records and analysis outputs. This records a
+prepared setup; these new jobs have not been submitted by the assistant.
+
+The original Slurm statuses are user-reported; copied analysis completion
+markers have been checked locally, while raw simulation/checkpoint files
+and remote Slurm state have not been inspected. The analysis launcher checks
 completion markers, lattice, task counts and source/target settings on UBELIX.
 The NS scanner additionally checks segment lengths, measurement alignment,
 N=4 logs and independent seeds. Four streams are a screening ensemble.
@@ -91,5 +111,6 @@ The user also reported completed L120 pilot jobs 22630183, 22630184,
 `/scratch/network/users/lb25v444/out_data/cpn_N4_L90_L120_timing.r4itZM/`.
 Their four-pair medians were 0.142633333 s/update at 3L²,
 0.172797222 s/update at 6L² and 0.032889166 s/MC step at beta=1.0.
-These reports establish timing; no full-length L120 production job was
-reported in this list.
+These reports establish timing. The subsequently submitted L120 screening
+campaign jobs 22780262–22780264 are recorded separately in
+[N4_L120_res/README.md](../N4_L120_res/README.md).

@@ -6,6 +6,9 @@ See [L90_L120_BENCHMARK.md](L90_L120_BENCHMARK.md) for both-volume commands,
 reporting and the L90 beta=0.95 three-chain MCMC production launcher.
 For the completed L90 screening jobs, their analysis launcher and the
 80k-to-140k continuation, see [N4_L90_res/README.md](../N4_L90_res/README.md).
+The next L90 campaign extends those four streams and adds eight fresh
+ones, all to 210k: `bash N4_volume_benchmark/extend_L90_12x210k_ubelix.sh`.
+See [the twelve-stream setup](../N4_L90_res/EXTEND_210K_12_STREAMS.md).
 To start L120 NS screening, its beta=1.0 MCMC reference and dependent
 analysis alongside L90, run `bash N4_volume_benchmark/fresh_L120_screen_ubelix.sh`.
 See [N4_L120_res/README.md](../N4_L120_res/README.md) for settings and outputs.

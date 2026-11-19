@@ -1,9 +1,42 @@
 # L120 screening campaign
 
-This prepares an N=4, theta=0 campaign independent of the L90 jobs. NS
-uses source beta=0.7 and direct MCMC uses target beta=1.0. The previously
-reported L120 jobs are timing pilots; no full-length L120 production job
-has been reported or submitted by the assistant.
+This is an N=4, theta=0 campaign independent of the L90 jobs. NS uses
+source beta=0.7 and direct MCMC uses target beta=1.0. On 2026-11-19 the
+user reported submission of the first screening campaign described below.
+
+## Reported submissions (2026-11-19)
+
+| Job ID | Role | Reported status | Dependency |
+| --- | --- | --- | --- |
+| 22780262 | Four NS streams, 120k updates each, 86,400 proposals/update | Submitted | None |
+| 22780263 | Three beta=1.0 MCMC chains, 1M MC steps each | Submitted | None |
+| 22780264 | NS depth scan and MCMC diagnostics | Queued | `afterok:22780262:22780263` |
+
+The user reported campaign records and Slurm logs at:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/campaign.op3KHS
+```
+
+The submitted IDs, dependency and expected output directories are also in
+[reported_jobs_20261119.tsv](reported_jobs_20261119.tsv). These entries
+transcribe the user's submission output. Completion, current Slurm state,
+allocated resources and remote output files have not been checked by the
+assistant. This campaign has already been submitted; the start command
+below creates another fresh campaign if repeated.
+
+The expected analysis result directory is:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/screen_ns22780262_mc22780263_analysis_22780264
+```
+
+To inspect these jobs on UBELIX:
+
+```bash
+sacct -j 22780262,22780263,22780264 \
+    --format=JobID,JobName%35,State,AllocCPUS,Elapsed,ExitCode
+```
 
 ## Start NS and MCMC, then analyze both
 
