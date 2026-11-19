@@ -1,4 +1,4 @@
-chain,block_size_measurements,block_size_mc_steps,n_blocks,observable,estimate,standard_error
+gchain,block_size_measurements,block_size_mc_steps,n_blocks,observable,estimate,standard_error
 run_0,1,10,100000,mean_action_density,0.5409701009699941,2.378434539485508e-05
 run_0,2,20,50000,mean_action_density,0.5409701009700004,2.3996457420040022e-05
 run_0,4,40,25000,mean_action_density,0.5409701009700012,2.4163512570155437e-05

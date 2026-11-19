@@ -5,12 +5,15 @@ repo=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)
 work=$(mktemp -d /tmp/cpn-L90-L120-launchers.XXXXXXXX)
 project="$work/project"
 mkdir -p "$project/N4_volume_benchmark" "$work/bin" "$work/scratch"
+git -C "$repo" init -q "$project"
 cp "$repo/N4_volume_benchmark/"{benchmark_L90_L120_ubelix.sh,run_timing_L90_L120_ubelix.sh} "$project/N4_volume_benchmark/"
+cp "$repo/N4_volume_benchmark/analyze_L90_ubelix.sh" "$project/N4_volume_benchmark/"
 cp -r "$repo/N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k" "$project/N4_volume_benchmark/"
 template=N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500
 mkdir -p "$project/$template"
 cp "$repo/$template/run_0" "$project/$template/"
 for file in "$repo/N4_volume_benchmark/"*L90_L120*.sh \
+    "$repo/N4_volume_benchmark/analyze_L90_ubelix.sh" \
     "$repo/N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k/"*.conf \
     "$repo/N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k/run_ubelix.sh"; do
     if [[ $file == *.sh ]]; then bash -n "$file"; fi
@@ -50,7 +53,8 @@ SH
 cat > "$work/bin/srun" <<'SH'
 #!/bin/bash
 set -euo pipefail
-[[ $* == *--export=ALL* && $* == *--kill-on-bad-exit=1* ]]
+[[ $* == *--export=ALL* ]]
+if (( SLURM_NTASKS > 1 )); then [[ $* == *--kill-on-bad-exit=1* ]]; fi
 while [[ $1 == --* ]]; do shift; done
 for ((task=0; task<SLURM_NTASKS; task++)); do SLURM_PROCID=$task "$@"; done
 SH
@@ -118,4 +122,33 @@ if SLURM_JOB_ID=9201 bash N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k/run_ube
 sed -i 's/4109001/4109002/' N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k/run_1.conf
 sed -i 's/N = 4/N = 21/' "$project/cpn_N4"
 if SLURM_JOB_ID=9202 bash N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k/run_ubelix.sh > "$work/mcmc_wrongN.log" 2>&1; then exit 1; fi
-echo "Passed shell/LF, mock submission, snapshot, all 12 timing jobs/configs/counts, report slopes/projections, CPU/incomplete/timing guards, output reuse, allocation, three production chains, duplicate seeds and wrong-N checks. Local artifacts: $work"
+# Analysis routing and guards. Python is mocked; no physics/bootstrap results are generated.
+ns="$NS_SCRATCH/ns_N4_beta0p7_volume_benchmark/L90/job_22635195"
+mkdir -p "$(dirname "$ns")"
+cp -r "$long_path" "$ns"
+for run in 0 1 2 3; do sed -i 's/num_ns_meas 2001/num_ns_meas 80001/' "$ns/run_$run/input.conf"; done
+cat > "$work/bin/python" <<'SH'
+#!/bin/bash
+set -euo pipefail
+printf '%s\n' "$*" >> "$MOCK_ANALYSIS"
+if [[ $1 == N4_volume_benchmark/scan_depth.py ]]; then printf 'synthetic_csv_header\n'; fi
+SH
+chmod +x "$work/bin/python"
+export MOCK_ANALYSIS="$work/analysis_calls.txt" SLURM_JOB_ID=9300 SLURM_NTASKS=1
+bash N4_volume_benchmark/analyze_L90_ubelix.sh 22635195 9200 > "$work/analysis.log"
+analysis="$project/N4_L90_res/screen_ns22635195_mc9200_analysis_9300"
+[[ -f "$analysis/completed" && -s "$analysis/depth.csv" ]]
+grep -q -- '--updates 20000 40000 60000 --targets 0.9 0.95 1.0 --bootstrap 200' "$MOCK_ANALYSIS"
+grep -q -- '--burn-in 20000 --output' "$MOCK_ANALYSIS"
+[[ $(grep -c 'utils/plot_mcmc.py' "$MOCK_ANALYSIS") == 2 ]]
+# Custom prefixes are passed unchanged; the real scanner adds the deepest prefix.
+SLURM_JOB_ID=9301 bash N4_volume_benchmark/analyze_L90_ubelix.sh 22635195 9200 40000 80000 100000 120000 > "$work/custom_prefixes.log"
+grep -q -- '--updates 40000 80000 100000 120000 --targets' "$MOCK_ANALYSIS"
+if bash N4_volume_benchmark/analyze_L90_ubelix.sh 22635195 9200 > "$work/analysis_reuse.log" 2>&1; then exit 1; fi
+if SLURM_JOB_ID=9302 bash N4_volume_benchmark/analyze_L90_ubelix.sh 22635195 9200 invalid > "$work/prefix_guard.log" 2>&1; then exit 1; fi
+mv "$ns/completed" "$ns/completed.saved"
+if SLURM_JOB_ID=9302 bash N4_volume_benchmark/analyze_L90_ubelix.sh 22635195 9200 > "$work/analysis_incomplete.log" 2>&1; then exit 1; fi
+mv "$ns/completed.saved" "$ns/completed"
+sed -i 's/num_single_site_stoc_upd 48600/num_single_site_stoc_upd 24300/' "$ns/run_0/input.conf"
+if SLURM_JOB_ID=9302 bash N4_volume_benchmark/analyze_L90_ubelix.sh 22635195 9200 > "$work/analysis_settings.log" 2>&1; then exit 1; fi
+echo "Passed shell/LF, mock submission, snapshot, all 12 timing jobs/configs/counts, report slopes/projections, CPU/incomplete/timing guards, output reuse, allocation, three production chains, duplicate seeds, wrong-N checks, analysis routing/prefixes/completion/settings guards. Local artifacts: $work"

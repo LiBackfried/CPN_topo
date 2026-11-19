@@ -4,6 +4,8 @@ For L90/L120 matched NS and target-beta MCMC timing pilots, start with
 `bash N4_volume_benchmark/benchmark_L90_L120_ubelix.sh` (L90 by default).
 See [L90_L120_BENCHMARK.md](L90_L120_BENCHMARK.md) for both-volume commands,
 reporting and the L90 beta=0.95 three-chain MCMC production launcher.
+For the completed L90 screening jobs, their analysis launcher and the
+80k-to-140k continuation, see [N4_L90_res/README.md](../N4_L90_res/README.md).
 
 For the seven-point beta scan comparing L22 with the 8,664-proposal L38
 ensemble and optional L66, including available direct MCMC references, see
