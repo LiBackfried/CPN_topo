@@ -1,0 +1,4 @@
+kind	job_id	directory
+ns	22780262	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22780262
+mcmc	22780263	/scratch/network/users/lb25v444/out_data/mcmc_120_N4_beta1p0_3x100k/job_22780263
+analysis	22780264	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/screen_ns22780262_mc22780263_analysis_22780264
