@@ -8,12 +8,18 @@ mkdir -p "$project/N4_volume_benchmark" "$work/bin" "$work/scratch"
 git -C "$repo" init -q "$project"
 cp "$repo/N4_volume_benchmark/"{benchmark_L90_L120_ubelix.sh,run_timing_L90_L120_ubelix.sh} "$project/N4_volume_benchmark/"
 cp "$repo/N4_volume_benchmark/analyze_L90_ubelix.sh" "$project/N4_volume_benchmark/"
+cp "$repo/N4_volume_benchmark/"{run_ubelix.sh,analyze_L120_ubelix.sh,fresh_L120_screen_ubelix.sh} "$project/N4_volume_benchmark/"
 cp -r "$repo/N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k" "$project/N4_volume_benchmark/"
+cp -r "$repo/N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k" "$project/N4_volume_benchmark/"
 template=N4_L22_runs/ns_constraint_22_N4_beta0p7_10x50000_stoc1500
 mkdir -p "$project/$template"
 cp "$repo/$template/run_0" "$project/$template/"
 for file in "$repo/N4_volume_benchmark/"*L90_L120*.sh \
     "$repo/N4_volume_benchmark/analyze_L90_ubelix.sh" \
+    "$repo/N4_volume_benchmark/analyze_L120_ubelix.sh" \
+    "$repo/N4_volume_benchmark/fresh_L120_screen_ubelix.sh" \
+    "$repo/N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k/"*.conf \
+    "$repo/N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k/run_ubelix.sh" \
     "$repo/N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k/"*.conf \
     "$repo/N4_volume_benchmark/mcmc_90_N4_beta0p95_3x100k/run_ubelix.sh"; do
     if [[ $file == *.sh ]]; then bash -n "$file"; fi
@@ -45,9 +51,10 @@ cat > "$work/bin/sbatch" <<'SH'
 #!/bin/bash
 set -euo pipefail
 [[ ! -v SBATCH_NTASKS && ! -v SBATCH_TIMELIMIT ]]
+if [[ -n ${MOCK_FAIL_MATCH:-} && $* == *"$MOCK_FAIL_MATCH"* ]]; then exit 1; fi
 count=$(wc -l < "$MOCK_RECORD")
 id=$((9101+count))
-printf '%s\t%s\n' "$id" "$*" >> "$MOCK_RECORD"
+printf '%s\t%s\t%s\t%s\t%s\n' "$id" "$*" "${NS_STOC:-}" "${NS_INIT_SWEEPS:-}" "${NS_INIT_SPACING:-}" >> "$MOCK_RECORD"
 printf '%s;mockcluster\n' "$id"
 SH
 cat > "$work/bin/srun" <<'SH'
@@ -151,4 +158,53 @@ if SLURM_JOB_ID=9302 bash N4_volume_benchmark/analyze_L90_ubelix.sh 22635195 920
 mv "$ns/completed.saved" "$ns/completed"
 sed -i 's/num_single_site_stoc_upd 48600/num_single_site_stoc_upd 24300/' "$ns/run_0/input.conf"
 if SLURM_JOB_ID=9302 bash N4_volume_benchmark/analyze_L90_ubelix.sh 22635195 9200 > "$work/analysis_settings.log" 2>&1; then exit 1; fi
-echo "Passed shell/LF, mock submission, snapshot, all 12 timing jobs/configs/counts, report slopes/projections, CPU/incomplete/timing guards, output reuse, allocation, three production chains, duplicate seeds, wrong-N checks, analysis routing/prefixes/completion/settings guards. Local artifacts: $work"
+# The L120 campaign has its own simulations/dependencies, so it can proceed alongside L90.
+sed -i 's/N = 21/N = 4/' "$project/cpn_ns_N4" "$project/cpn_N4"
+SBATCH_NTASKS=1 SBATCH_TIMELIMIT=1 NS_STOC=1 NS_SEED_BASE=1 \
+    bash N4_volume_benchmark/fresh_L120_screen_ubelix.sh > "$work/L120_submit.log"
+[[ $(wc -l < "$MOCK_RECORD") == 21 ]]
+l120_campaign=$(awk -F ': ' '/^L120 campaign records:/ {print $2}' "$work/L120_submit.log")
+[[ $(wc -l < "$l120_campaign/jobs.tsv") == 4 && -s "$l120_campaign/analyze_command.txt" ]]
+l120_ns_id=$(awk -F '\t' '$1=="ns" {print $2}' "$l120_campaign/jobs.tsv")
+l120_mc_id=$(awk -F '\t' '$1=="mcmc" {print $2}' "$l120_campaign/jobs.tsv")
+l120_analysis_id=$(cat "$l120_campaign/analysis_job_id.txt")
+grep -q -- "--dependency=afterok:$l120_ns_id:$l120_mc_id" "$MOCK_RECORD"
+grep -q -- '--ntasks=4 --cpus-per-task=1 --time=12:00:00.*120 120000' "$MOCK_RECORD"
+grep -q -- '--ntasks=3 --cpus-per-task=1 --time=16:00:00' "$MOCK_RECORD"
+awk -F '\t' -v id="$l120_ns_id" '$1==id {ok=($3==86400 && $4==20 && $5==8)} END {exit !ok}' "$MOCK_RECORD"
+SLURM_JOB_ID=$l120_ns_id SLURM_NTASKS=4 NS_STOC=86400 NS_INIT_SWEEPS=20 NS_INIT_SPACING=8 \
+    bash N4_volume_benchmark/run_ubelix.sh 120 120000 > "$work/L120_ns.log"
+l120_ns="$NS_SCRATCH/ns_N4_beta0p7_volume_benchmark/L120/job_$l120_ns_id"
+[[ -f "$l120_ns/completed" ]]
+for run in 0 1 2 3; do
+    awk '$1=="size" {a=($2==120 && $3==120)} $1=="num_ns_meas" {b=($2==120001)}
+         $1=="num_single_site_stoc_upd" {c=($2==86400)} $1=="beta" {d=($2==0.7)}
+         $1=="start" {e=($2==1)} $1=="rng_start" {f=($2==0)} END {exit !(a&&b&&c&&d&&e&&f)}' "$l120_ns/run_$run/input.conf"
+done
+[[ $(awk '$1=="rng_seed" {print $2}' "$l120_ns"/run_*/input.conf | sort -u | wc -l) == 4 ]]
+SLURM_JOB_ID=$l120_mc_id SLURM_NTASKS=3 bash N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k/run_ubelix.sh > "$work/L120_mcmc.log"
+l120_mc="$NS_SCRATCH/mcmc_120_N4_beta1p0_3x100k/job_$l120_mc_id"
+[[ -f "$l120_mc/completed" && $(<"$l120_mc/tasks") == 3 ]]
+if SLURM_JOB_ID=$l120_mc_id SLURM_NTASKS=3 bash N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k/run_ubelix.sh > "$work/L120_reuse.log" 2>&1; then exit 1; fi
+SLURM_JOB_ID=$l120_analysis_id bash N4_volume_benchmark/analyze_L120_ubelix.sh "$l120_ns_id" "$l120_mc_id" > "$work/L120_analysis.log"
+l120_analysis="$project/N4_L120_res/screen_ns${l120_ns_id}_mc${l120_mc_id}_analysis_${l120_analysis_id}"
+[[ -f "$l120_analysis/completed" && -s "$l120_analysis/depth.csv" ]]
+grep -q -- '--updates 30000 60000 90000 --targets 0.9 0.95 1.0 --bootstrap 200' "$MOCK_ANALYSIS"
+grep -q -- "scan_depth.py $l120_ns" "$MOCK_ANALYSIS"
+grep -q -- "plot_mcmc.py $l120_mc --burn-in 20000" "$MOCK_ANALYSIS"
+sed -i 's/num_single_site_stoc_upd 86400/num_single_site_stoc_upd 43200/' "$l120_ns/run_0/input.conf"
+if SLURM_JOB_ID=9400 bash N4_volume_benchmark/analyze_L120_ubelix.sh "$l120_ns_id" "$l120_mc_id" > "$work/L120_settings.log" 2>&1; then exit 1; fi
+sed -i 's/num_single_site_stoc_upd 43200/num_single_site_stoc_upd 86400/' "$l120_ns/run_0/input.conf"
+sed -i 's/beta 1.0/beta 0.95/' "$l120_mc/run_0/input.conf"
+if SLURM_JOB_ID=9400 bash N4_volume_benchmark/analyze_L120_ubelix.sh "$l120_ns_id" "$l120_mc_id" > "$work/L120_beta.log" 2>&1; then exit 1; fi
+sed -i 's/4112002/4112001/' N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k/run_1.conf
+if SLURM_JOB_ID=9400 SLURM_NTASKS=3 bash N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k/run_ubelix.sh > "$work/L120_seeds.log" 2>&1; then exit 1; fi
+sed -i 's/4112001/4112002/' N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k/run_1.conf
+sed -i 's/N = 4/N = 21/' "$project/cpn_N4"
+if SLURM_JOB_ID=9401 SLURM_NTASKS=3 bash N4_volume_benchmark/mcmc_120_N4_beta1p0_3x100k/run_ubelix.sh > "$work/L120_wrongN.log" 2>&1; then exit 1; fi
+sed -i 's/N = 21/N = 4/' "$project/cpn_N4"
+# A partial submission leaves its successful NS job in the new manifest.
+if MOCK_FAIL_MATCH=mcmc_120_N4 bash N4_volume_benchmark/fresh_L120_screen_ubelix.sh > "$work/L120_partial.log" 2>&1; then exit 1; fi
+partial=$(awk -F ': ' '/^L120 campaign records:/ {print $2}' "$work/L120_partial.log")
+[[ $(wc -l < "$partial/jobs.tsv") == 2 && $(wc -l < "$MOCK_RECORD") == 22 ]]
+echo "Passed shell/LF, both-volume timing jobs/reports, snapshots, production counts/seeds/N guards, L90/L120 analysis routing/settings, L120 submission resources/dependencies, generated 120k NS configs/seeds, and partial-submission records. Local artifacts: $work"

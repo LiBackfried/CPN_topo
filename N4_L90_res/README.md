@@ -7,6 +7,10 @@ On 2026-11-19 the user reported successful completion (`ExitCode=0:0`) of:
 | 22635137 | Three-chain direct MCMC, N=4, beta=0.95, 1M MC steps/chain | 3 | 04:33:29 |
 | 22635195 | Four NS streams, N=4, source beta=0.7, 48,600 proposals/update, planned 80k updates/stream | 4 | 01:58:04 |
 
+The user subsequently reported continuation job **22779059**, adding 60k
+updates to job 22635195 for an expected cumulative 140k. Completion of that
+continuation and submission of its dependent analysis have not been confirmed.
+
 These are user-reported Slurm results; raw files, completion markers and remote
 Slurm state have not been inspected locally. The analysis launcher checks
 completion markers, lattice, task counts and source/target settings on UBELIX.
@@ -64,7 +68,7 @@ The continuation writes `num_ns_meas=60001` for the segment.
 After successful completion, analyze only the new leaf:
 
 ```bash
-sbatch N4_volume_benchmark/analyze_L90_ubelix.sh <CONTINUATION_JOB_ID> 22635137 \
+sbatch --dependency=afterok:22779059 N4_volume_benchmark/analyze_L90_ubelix.sh 22779059 22635137 \
     40000 80000 100000 120000
 ```
 

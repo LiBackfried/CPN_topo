@@ -3,8 +3,10 @@
 Prepared for N=4, theta=0. NS uses source beta=0.7 at both volumes;
 direct MCMC uses beta=0.95 at L90 and beta=1.0 at L120. This setup
 submits short timing pilots and provides the L90 million-step MCMC
-launcher. Deep NS campaigns and the L120 production MCMC launcher are
-separate next steps. No remote submission or timing is implied by these files.
+launcher. The L120 screening campaign and its beta=1.0 MCMC reference are
+now prepared in [N4_L120_res/README.md](../N4_L120_res/README.md), including
+dependent analysis and launch commands. No remote submission or timing
+is implied by the prepared launchers.
 
 ## Build the two N=4 executables
 
