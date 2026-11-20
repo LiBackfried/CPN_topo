@@ -1,0 +1,1 @@
+sbatch --export=ALL --ntasks=1 --cpus-per-task=1 --dependency=afterok:22810844:22810845:22810846 --output=/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/extend210k.PaYuxc/slurm_analysis_%j.out N4_volume_benchmark/analyze_L90_12x210k_ubelix.sh 22810844 22810845 22810846 22635137

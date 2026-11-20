@@ -1,0 +1,5 @@
+role	job_id	directory	segment_updates	cumulative_updates	seed_base
+continuation	22810844	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810844	70000	210000	inherited
+fresh1	22810845	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810845	210000	210000	402339895
+fresh2	22810846	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810846	210000	210000	266811617
+analysis	22810847	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/combined210_ns22810844_analysis_22810847	-	210000	-
