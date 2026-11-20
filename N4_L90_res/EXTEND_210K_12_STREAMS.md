@@ -6,6 +6,56 @@ It continues the four existing streams from 140k to 210k and adds eight
 fresh streams of 210k updates each. The same completed beta=0.95 MCMC
 reference, job 22635137, is reused. No new MCMC job is submitted.
 
+## Reported submission (2026-11-19)
+
+The user reported these job IDs and fresh seed bases:
+
+| Job ID | Role | Reported status | Seeds for run_0 through run_3 |
+| --- | --- | --- | --- |
+| 22810844 | Continue parent 22779059, +70k to cumulative 210k | Submitted | Inherited from the existing streams |
+| 22810845 | First fresh four-stream batch, 210k each | Submitted | 402339895–402339898 |
+| 22810846 | Second fresh four-stream batch, 210k each | Submitted | 266811617–266811620 |
+| 22810847 | Combined twelve-stream analysis | Queued | — |
+
+The fresh seed ranges follow from the reported bases and the launcher's
+`seed=base+run` convention. The continuation adds no independent seeds.
+All twelve NS streams use the existing beta=0.7, N=4, L90, theta=0,
+50-live-point, 48,600-proposal settings. The MCMC comparison remains
+job **22635137** at beta=0.95.
+
+The exact reported campaign directory is:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/extend210k.PaYuxc
+```
+
+Analysis has dependency **`afterok:22810844:22810845:22810846`**. Its
+expected result directory is:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/combined210_ns22810844_analysis_22810847
+```
+
+The same information is recorded in
+[reported_210k_jobs_20261119.tsv](reported_210k_jobs_20261119.tsv).
+These records transcribe the user's submission output. On 2026-11-20
+the completed analysis folder `combined210_ns22810844_analysis_22810847/`
+and campaign records were copied locally. Its marker, inputs and CSV
+confirm a completed twelve-stream analysis through 210k. The copied
+`planned_seeds.tsv` also records inherited seeds 824326240–824326243.
+See [RESULTS_REVIEW.md](RESULTS_REVIEW.md) for depth screens, matched
+integrated observables and conditional Gk differences needing follow-up.
+Remote Slurm states, allocated resources and raw simulation/checkpoint
+files have not been inspected. The commands below reproduce submission
+and would create another campaign if repeated.
+
+To inspect the submitted jobs on UBELIX:
+
+```bash
+sacct -j 22810844,22810845,22810846,22810847 \
+    --format=JobID,JobName%35,State,AllocCPUS,Elapsed,ExitCode
+```
+
 ## Submit on UBELIX
 
 Sync the new driver and analysis launcher to the UBELIX checkout, then

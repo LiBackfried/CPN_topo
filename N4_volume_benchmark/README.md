@@ -12,6 +12,10 @@ See [the twelve-stream setup](../N4_L90_res/EXTEND_210K_12_STREAMS.md).
 To start L120 NS screening, its beta=1.0 MCMC reference and dependent
 analysis alongside L90, run `bash N4_volume_benchmark/fresh_L120_screen_ubelix.sh`.
 See [N4_L120_res/README.md](../N4_L120_res/README.md) for settings and outputs.
+To add eight fresh L120 streams to the completed four, all at 300k, use
+`bash N4_volume_benchmark/add_L120_8x300k_ubelix.sh`. See
+[the twelve-stream addition](../N4_L120_res/ADD_8_STREAMS_300K.md) for the
+two-stage jobs, dependent analysis and bookkeeping.
 
 For the seven-point beta scan comparing L22 with the 8,664-proposal L38
 ensemble and optional L66, including available direct MCMC references, see

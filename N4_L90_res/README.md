@@ -10,32 +10,53 @@ On 2026-11-19 the user reported successful completion (`ExitCode=0:0`) of:
 The user subsequently reported continuation job **22779059**, adding 60k
 updates to job 22635195 for an expected cumulative 140k. On 2026-11-19
 the user reported that **all L90 jobs are done**. The continuation's
-completion is therefore user-reported. Two completed analysis directories
-are now copied locally: **22779028** for the original **80k NS job
-22635195**, and **22803861** for continuation **22779059**, through
-**140k cumulative updates**. Both contain `completed` markers and saved
-NS/MCMC summaries and plots.
+completion is therefore user-reported. The original 80k analysis
+**22779028** and 140k analysis **22803861** remain available locally.
+On 2026-11-20 the user copied the completed twelve-stream analysis
+**22810847**, through **210k updates per stream**, from jobs 22810844,
+22810845 and 22810846. All three analysis directories have `completed`
+markers and saved results.
 
-The review is in [RESULTS_REVIEW.md](RESULTS_REVIEW.md). At beta=0.95,
-120k and 140k estimates agree to numerical precision and the final-tenth
-weight at 140k is 1.18e-19, supporting 140k for the observed depth screens.
-At beta=1.0 it remains 78.4%, so that target needs more depth. The
-beta=0.95 NS/MCMC susceptibility difference is about 2.1 combined SE;
-additional independent streams and mixing checks remain priorities.
+The updated [review](RESULTS_REVIEW.md) finds that 210k passes observed
+depth screens through beta=1.0; 160k is the first tested prefix passing
+both screens at that target. At beta=0.95 all integrated NS/MCMC
+observables agree within 0.6 combined SE. The 32-bin comparison still
+has conditional Gk differences up to 4.77 reported SE, so rebinning and
+mixing checks remain priorities. The earlier four-stream integrated
+offsets of about two SE are absent in the twelve-stream comparison.
 
-The continuation and eight additional streams, all to **210k**, are now
-prepared. Run `bash N4_volume_benchmark/extend_L90_12x210k_ubelix.sh` on
-UBELIX to submit the three NS jobs and dependent twelve-stream analysis.
-See [EXTEND_210K_12_STREAMS.md](EXTEND_210K_12_STREAMS.md) for checkpoints,
-seeds, runtime requests, records and analysis outputs. This records a
-prepared setup; these new jobs have not been submitted by the assistant.
+On 2026-11-19 the user reported submission of the **twelve-stream 210k
+campaign**:
+
+| Job ID | Role | Updates per stream | Seed base |
+| --- | --- | --- | --- |
+| 22810844 | Continue four streams from parent 22779059 | +70k, cumulative 210k | Inherited |
+| 22810845 | Four fresh streams | 210k | 402339895 |
+| 22810846 | Four fresh streams | 210k | 266811617 |
+| 22810847 | Combined twelve-stream analysis | Common prefixes through 210k | — |
+
+Analysis depends on `afterok:22810844:22810845:22810846` and reuses MCMC
+**22635137**. The reported campaign records, seeds, logs and retry command
+are under:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/extend210k.PaYuxc
+```
+
+See [reported_210k_jobs_20261119.tsv](reported_210k_jobs_20261119.tsv) and
+[EXTEND_210K_12_STREAMS.md](EXTEND_210K_12_STREAMS.md) for seed ranges,
+runtime requests and outputs. The completed combined analysis is now
+copied locally at `combined210_ns22810844_analysis_22810847/`; current
+remote Slurm states and raw run files have not been inspected. Repeating
+the submission driver would create another campaign.
 
 The original Slurm statuses are user-reported; copied analysis completion
 markers have been checked locally, while raw simulation/checkpoint files
 and remote Slurm state have not been inspected. The analysis launcher checks
 completion markers, lattice, task counts and source/target settings on UBELIX.
 The NS scanner additionally checks segment lengths, measurement alignment,
-N=4 logs and independent seeds. Four streams are a screening ensemble.
+N=4 logs and independent seeds. The latest ensemble has twelve independent
+streams; the earlier four-stream results remain screening analyses.
 
 ## Analyze the 80k run and the MCMC reference
 

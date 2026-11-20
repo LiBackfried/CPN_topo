@@ -1,0 +1,5 @@
+reported_date	kind	job_id	reported_status	parent_job_id	streams	segment_updates	cumulative_updates	proposals_per_update	mcmc_job_id	expected_directory	source
+2026-11-20	ns_continuation	22860149	submitted	22780262	4	120000	240000	86400	22780263	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22860149	user_report
+2026-11-20	analysis	22860160	completed_local	22860149	4	-	240000	86400	22780263	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/screen_ns22860149_mc22780263_analysis_22860160	copied_analysis_marker_and_inputs
+2026-11-20	ns_continuation	22885157	submitted	22860149	4	60000	300000	86400	22780263	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22885157	user_report
+2026-11-20	analysis	22885274	completed_local	22885157	4	-	300000	86400	22780263	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/screen_ns22885157_mc22780263_analysis_22885274	copied_analysis_marker_and_inputs

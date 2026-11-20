@@ -52,6 +52,7 @@ def table(path: Path) -> np.ndarray:
 def load_run(path: Path, prefactor: float, requested_cooling: int | None
              ) -> tuple[NestedSamplingStream, dict[str, Any]]:
     config = read_config(path / "input.conf")
+    
     size = tuple(map(int, config["size"]))
     n_live = int(config["num_live_pts"][0])
     cool_every = int(config["meas_cool_every"][0])
@@ -63,13 +64,16 @@ def load_run(path: Path, prefactor: float, requested_cooling: int | None
     general, topology = table(path / "dati.dat"), table(path / "topo.dat")
     if general.shape[1] < 4 or topology.shape[1] < 5:
         raise ValueError(f"unexpected column count in {path}")
+    
     block_size = max_cool // cool_every + 1
     count = min(len(general), len(topology) // block_size)
+    
     acceptance = path / "acceptance_rate.dat"
     if acceptance.is_file():
         count = min(count, len(table(acceptance)))
     if count == 0:
         raise ValueError(f"no complete measurements in {path}")
+    
     general = general[:count]
     topo = topology[:count * block_size].reshape(count, block_size, -1)[:, cooling // cool_every]
     energy = prefactor * general[:, 1]
@@ -93,14 +97,17 @@ def quantities(data: CombinedNestedSampling, lattice_size: int,
     q, q2 = data.mean("q_u"), data.weighted_sum(q_values ** 2)
     q_variance = data.variance("q_u", mean=q)
     action_density = data.mean("action_density")
+    
     result = {"mean_action_density": action_density,
               "mean_energy": data.mean("energy"), "mean_G0": g0, "mean_Gk": gk,
               "xi_L_squared": xi2, "xi_L": np.sqrt(xi2) if xi2 >= 0 else np.nan,
               "mean_Q_U": q, "mean_Q_U_squared": q2,
               "chi_topological": q_variance / lattice_size**2,
               "mean_Q_z": data.mean("q_z"), "mean_Q_plaquette": data.mean("q_plaq")}
+    
     if (cpn_n is None) != (beta is None):
         raise ValueError("cpn_n and beta must be provided together")
+    
     if cpn_n is not None:
         mean_extensive_energy = 2.0 * cpn_n * lattice_size**2 * action_density
         result["mean_extensive_energy"] = mean_extensive_energy
@@ -226,6 +233,7 @@ def plots(data: CombinedNestedSampling, streams: list[NestedSamplingStream], out
 
 def main() -> None:
     args = arguments()
+
     if args.cpn_n is not None and args.cpn_n <= 0:
         raise ValueError("--cpn-n must be positive")
     if args.target_beta is not None:
@@ -233,12 +241,15 @@ def main() -> None:
             raise ValueError("--cpn-n is required with --target-beta")
         if not np.isfinite(args.target_beta) or args.target_beta < 0.0:
             raise ValueError("--target-beta must be finite and non-negative")
+    
     loaded = [load_run(p, args.action_prefactor, args.cooling_step) for p in discover_runs(args.run_roots)]
     streams, run_info = [x[0] for x in loaded], [x[1] for x in loaded]
+
     sizes = {tuple(x["size"]) for x in run_info}
     if len(sizes) != 1 or len(next(iter(sizes))) != 2 or len(set(next(iter(sizes)))) != 1:
         raise ValueError(f"runs must share one square lattice size; found {sizes}")
     length = next(iter(sizes))[0]
+    
     source_betas = {x["beta"] for x in run_info}
     if len(source_betas) != 1 or not np.isfinite(next(iter(source_betas))):
         raise ValueError(f"runs must share one finite source beta; found {source_betas}")

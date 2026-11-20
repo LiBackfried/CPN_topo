@@ -4,6 +4,36 @@ This is an N=4, theta=0 campaign independent of the L90 jobs. NS uses
 source beta=0.7 and direct MCMC uses target beta=1.0. On 2026-11-19 the
 user reported submission of the first screening campaign described below.
 
+Three completed analyses are now copied locally: initial 120k analysis
+**22780264**, 240k analysis **22860160** and latest 300k analysis
+**22885274** at `screen_ns22885157_mc22780263_analysis_22885274/`.
+All have `completed` markers. NS continuation **22885157** follows
+22860149 and original 22780262 for **300k cumulative updates in the
+same four streams**, with 86,400 proposals/update. MCMC **22780263**
+remains the reference.
+The records are in [reported_jobs_20261120.tsv](reported_jobs_20261120.tsv).
+
+The updated [results review](RESULTS_REVIEW.md) finds that **300k passes
+the observed depth screens through beta=1.0**. At that target, 270k and
+300k estimates agree to saved numerical precision; final-tenth mass is
+0.0669% at 270k and 1.01e-21 at 300k. All integrated beta=1.0 NS/MCMC
+observables agree within 0.5 combined SE. NS gives xi_L=10.358 +/- 0.923;
+MCMC gives 9.938 +/- 0.148, with unchanged copied diagnostics.
+
+The next priorities are eight additional independent streams at 300k,
+conditional correlator-bin comparisons and mixing checks. The depth
+diagnostics give no reason for another extension of the current four
+streams. Remote Slurm state and raw simulation/checkpoint files have
+not been inspected in this local review.
+
+The eight additional streams are now prepared. Run
+`bash N4_volume_benchmark/add_L120_8x300k_ubelix.sh` on UBELIX to submit
+two batches of four fresh streams, each staged at 150k then 300k, plus
+dependent twelve-stream analysis. The existing four streams and MCMC
+reference are reused. See [ADD_8_STREAMS_300K.md](ADD_8_STREAMS_300K.md)
+for resources, checkpoints, seeds and output records. These new jobs
+have not been submitted by the assistant.
+
 ## Reported submissions (2026-11-19)
 
 | Job ID | Role | Reported status | Dependency |
@@ -20,10 +50,11 @@ The user reported campaign records and Slurm logs at:
 
 The submitted IDs, dependency and expected output directories are also in
 [reported_jobs_20261119.tsv](reported_jobs_20261119.tsv). These entries
-transcribe the user's submission output. Completion, current Slurm state,
-allocated resources and remote output files have not been checked by the
-assistant. This campaign has already been submitted; the start command
-below creates another fresh campaign if repeated.
+transcribe the user's submission output. The completed local analysis
+marker and CSVs have now been checked; current Slurm state, allocated
+resources and raw remote run files have not been inspected. This campaign
+has already produced its initial analysis; the start command below
+creates another fresh campaign if repeated.
 
 The expected analysis result directory is:
 
@@ -115,7 +146,7 @@ base="${NS_SCRATCH:-/scratch/network/users/lb25v444/out_data}"
 unset NS_STOC NS_INIT_SWEEPS NS_INIT_SPACING NS_SEED_BASE NS_EXECUTABLE
 sbatch --ntasks=4 --cpus-per-task=1 --time=12:00:00 \
     N4_volume_benchmark/run_ubelix.sh 120 120000 \
-    "$base/ns_N4_beta0p7_volume_benchmark/L120/job_<NS_PARENT_ID>"
+    "$base/ns_N4_beta0p7_volume_benchmark/L120/job_22780262"
 ```
 
 It copies validated checkpoints and inherits the executable, proposal count,
@@ -125,7 +156,7 @@ the new leaf and reuse the completed MCMC reference:
 
 ```bash
 sbatch N4_volume_benchmark/analyze_L120_ubelix.sh \
-    <NS_LEAF_ID> <MCMC_ID> 60000 120000 180000 210000
+    22860149 22780263 60000 120000 180000 210000
 ```
 
 The deepest shared depth (expected 240k) is added automatically. A formal
