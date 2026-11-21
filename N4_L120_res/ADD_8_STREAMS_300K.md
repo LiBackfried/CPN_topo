@@ -7,6 +7,56 @@ All twelve streams will have 300,000 NS updates, 50 live points and
 reference **22780263** is reused. The four existing NS streams are
 read-only inputs and are not extended or rerun.
 
+## Reported submission on 2026 11 20
+
+The user reported the following job IDs and seed bases:
+
+| Job ID | Role | Cumulative updates per stream | Reported status | Dependency |
+| --- | --- | ---: | --- | --- |
+| 22904261 | Batch 1 fresh start, four streams | 150,000 | Submitted | None |
+| 22904262 | Batch 1 leaf, same four streams | 300,000 | Queued | `afterok:22904261` |
+| 22904263 | Batch 2 fresh start, four streams | 150,000 | Submitted | None |
+| 22904264 | Batch 2 leaf, same four streams | 300,000 | Queued | `afterok:22904263` |
+| 22904265 | Combined twelve-stream analysis | 300,000 | Queued | `afterok:22904262:22904264` |
+
+Batch 1 has seed labels **335358449–335358452**, and batch 2 has
+**691294503–691294506**, from the reported bases and `seed=base+run`
+convention. The leaf jobs inherit RNG states from their starts; repeated
+seed labels do not mean the chains restart or add independent streams.
+Existing NS **22885157** supplies the other four streams, and MCMC
+**22780263** remains the direct beta=1.0 reference.
+
+The exact reported campaign records/log directory is:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/add8_300k.stUQg8
+```
+
+The expected combined-analysis output is:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/combined300_ns22885157_analysis_22904265
+```
+
+The machine-readable record is
+[reported_add8_jobs_20261120.tsv](reported_add8_jobs_20261120.tsv).
+The submission entries transcribe the user's output. On 2026-11-21 the
+completed analysis `combined300_ns22885157_analysis_22904265/` and
+campaign records were copied locally. Its completion marker, twelve-stream
+CSV and twelve distinct seed labels have been checked. The updated
+[results review](RESULTS_REVIEW.md) records passing depth screens,
+integrated agreement within 1.3 combined SE and a conditional G0-bin
+feature needing follow-up. Current remote Slurm states, allocated
+resources and raw run files have not been queried. The submission
+commands below would start another campaign if repeated.
+
+To inspect these jobs on UBELIX:
+
+```bash
+sacct -j 22904261,22904262,22904263,22904264,22904265 \
+    --format=JobID,JobName%35,State,AllocCPUS,Elapsed,ExitCode
+```
+
 ## Submit on UBELIX
 
 Sync the new submission driver and combined-analysis launcher to the

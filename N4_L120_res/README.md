@@ -4,35 +4,50 @@ This is an N=4, theta=0 campaign independent of the L90 jobs. NS uses
 source beta=0.7 and direct MCMC uses target beta=1.0. On 2026-11-19 the
 user reported submission of the first screening campaign described below.
 
-Three completed analyses are now copied locally: initial 120k analysis
-**22780264**, 240k analysis **22860160** and latest 300k analysis
-**22885274** at `screen_ns22885157_mc22780263_analysis_22885274/`.
-All have `completed` markers. NS continuation **22885157** follows
-22860149 and original 22780262 for **300k cumulative updates in the
-same four streams**, with 86,400 proposals/update. MCMC **22780263**
-remains the reference.
+The latest completed analysis, copied on 2026-11-21, is **22904265** at
+`combined300_ns22885157_analysis_22904265/`: **twelve independent streams,
+300k updates each**, combining existing leaf 22885157 with new leaves
+22904262 and 22904264. The earlier four-stream analyses **22780264**,
+**22860160** and **22885274** remain available. All have `completed`
+markers. The ensemble uses 86,400 proposals/update and MCMC **22780263**
+remains the reference; its copied diagnostics are unchanged.
 The records are in [reported_jobs_20261120.tsv](reported_jobs_20261120.tsv).
 
 The updated [results review](RESULTS_REVIEW.md) finds that **300k passes
 the observed depth screens through beta=1.0**. At that target, 270k and
 300k estimates agree to saved numerical precision; final-tenth mass is
-0.0669% at 270k and 1.01e-21 at 300k. All integrated beta=1.0 NS/MCMC
-observables agree within 0.5 combined SE. NS gives xi_L=10.358 +/- 0.923;
-MCMC gives 9.938 +/- 0.148, with unchanged copied diagnostics.
+0.1810% at 270k and 2.99e-21 at 300k in the twelve-stream analysis.
+All integrated beta=1.0 NS/MCMC observables agree within 1.3 combined
+SE. NS gives xi_L=9.450 +/- 0.635 and MCMC gives 9.938 +/- 0.148.
 
-The next priorities are eight additional independent streams at 300k,
-conditional correlator-bin comparisons and mixing checks. The depth
-diagnostics give no reason for another extension of the current four
-streams. Remote Slurm state and raw simulation/checkpoint files have
-not been inspected in this local review.
+The 32-bin comparison has one conditional G0 bin at 3.32 reported SE;
+no Gk bin exceeds two. Rebinning, joint error assessment and mixing
+checks remain priorities. The depth diagnostics give no reason for a
+further production extension. Remote Slurm state and raw simulation/
+checkpoint files have not been inspected in this local review.
 
-The eight additional streams are now prepared. Run
-`bash N4_volume_benchmark/add_L120_8x300k_ubelix.sh` on UBELIX to submit
-two batches of four fresh streams, each staged at 150k then 300k, plus
-dependent twelve-stream analysis. The existing four streams and MCMC
-reference are reused. See [ADD_8_STREAMS_300K.md](ADD_8_STREAMS_300K.md)
-for resources, checkpoints, seeds and output records. These new jobs
-have not been submitted by the assistant.
+On 2026-11-20 the user reported submission of the eight additional streams:
+
+| Batch | First 150k job | Leaf at 300k | Seed labels for run_0 through run_3 |
+| --- | --- | --- | --- |
+| Four new streams, batch 1 | 22904261 | 22904262 | 335358449–335358452 |
+| Four new streams, batch 2 | 22904263 | 22904264 | 691294503–691294506 |
+
+Analysis **22904265** was queued with `afterok:22904262:22904264`, combines the
+eight new streams with existing NS **22885157**, and reuses MCMC
+**22780263**. The reported campaign directory is:
+
+```text
+/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/add8_300k.stUQg8
+```
+
+See [reported_add8_jobs_20261120.tsv](reported_add8_jobs_20261120.tsv)
+and [ADD_8_STREAMS_300K.md](ADD_8_STREAMS_300K.md) for dependencies,
+seed ranges and output paths. The completed analysis and campaign records
+are now copied locally, including twelve distinct seed labels. The
+submission table is historical; current remote Slurm states/resources
+have not been queried. Repeating the driver would submit another eight
+streams.
 
 ## Reported submissions (2026-11-19)
 

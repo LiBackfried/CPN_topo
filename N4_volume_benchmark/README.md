@@ -1,5 +1,11 @@
 # CP³ volume and reweighting benchmark on UBELIX
 
+For the completed L90/L120 twelve-stream ensembles, run the bin/block
+robustness and stream-group/leave-one-out checks with
+`bash N4_volume_benchmark/submit_robustness_ubelix.sh`.
+See [ROBUSTNESS_STEPS_1_2.md](ROBUSTNESS_STEPS_1_2.md) for the fixed input
+jobs, output tables, joint diagnostics and interpretation.
+
 For L90/L120 matched NS and target-beta MCMC timing pilots, start with
 `bash N4_volume_benchmark/benchmark_L90_L120_ubelix.sh` (L90 by default).
 See [L90_L120_BENCHMARK.md](L90_L120_BENCHMARK.md) for both-volume commands,
