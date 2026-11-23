@@ -1,0 +1,6 @@
+method,L,beta,xi_L,xi_L_se,L_over_xi_L,L_over_xi_L_se,L_over_xi_L_table_rounded,input_file
+Table III,22,0.7,1.7842,0.0059,12.330456226880395,0.04077440406826271,12.3,N4_L66_res\reference_targets.csv
+Table III,38,0.8,3.039,0.012,12.504113195129976,0.04937458319893377,12.5,N4_L66_res\reference_targets.csv
+Table III,66,0.9,5.398,0.022,12.226750648388293,0.049831143805954506,12.2,N4_L66_res\reference_targets.csv
+Table III,90,0.95,7.314,0.033,12.305168170631665,0.05551962669275977,12.3,N4_L66_res\reference_targets.csv
+Table III,120,1.0,9.997,0.045,12.003601080324097,0.05403241458583418,12.0,N4_L66_res\reference_targets.csv

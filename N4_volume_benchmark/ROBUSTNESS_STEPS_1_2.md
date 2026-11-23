@@ -1,5 +1,28 @@
 # L90/L120 post-processing: steps 1 and 2
 
+## Reported submissions
+
+On 2026-11-21 the user reported the following successful `sbatch` submissions.
+Both results were copied on 2026-11-23, with analysis and record completion
+markers. See [the completed review](ROBUSTNESS_REVIEW_20261123.md). Remote
+Slurm status has not been independently checked. These jobs perform the
+robustness checks below; they do not add
+autocorrelation-time estimation or source-beta thermalization pilots.
+
+| Volume | Analysis job | Records/logs under that volume's result root | Expected output directory |
+| --- | --- | --- | --- |
+| L90 | 22974797 | `robustness_submit.e9FfqB/` | `robustness_steps12_22974797/` |
+| L120 | 22974798 | `robustness_submit.Eh36vA/` | `robustness_steps12_22974798/` |
+
+The UBELIX result roots are
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res` and
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res`.
+Machine-readable submission records are in
+[L90](../N4_L90_res/reported_robustness_jobs_20261121.tsv) and
+[L120](../N4_L120_res/reported_robustness_jobs_20261121.tsv).
+
+## Submission instructions
+
 Run from the UBELIX repository root after syncing the new Python driver,
 the two shell scripts, and their existing imported analysis modules:
 

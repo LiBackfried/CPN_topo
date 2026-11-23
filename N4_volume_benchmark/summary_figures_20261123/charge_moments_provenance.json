@@ -1,0 +1,290 @@
+{
+  "inputs": [
+    {
+      "path": "N4_L66_res\\volume_scan.T1n611\\volume_comparison.csv",
+      "sha256": "ea5a5d335d914425ef87f621ecd02a985da8d65be467b0abc4215f806ad6b857"
+    },
+    {
+      "path": "N4_L90_res\\combined210_ns22810844_analysis_22810847\\mcmc_burn20000\\binning.csv",
+      "sha256": "709fbacac5e8581a519ac0c6f42d96044f532c201c57fad09aa713ed167d03e7"
+    },
+    {
+      "path": "N4_L120_res\\combined300_ns22885157_analysis_22904265\\mcmc_burn20000\\binning.csv",
+      "sha256": "2b4ca46b0a307b5fe029eeed65a89b25242d9ab86c62fbdda1dc66a6c632f00d"
+    }
+  ],
+  "points": 94,
+  "source_beta": 0.7,
+  "theta": 0,
+  "NS_error": "whole-independent-stream bootstrap",
+  "MCMC_error": "blocked jackknife; 20000 MC steps discarded, 128 measurements per block",
+  "unavailable": [
+    {
+      "method": "NS",
+      "L": 22,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 22,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 38,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 38,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 66,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 66,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 90,
+      "observable": "mean_Q_U",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 90,
+      "observable": "mean_Q_z",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 90,
+      "observable": "mean_Q_plaquette",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 90,
+      "observable": "mean_Q_U_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 90,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 90,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 120,
+      "observable": "mean_Q_U",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 120,
+      "observable": "mean_Q_z",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 120,
+      "observable": "mean_Q_plaquette",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 120,
+      "observable": "mean_Q_U_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 120,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "NS",
+      "L": 120,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 22,
+      "observable": "mean_Q_z",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 22,
+      "observable": "mean_Q_plaquette",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 22,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 22,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 38,
+      "observable": "mean_Q_z",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 38,
+      "observable": "mean_Q_plaquette",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 38,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 38,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 66,
+      "observable": "mean_Q_z",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 66,
+      "observable": "mean_Q_plaquette",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 66,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 66,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 90,
+      "observable": "mean_Q_z",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 90,
+      "observable": "mean_Q_plaquette",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 90,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 90,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 120,
+      "observable": "mean_Q_z",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 120,
+      "observable": "mean_Q_plaquette",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 120,
+      "observable": "mean_Q_z_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    },
+    {
+      "method": "MCMC",
+      "L": 120,
+      "observable": "mean_Q_plaquette_squared",
+      "points": 0,
+      "status": "not_in_saved_exports"
+    }
+  ],
+  "notes": "No second moments inferred from means. No charge values supplied by screenshot Table III."
+}

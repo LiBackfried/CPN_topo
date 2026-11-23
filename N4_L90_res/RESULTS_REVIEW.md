@@ -1,6 +1,12 @@
 # L90 results through 210k NS updates
 
-The latest copied analysis, with a `completed` marker, is
+The robustness analysis **22974797**, copied on 2026-11-23, is complete.
+The conditional Gk discrepancy persists across 8/16/32 bins and MC blocks
+128/512/1024; omitting any one stream does not remove the highlighted bin
+residual. See [the robustness review](../N4_volume_benchmark/ROBUSTNESS_REVIEW_20261123.md)
+for joint diagnostics, group comparisons and initialization/mixing priorities.
+
+The latest depth-scan analysis, with a `completed` marker, is
 `combined210_ns22810844_analysis_22810847/`: **twelve independent streams,
 210k updates each**, from NS jobs 22810844, 22810845 and 22810846. Its
 depth scan contains 100k, 120k, 140k, 160k, 180k, 200k and 210k prefixes.

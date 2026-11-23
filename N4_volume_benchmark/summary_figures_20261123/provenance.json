@@ -1,0 +1,44 @@
+{
+  "inputs": [
+    {
+      "path": "N4_L66_res\\volume_scan.T1n611\\volume_comparison.csv",
+      "sha256": "ea5a5d335d914425ef87f621ecd02a985da8d65be467b0abc4215f806ad6b857"
+    },
+    {
+      "path": "N4_L90_res\\combined210_ns22810844_analysis_22810847\\depth.csv",
+      "sha256": "23c3dd79134f9104d5ed86b344cd17a22d70035a5d8aa25eecbbf0ba200730ac"
+    },
+    {
+      "path": "N4_L90_res\\combined210_ns22810844_analysis_22810847\\mcmc_burn20000\\binning.csv",
+      "sha256": "709fbacac5e8581a519ac0c6f42d96044f532c201c57fad09aa713ed167d03e7"
+    },
+    {
+      "path": "N4_L120_res\\combined300_ns22885157_analysis_22904265\\depth.csv",
+      "sha256": "57fc9cfb879031a4e37bd1f43f5e3452a96538af98b81e2829a44e53a507fa61"
+    },
+    {
+      "path": "N4_L120_res\\combined300_ns22885157_analysis_22904265\\mcmc_burn20000\\binning.csv",
+      "sha256": "2b4ca46b0a307b5fe029eeed65a89b25242d9ab86c62fbdda1dc66a6c632f00d"
+    },
+    {
+      "path": "N4_L66_res\\reference_targets.csv",
+      "sha256": "4559d32c31307412b8cbfad71dc732a731f9fe57210b85ad081ef11506ceee93"
+    }
+  ],
+  "source_beta": 0.7,
+  "theta": 0,
+  "scope": "Main seven-beta L22/L38/L66 scans and deepest saved L90/L120 prefixes; earlier L22 narrow-beta studies excluded.",
+  "NS_points": 27,
+  "MCMC_points": 5,
+  "xi_uncertainty": "First-order propagation from xi_squared for every volume and method",
+  "MCMC_burn_in_MC_steps": 20000,
+  "MCMC_block_size_measurements": 128,
+  "color": "Separate Blues (NS), Oranges (MCMC), Greens (Table III) gradients, logarithmic in V=L^2; volume marker legends",
+  "markers": "NS: open circles; MCMC: open diamonds; Table III: open squares; markerfacecolor='None'",
+  "table_reference": "User screenshot Table III, matched to saved reference_targets.csv; only L=22,38,66,90,120 included",
+  "table_reference_points": 5,
+  "table_observables": "xi_L and L/xi_L only; susceptibility not supplied",
+  "ratio_uncertainty": "L*sigma_xi/xi^2; ratios computed from xi, with screenshot rounded values retained separately",
+  "susceptibility_plot_scale": 10000.0,
+  "csv_susceptibility_scale": 1
+}

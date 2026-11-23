@@ -1,5 +1,16 @@
 # L90 screening campaign
 
+On 2026-11-21 the user reported submission of robustness analysis
+**22974797**, covering the bin/block grid, three four-stream groups and
+twelve leave-one-out subsets of the completed 210k ensemble. Records/logs:
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/robustness_submit.e9FfqB`.
+The results were copied on 2026-11-23 to `robustness_steps12_22974797/`,
+with analysis and record completion markers. The pooled Gk discrepancy
+persists across bin/block choices and every single-stream omission. See
+[the robustness review](../N4_volume_benchmark/ROBUSTNESS_REVIEW_20261123.md),
+[the submission record](reported_robustness_jobs_20261121.tsv) and
+[the analysis guide](../N4_volume_benchmark/ROBUSTNESS_STEPS_1_2.md).
+
 On 2026-11-19 the user reported successful completion (`ExitCode=0:0`) of:
 
 | Job | Role | CPUs | Reported elapsed |

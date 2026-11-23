@@ -1,5 +1,17 @@
 # L120 screening campaign
 
+On 2026-11-21 the user reported submission of robustness analysis
+**22974798**, covering the bin/block grid, three four-stream groups and
+twelve leave-one-out subsets of the completed 300k ensemble. Records/logs:
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/robustness_submit.Eh36vA`.
+The results were copied on 2026-11-23 to `robustness_steps12_22974798/`,
+with analysis and record completion markers. The pooled bin comparison
+stays within its joint 95% thresholds; four-stream group residuals still
+leave sampling validation open. See
+[the robustness review](../N4_volume_benchmark/ROBUSTNESS_REVIEW_20261123.md),
+[the submission record](reported_robustness_jobs_20261121.tsv) and
+[the analysis guide](../N4_volume_benchmark/ROBUSTNESS_STEPS_1_2.md).
+
 This is an N=4, theta=0 campaign independent of the L90 jobs. NS uses
 source beta=0.7 and direct MCMC uses target beta=1.0. On 2026-11-19 the
 user reported submission of the first screening campaign described below.
