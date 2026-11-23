@@ -1,0 +1,80 @@
+{
+  "L": 66,
+  "cpn_n": 4,
+  "source_beta": 0.7,
+  "theta": 0.0,
+  "targets": [
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "updates": 110000,
+  "NS_streams": 12,
+  "proposals": 26136,
+  "NS_paths": [
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587433/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587434/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L66/job_22587435/run_3"
+  ],
+  "bootstrap": 200,
+  "seed": 20261123,
+  "burn_in_MC_steps": 20000,
+  "block_size_measurements": 128,
+  "MCMC_beta": 0.9,
+  "MCMC_chains": [
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511/run_0",
+      "seed": 4106601,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511/run_1",
+      "seed": 4106602,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_66_N4_beta0p9_3x100k/job_22587511/run_2",
+      "seed": 4106603,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    }
+  ],
+  "quantities": [
+    "mean_Q_U",
+    "mean_Q_U_squared",
+    "mean_Q_z",
+    "mean_Q_z_squared",
+    "mean_Q_plaquette",
+    "mean_Q_plaquette_squared"
+  ],
+  "NS_error": "whole-stream bootstrap; merge and reweight each replicate",
+  "MCMC_error": "delete-one-complete-block jackknife; incomplete tails discarded per chain",
+  "second_moment": "Weighted mean of each measured Q squared; not mean(Q) squared",
+  "support": "Same common-energy-support prefix convention as saved volume/depth scans",
+  "selection_manifest": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L66_res/volume_scan.T1n611/L66/inputs.json",
+  "selection_manifest_sha256": "4264d8b4605d9519141e582ef4572385c3d20f0dc6408dddc0750dbdabe5810f",
+  "MCMC_complete_blocks": 2295,
+  "MCMC_dropped_tail_measurements": [
+    80,
+    80,
+    80
+  ]
+}

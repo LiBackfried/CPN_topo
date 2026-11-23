@@ -1,0 +1,4 @@
+Exporting all Q and Q^2 moments for L90 to /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/charge_moments/job_23205440
+L90: bootstrapping 12 NS streams at 210000 updates, targets (0.9, 0.95, 1.0)
+L90: wrote 18 NS and 6 MCMC estimates to /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/charge_moments/job_23205440
+Completed charge-moment export for L90: /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/charge_moments/job_23205440

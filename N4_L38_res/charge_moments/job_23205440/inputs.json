@@ -1,0 +1,92 @@
+{
+  "L": 38,
+  "cpn_n": 4,
+  "source_beta": 0.7,
+  "theta": 0.0,
+  "targets": [
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "updates": 35000,
+  "NS_streams": 24,
+  "proposals": 8664,
+  "NS_paths": [
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320950/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320950/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320950/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320950/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320951/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320951/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320951/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320951/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320952/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320952/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320952/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22320952/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583507/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583507/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583507/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583507/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583508/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583508/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583508/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583508/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583509/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583509/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583509/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L38/job_22583509/run_3"
+  ],
+  "bootstrap": 200,
+  "seed": 20261123,
+  "burn_in_MC_steps": 20000,
+  "block_size_measurements": 128,
+  "MCMC_beta": 1.0,
+  "MCMC_chains": [
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_38_N4_beta1p0_3x100k/job_22121710/run_0",
+      "seed": 4103801,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_38_N4_beta1p0_3x100k/job_22121710/run_1",
+      "seed": 4103802,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_38_N4_beta1p0_3x100k/job_22121710/run_2",
+      "seed": 4103803,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    }
+  ],
+  "quantities": [
+    "mean_Q_U",
+    "mean_Q_U_squared",
+    "mean_Q_z",
+    "mean_Q_z_squared",
+    "mean_Q_plaquette",
+    "mean_Q_plaquette_squared"
+  ],
+  "NS_error": "whole-stream bootstrap; merge and reweight each replicate",
+  "MCMC_error": "delete-one-complete-block jackknife; incomplete tails discarded per chain",
+  "second_moment": "Weighted mean of each measured Q squared; not mean(Q) squared",
+  "support": "Same common-energy-support prefix convention as saved volume/depth scans",
+  "selection_manifest": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L66_res/volume_scan.T1n611/L38/inputs.json",
+  "selection_manifest_sha256": "848eec5685f7f62bcd48268bd3beadca2a67c7cc02580788f26fa62e96edfc40",
+  "MCMC_complete_blocks": 2295,
+  "MCMC_dropped_tail_measurements": [
+    80,
+    80,
+    80
+  ]
+}

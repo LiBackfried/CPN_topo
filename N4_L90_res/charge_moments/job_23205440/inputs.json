@@ -1,0 +1,76 @@
+{
+  "L": 90,
+  "cpn_n": 4,
+  "source_beta": 0.7,
+  "theta": 0.0,
+  "targets": [
+    0.9,
+    0.95,
+    1.0
+  ],
+  "updates": 210000,
+  "NS_streams": 12,
+  "proposals": 48600,
+  "NS_paths": [
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810844/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810844/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810844/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810844/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810845/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810845/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810845/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810845/run_3",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810846/run_0",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810846/run_1",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810846/run_2",
+    "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L90/job_22810846/run_3"
+  ],
+  "bootstrap": 200,
+  "seed": 20261123,
+  "burn_in_MC_steps": 20000,
+  "block_size_measurements": 128,
+  "MCMC_beta": 0.95,
+  "MCMC_chains": [
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_90_N4_beta0p95_3x100k/job_22635137/run_0",
+      "seed": 4109001,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_90_N4_beta0p95_3x100k/job_22635137/run_1",
+      "seed": 4109002,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    },
+    {
+      "path": "/rs_scratch/users/lb25v444/out_data/mcmc_90_N4_beta0p95_3x100k/job_22635137/run_2",
+      "seed": 4109003,
+      "retained_measurements": 98000,
+      "cooling_step": 50,
+      "meas_every": 10
+    }
+  ],
+  "quantities": [
+    "mean_Q_U",
+    "mean_Q_U_squared",
+    "mean_Q_z",
+    "mean_Q_z_squared",
+    "mean_Q_plaquette",
+    "mean_Q_plaquette_squared"
+  ],
+  "NS_error": "whole-stream bootstrap; merge and reweight each replicate",
+  "MCMC_error": "delete-one-complete-block jackknife; incomplete tails discarded per chain",
+  "second_moment": "Weighted mean of each measured Q squared; not mean(Q) squared",
+  "support": "Same common-energy-support prefix convention as saved volume/depth scans",
+  "selection_manifest": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L90_res/combined210_ns22810844_analysis_22810847/inputs.tsv",
+  "selection_manifest_sha256": "8b4e092c62b79000ef3a68be27ee3b6db93769926d3fd699954d4e826819b902",
+  "MCMC_complete_blocks": 2295,
+  "MCMC_dropped_tail_measurements": [
+    80,
+    80,
+    80
+  ]
+}

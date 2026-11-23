@@ -1,0 +1,7 @@
+method,L,beta,observable,estimate,standard_error,input_file
+MCMC,38,1.0,mean_Q_U,0.002393110021786495,0.0014831752850589192,/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L38_res/charge_moments/job_23205440/inputs.json
+MCMC,38,1.0,mean_Q_U_squared,0.5213133169934641,0.002018035952390382,/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L38_res/charge_moments/job_23205440/inputs.json
+MCMC,38,1.0,mean_Q_z,0.0024067265795206967,0.0014830249761502094,/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L38_res/charge_moments/job_23205440/inputs.json
+MCMC,38,1.0,mean_Q_z_squared,0.5207890795206972,0.002017800178955956,/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L38_res/charge_moments/job_23205440/inputs.json
+MCMC,38,1.0,mean_Q_plaquette,0.0023996676913600836,0.0014800476226859282,/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L38_res/charge_moments/job_23205440/inputs.json
+MCMC,38,1.0,mean_Q_plaquette_squared,0.5181680431477159,0.0020077836009707137,/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L38_res/charge_moments/job_23205440/inputs.json
