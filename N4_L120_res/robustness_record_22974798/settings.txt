@@ -1,0 +1,5 @@
+SLURM_JOB_ID=22974798
+L=120
+BOOTSTRAP=200
+JOINT_DRAWS=1000
+OUTPUT=/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/robustness_steps12_22974798

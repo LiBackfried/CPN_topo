@@ -1,0 +1,10 @@
+{
+  "max_abs_z": 1.9055501252502525,
+  "joint_bootstrap_p": 0.4865134865134865,
+  "simultaneous_95_critical_z": 2.792724177509064,
+  "ns_bootstrap_replicates": 200,
+  "joint_replicates": 1000,
+  "p_resolution": 0.000999000999000999,
+  "scope": "Both correlators and all bins in this configuration; fixed MCMC-derived edges.",
+  "caveat": "Approximate centered bootstrap; requires independent NS streams and sufficiently long MCMC blocks. Grid rows are correlated; do not select the smallest p as a global test."
+}
