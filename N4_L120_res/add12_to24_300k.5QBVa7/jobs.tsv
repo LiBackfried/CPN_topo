@@ -1,0 +1,8 @@
+role	job_id	directory	segment_updates	cumulative_updates	seed_base	dependency
+fresh1_start	23350702	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350702	150000	150000	25597939	-
+fresh1_leaf	23350703	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350703	150000	300000	25597939	afterok:23350702
+fresh2_start	23350704	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350704	150000	150000	1713020953	-
+fresh2_leaf	23350705	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350705	150000	300000	1713020953	afterok:23350704
+fresh3_start	23350706	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350706	150000	150000	1015237625	-
+fresh3_leaf	23350707	/scratch/network/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350707	150000	300000	1015237625	afterok:23350706
+analysis	23350708	/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/combined24x300_analysis_23350708	-	300000	-	afterok:23350703:23350705:23350707
