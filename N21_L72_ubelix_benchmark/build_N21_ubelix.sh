@@ -3,7 +3,10 @@
 set -euo pipefail
 export LC_ALL=C
 repo=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)
-module load foss/2025a OpenSSL/1.1
+# The serial code needs GCC, not foss's MPI/libevent stack (which needs OpenSSL/3).
+# Purging here affects this child shell, not the submitting shell or running jobs.
+module purge
+module load GCCcore/14.2.0 OpenSSL/1.1
 work=$(mktemp -d "${TMPDIR:-/tmp}/cpn-N21-build.XXXXXXXX")
 trap 'rm -rf -- "$work"; module purge || true' EXIT
 mkdir "$work/include" "$work/lib" "$work/src"
@@ -41,7 +44,7 @@ mv src/cpn_ns.instrumented src/cpn_ns.c
 log="$repo/cpn_ns_N21.build.log"
 {
     bash script_build_code.sh
-    ./configure CFLAGS=-O3
+    ./configure CC=gcc CFLAGS=-O3
     make -j2 cpn_ns
 } > "$log" 2>&1 || { tail -n 60 "$log" >&2; exit 1; }
 info=$(./cpn_ns 2>&1 || true)
@@ -57,6 +60,7 @@ grep -aFq '#NS loop wall time:' cpn_ns
         printf 'Checkout revision: unavailable (source copy without Git metadata)\n'
     fi
     gcc --version
+    module list 2>&1
     cat config.h
     cat source_sha256.txt
     sha256sum src/cpn_ns.c
