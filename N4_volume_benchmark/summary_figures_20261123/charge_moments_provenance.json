@@ -11,280 +11,53 @@
     {
       "path": "N4_L120_res\\combined300_ns22885157_analysis_22904265\\mcmc_burn20000\\binning.csv",
       "sha256": "2b4ca46b0a307b5fe029eeed65a89b25242d9ab86c62fbdda1dc66a6c632f00d"
+    },
+    {
+      "path": "N4_L22_res\\charge_moments\\job_23205440\\charge_moments.csv",
+      "sha256": "56c0a83972c33097fa94c84c3da5a01058c9689f4f74b4e9614d0bfea26b708c"
+    },
+    {
+      "path": "N4_L22_res\\charge_moments\\job_23205440\\inputs.json",
+      "sha256": "ed8f7d429cea86f4695a07c852873e7edcebef9b9793dda98b211c2604892188"
+    },
+    {
+      "path": "N4_L38_res\\charge_moments\\job_23205440\\charge_moments.csv",
+      "sha256": "f167579c21c24e8b080c266925092114abb000bfbb108730d83590feac9a92ac"
+    },
+    {
+      "path": "N4_L38_res\\charge_moments\\job_23205440\\inputs.json",
+      "sha256": "940f0585e361a8099c93181af80fd6f60d609ba22d5e886ff7d709b298d50a05"
+    },
+    {
+      "path": "N4_L66_res\\charge_moments\\job_23205440\\charge_moments.csv",
+      "sha256": "dfcbbc844c9e933666fd7ec6ed7aa8eb211438719724d4dff9402b7f34fa6afc"
+    },
+    {
+      "path": "N4_L66_res\\charge_moments\\job_23205440\\inputs.json",
+      "sha256": "d427abf07326e320f5e353524ad3c5663a3246bd64d598a1080f200adfd952c8"
+    },
+    {
+      "path": "N4_L90_res\\charge_moments\\job_23205440\\charge_moments.csv",
+      "sha256": "0865b2421f011eb97a6e3774f767a6491549cc0d4d34d0db41b2c0b6949c6326"
+    },
+    {
+      "path": "N4_L90_res\\charge_moments\\job_23205440\\inputs.json",
+      "sha256": "0673a9b0d5f78f205c6d110d95ed8079dfbfe00bfec14442c1f2e95dc8688a4c"
+    },
+    {
+      "path": "N4_L120_res\\charge_moments\\job_23205440\\charge_moments.csv",
+      "sha256": "633fa8c6b7634f9498a6e847ea2738609b4375d988bbcc36b8370e8cf1851269"
+    },
+    {
+      "path": "N4_L120_res\\charge_moments\\job_23205440\\inputs.json",
+      "sha256": "107af438fe6ae6a863bd8373ac5660ceeb84d82eaeeac412e3ae450ff47ff3aa"
     }
   ],
-  "points": 94,
+  "points": 192,
   "source_beta": 0.7,
   "theta": 0,
   "NS_error": "whole-independent-stream bootstrap",
   "MCMC_error": "blocked jackknife; 20000 MC steps discarded, 128 measurements per block",
-  "unavailable": [
-    {
-      "method": "NS",
-      "L": 22,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 22,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 38,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 38,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 66,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 66,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 90,
-      "observable": "mean_Q_U",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 90,
-      "observable": "mean_Q_z",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 90,
-      "observable": "mean_Q_plaquette",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 90,
-      "observable": "mean_Q_U_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 90,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 90,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 120,
-      "observable": "mean_Q_U",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 120,
-      "observable": "mean_Q_z",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 120,
-      "observable": "mean_Q_plaquette",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 120,
-      "observable": "mean_Q_U_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 120,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "NS",
-      "L": 120,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 22,
-      "observable": "mean_Q_z",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 22,
-      "observable": "mean_Q_plaquette",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 22,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 22,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 38,
-      "observable": "mean_Q_z",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 38,
-      "observable": "mean_Q_plaquette",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 38,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 38,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 66,
-      "observable": "mean_Q_z",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 66,
-      "observable": "mean_Q_plaquette",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 66,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 66,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 90,
-      "observable": "mean_Q_z",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 90,
-      "observable": "mean_Q_plaquette",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 90,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 90,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 120,
-      "observable": "mean_Q_z",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 120,
-      "observable": "mean_Q_plaquette",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 120,
-      "observable": "mean_Q_z_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    },
-    {
-      "method": "MCMC",
-      "L": 120,
-      "observable": "mean_Q_plaquette_squared",
-      "points": 0,
-      "status": "not_in_saved_exports"
-    }
-  ],
+  "unavailable": [],
   "notes": "No second moments inferred from means. No charge values supplied by screenshot Table III."
 }

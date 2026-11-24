@@ -1,0 +1,89 @@
+test_mass_conditional_means_and_gap_decomposition (test_action_bins.ActionBinTests) ... ok
+test_missing_conditional_bin_is_rejected (test_action_bins.ActionBinTests) ... ok
+test_resamples_hold_the_other_method_fixed (test_action_bins.ActionBinTests) ... ok
+test_blocking_squares_before_averaging_and_drops_chain_tails (test_charge_moments.ChargeMomentTests) ... ok
+test_end_to_end_six_moments_and_new_output_directory (test_charge_moments.ChargeMomentTests) ... ok
+test_final_cooling_alignment_burnin_and_all_three_charge_columns (test_charge_moments.ChargeMomentTests) ... ok
+test_historical_scratch_mapping (test_charge_moments.ChargeMomentTests) ... ok
+test_plot_prefers_complete_exports_and_ignores_incomplete_jobs (test_charge_moments.ChargeMomentTests) ... ok
+test_reweighted_second_moments_match_explicit_weighted_squares (test_charge_moments.ChargeMomentTests) ... ok
+test_block_bootstrap_keeps_multivariate_blocks_intact (test_ensemble_robustness.EnsembleRobustnessTests) ... ok
+L22: bootstrapping 2 NS streams at 40 updates, targets (0.7, 0.7001)
+L22: wrote 12 NS and 6 MCMC estimates to C:\Users\libac\AppData\Local\Temp\tmpu48xegjw\export
+Saved charge plots and 12 exported estimates to C:\Users\libac\AppData\Local\Temp\tmpepifm8xb\figure
+L22: bootstrap full twelve-stream ensemble
+L22: 2 bins, MC block 1
+L22: 2 bins, MC block 2
+L22: 4 bins, MC block 1
+L22: 4 bins, MC block 2
+L22: bootstrap independent group 1/3
+L22: bootstrap independent group 2/3
+L22: bootstrap independent group 3/3
+L22: leave out stream 1/12
+L22: leave out stream 2/12
+L22: leave out stream 3/12
+L22: leave out stream 4/12
+L22: leave out stream 5/12
+L22: leave out stream 6/12
+L22: leave out stream 7/12
+L22: leave out stream 8/12
+L22: leave out stream 9/12
+L22: leave out stream 10/12
+L22: leave out stream 11/12
+L22: leave out stream 12/12
+Completed both checks: C:\Users\libac\AppData\Local\Temp\tmpmo554vly\checks
+Loading 2 of 2 candidate streams
+Wrote L=22 beta scan from 2 streams at 40 updates to C:\Users\libac\AppData\Local\Temp\tmp_0jorkor\L22
+Loading 2 of 2 candidate streams
+Wrote L=38 beta scan from 2 streams at 40 updates to C:\Users\libac\AppData\Local\Temp\tmp_0jorkor\L38
+Loading 2 of 2 candidate streams
+Wrote L=66 beta scan from 2 streams at 40 updates to C:\Users\libac\AppData\Local\Temp\tmp_0jorkor\L66
+L22 MCMC: no directory supplied.
+L38 MCMC: no directory supplied.
+L66 MCMC: C:\Users\libac\AppData\Local\Temp\tmp_0jorkor\mc66 (direct beta 0.9)
+Saved volume comparison to C:\Users\libac\AppData\Local\Temp\tmp_0jorkor\comparison
+Loading 2 of 2 candidate streams
+Wrote L=22 beta scan from 2 streams at 40 updates to C:\Users\libac\AppData\Local\Temp\tmpjn8iy9hk\L22
+Loading 2 of 2 candidate streams
+Wrote L=38 beta scan from 2 streams at 40 updates to C:\Users\libac\AppData\Local\Temp\tmpjn8iy9hk\L38
+L22 MCMC: no directory supplied.
+L38 MCMC: C:\Users\libac\AppData\Local\Temp\tmpjn8iy9hk\mcmc38 (direct beta 1.0)
+test_end_to_end_groups_and_leave_one_out_use_recomputed_weights (test_ensemble_robustness.EnsembleRobustnessTests) ... ok
+test_joint_covariance_preserves_perfect_bin_correlation (test_ensemble_robustness.EnsembleRobustnessTests) ... ok
+test_joint_null_adds_the_signed_ns_and_mc_residual_variations (test_ensemble_robustness.EnsembleRobustnessTests) ... ok
+test_burn_in_uses_mc_step_and_includes_the_boundary_in_cut (test_mcmc.BinningTests) ... ok
+test_linear_error_matches_standard_error_of_bin_means (test_mcmc.BinningTests) ... ok
+test_pooled_jackknife_preserves_covariances_and_chain_boundaries (test_mcmc.BinningTests) ... ok
+test_load_last_recorded_cooling_step_and_detect_misalignment (test_mcmc.LoadTests) ... ok
+test_accumulated_and_remaining_prior_mass_sum_to_one (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_beta_reweighting_uses_extensive_energy (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_evaluate_at_beta_keeps_prior_mass_separate_from_z_ratio (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_expm1_keeps_tiny_shrinkage_weight_finite (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_log_mean_of_zero_observable_is_negative_infinity (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_quantities_report_extensive_energy_and_action (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_topological_susceptibility_uses_centered_variance (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_variance_uses_centered_observations (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_weighted_sum_avoids_intermediate_underflow (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_weighted_sum_supports_signed_observables (test_nest_sampl.CombinedNestedSamplingTests) ... ok
+test_negative_xi_squared_is_preserved_and_sqrt_is_undefined (test_saved_volume_comparison.SavedVolumeComparisonTests) ... ok
+test_reject_duplicate_depth_and_wrong_proposals (test_saved_volume_comparison.SavedVolumeComparisonTests) ... ok
+test_sparse_scan_selects_deepest_without_filling_missing_betas (test_saved_volume_comparison.SavedVolumeComparisonTests) ... ok
+test_tables_require_matching_volume_and_combine_independent_errors (test_saved_volume_comparison.SavedVolumeComparisonTests) ... ok
+test_beta_weights_and_volume_normalization_against_explicit_sum (test_volume_beta_scan.VolumeScanTests) ... ok
+test_l66_scan_and_three_volume_comparison_preserve_unresolved_xi (test_volume_beta_scan.VolumeScanTests) ... ok
+test_scan_and_comparison_with_direct_mcmc (test_volume_beta_scan.VolumeScanTests) ... ok
+test_scan_refuses_wrong_proposal_count (test_volume_beta_scan.VolumeScanTests) ... ok
+test_single_stream_log_weights_preserve_underflowed_tails (test_volume_beta_scan.VolumeScanTests) ... ok
+test_single_stream_weights_normalize_each_beta_and_use_its_own_live_count (test_volume_beta_scan.VolumeScanTests) ... ok
+test_subsets_are_reproducible_and_unselected_measurements_are_not_loaded (test_volume_beta_scan.VolumeScanTests) ... ok
+
+----------------------------------------------------------------------
+Saved volume comparison to C:\Users\libac\AppData\Local\Temp\tmpjn8iy9hk\comparison
+Loading 2 of 2 candidate streams
+Loading 3 of 6 candidate streams
+Wrote L=22 beta scan from 3 streams at 40 updates to C:\Users\libac\AppData\Local\Temp\tmpez383ed0\output
+
+Ran 38 tests in 13.735s
+
+OK
+

@@ -1,0 +1,3 @@
+Replaced slot 4. Maximum stored-vs-recomputed error: 0
+Maximum energy before: 0.826569094453113
+Maximum after: 0.82656430931602309

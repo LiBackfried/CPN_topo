@@ -1,0 +1,5 @@
+PASS: private N=21 build, preserved header/generic binary, real L=72 two-update smoke.
+#Heatbath init. time: 5.8221260000 s
+#NS loop wall time: 0.152910711 s
+#Simulation time: 0.1529140000 s
+acceptance_rows=2 data_rows=3 topology_rows=33

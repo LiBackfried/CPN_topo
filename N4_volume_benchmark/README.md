@@ -1,5 +1,9 @@
 # CP³ volume and reweighting benchmark on UBELIX
 
+To expand the completed L120 ensemble from twelve to **24 streams**, all
+at 300k updates, run `bash N4_volume_benchmark/add_L120_12_to24_300k_ubelix.sh`.
+See [the L120 expansion](../N4_L120_res/ADD_12_TO24_STREAMS_300K.md).
+
 For the completed L90/L120 twelve-stream ensembles, run the bin/block
 robustness and stream-group/leave-one-out checks with
 `bash N4_volume_benchmark/submit_robustness_ubelix.sh`.

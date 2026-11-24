@@ -1,0 +1,39 @@
+{
+  "inputs": [
+    {
+      "path": "N4_L66_res\\volume_scan.T1n611\\volume_comparison.csv",
+      "sha256": "ea5a5d335d914425ef87f621ecd02a985da8d65be467b0abc4215f806ad6b857"
+    },
+    {
+      "path": "N4_L90_res\\combined210_ns22810844_analysis_22810847\\depth.csv",
+      "sha256": "23c3dd79134f9104d5ed86b344cd17a22d70035a5d8aa25eecbbf0ba200730ac"
+    },
+    {
+      "path": "N4_L90_res\\combined210_ns22810844_analysis_22810847\\mcmc_burn20000\\binning.csv",
+      "sha256": "709fbacac5e8581a519ac0c6f42d96044f532c201c57fad09aa713ed167d03e7"
+    },
+    {
+      "path": "N4_L120_res\\combined300_ns22885157_analysis_22904265\\depth.csv",
+      "sha256": "57fc9cfb879031a4e37bd1f43f5e3452a96538af98b81e2829a44e53a507fa61"
+    },
+    {
+      "path": "N4_L120_res\\combined300_ns22885157_analysis_22904265\\mcmc_burn20000\\binning.csv",
+      "sha256": "2b4ca46b0a307b5fe029eeed65a89b25242d9ab86c62fbdda1dc66a6c632f00d"
+    }
+  ],
+  "NS_points": 27,
+  "MCMC_points": 5,
+  "source_beta": 0.7,
+  "theta": 0,
+  "cpn_n": 4,
+  "definitions": {
+    "mean_energy": "2*mean_action_density",
+    "mean_extensive_energy": "2*N*V*mean_action_density"
+  },
+  "extensive_energy_display_scale": 0.0001,
+  "CSV_values": "unscaled",
+  "uncertainty": "The same exact multiplicative factors applied to the saved statistical errors",
+  "NS_error": "whole-independent-stream bootstrap",
+  "MCMC_error": "blocked jackknife, 20000-step burn-in and 128-measurement blocks",
+  "style": "Open circles/Blues for NS; open diamonds/Oranges for MCMC; gradients track volume"
+}

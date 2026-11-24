@@ -1,0 +1,38 @@
+method,L,V,beta,xi_L,xi_L_se,status,input_file
+NS,22,484,0.7,1.6423367878640764,0.09186257211483836,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,22,484,0.75,2.266811645374345,0.044525616257934685,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,22,484,0.8,3.0370389038127144,0.03257771573635671,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,22,484,0.85,4.083373231951927,0.030133800979261244,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,22,484,0.9,5.648838047303893,0.034957126096700555,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,22,484,0.95,7.198489524614477,0.032960689033454844,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,22,484,1.0,8.425973832291978,0.02799229762633812,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,38,1444,0.7,nan,nan,undefined_xi_omitted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,38,1444,0.75,2.1915455609676235,0.24508287819959,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,38,1444,0.8,2.9745167414514984,0.11646396723499494,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,38,1444,0.85,4.084172526938594,0.10536651718871477,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,38,1444,0.9,5.4798217464694154,0.0973280092979618,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,38,1444,0.95,7.37822612912452,0.10926851706863358,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,38,1444,1.0,10.273977852391035,0.14761311526245596,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,66,4356,0.7,nan,nan,undefined_xi_omitted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,66,4356,0.75,nan,nan,undefined_xi_omitted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,66,4356,0.8,3.5856299996587113,0.4254737262150654,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,66,4356,0.85,4.625746223862375,0.23793240554662515,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,66,4356,0.9,5.547132773489174,0.2476730964780708,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,66,4356,0.95,7.293511291012434,0.23625382202759782,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,66,4356,1.0,10.30932245285982,0.33046815735218654,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+MCMC,22,484,0.7,1.7817170412475922,0.006006400451009565,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+MCMC,38,1444,1.0,10.3656810439065,0.020903282528815792,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+MCMC,66,4356,0.9,5.464847835465676,0.07240806165825348,plotted,N4_L66_res\volume_scan.T1n611\volume_comparison.csv
+NS,90,8100,0.9,6.149051732677949,0.5398744176846422,plotted,N4_L90_res\combined210_ns22810844_analysis_22810847\depth.csv
+NS,90,8100,0.95,7.1855453404147145,0.3870938896573874,plotted,N4_L90_res\combined210_ns22810844_analysis_22810847\depth.csv
+NS,90,8100,1.0,9.283686559542987,0.5312681208160441,plotted,N4_L90_res\combined210_ns22810844_analysis_22810847\depth.csv
+MCMC,90,8100,0.95,7.409277493416881,0.10501973736090725,plotted,N4_L90_res\combined210_ns22810844_analysis_22810847\mcmc_burn20000\binning.csv
+NS,120,14400,0.9,4.404826468491606,1.0520080649444312,plotted,N4_L120_res\combined300_ns22885157_analysis_22904265\depth.csv
+NS,120,14400,0.95,7.94974827841078,0.7833086068098756,plotted,N4_L120_res\combined300_ns22885157_analysis_22904265\depth.csv
+NS,120,14400,1.0,9.449852323504679,0.635469954780371,plotted,N4_L120_res\combined300_ns22885157_analysis_22904265\depth.csv
+MCMC,120,14400,1.0,9.938007587925188,0.14837630724307735,plotted,N4_L120_res\combined300_ns22885157_analysis_22904265\mcmc_burn20000\binning.csv
+Table III,22,484,0.7,1.7842,0.0059,plotted,N4_L66_res\reference_targets.csv
+Table III,38,1444,0.8,3.039,0.012,plotted,N4_L66_res\reference_targets.csv
+Table III,66,4356,0.9,5.398,0.022,plotted,N4_L66_res\reference_targets.csv
+Table III,90,8100,0.95,7.314,0.033,plotted,N4_L66_res\reference_targets.csv
+Table III,120,14400,1.0,9.997,0.045,plotted,N4_L66_res\reference_targets.csv
