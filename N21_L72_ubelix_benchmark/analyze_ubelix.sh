@@ -18,6 +18,7 @@ export LC_ALL=C OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 campaign=$(cd "$1" && pwd -P)
 snapshot="$campaign/snapshot"
 (cd "$snapshot"; sha256sum -c scripts.sha256)
+module purge
 module load Python SciPy-bundle matplotlib
 python_bin=$(type -P python3 || type -P python)
 "$python_bin" -c 'import numpy, scipy, matplotlib'

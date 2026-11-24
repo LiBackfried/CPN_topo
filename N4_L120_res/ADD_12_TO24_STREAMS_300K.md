@@ -1,7 +1,8 @@
 # L120 expansion from twelve to twenty-four streams
 
-Prepared locally on 2026-11-24 at the user's request. No new UBELIX jobs
-have been submitted or verified from this local setup.
+Prepared locally on 2026-11-24 at the user's request. On the same date the
+user reported the submissions below. Remote execution/completion has not
+been independently verified.
 
 Add **twelve fresh independent NS streams**, each with **300,000 updates**,
 to the existing twelve. Keep N=4, L=120, source beta=0.7, theta=0, 50 live
@@ -10,6 +11,41 @@ cycles followed by live-point spacing eight, with four microcanonical sweeps,
 `num_norm=1` and cooling 50 measured every five. This increases the statistics
 of the existing production ensemble; initialization/mixing validation remains
 a separate study with separately identified settings.
+
+## Reported submissions on 2026-11-24
+
+| Job | Role | Cumulative updates/stream | Reported status | Dependency |
+| --- | --- | ---: | --- | --- |
+| 23350702 | Fresh batch1, four streams | 150,000 | Submitted | None |
+| 23350703 | Batch1 continuation, same four | 300,000 | Queued | `afterok:23350702` |
+| 23350704 | Fresh batch2, four streams | 150,000 | Submitted | None |
+| 23350705 | Batch2 continuation, same four | 300,000 | Queued | `afterok:23350704` |
+| 23350706 | Fresh batch3, four streams | 150,000 | Submitted | None |
+| 23350707 | Batch3 continuation, same four | 300,000 | Queued | `afterok:23350706` |
+| 23350708 | Combined 24-stream analysis | 300,000 | Queued | `afterok:23350703:23350705:23350707` |
+
+Seed labels for `run_0` through `run_3` are **25597939-25597942** for
+batch1, **1713020953-1713020956** for batch2 and **1015237625-1015237628**
+for batch3. Continuations inherit their start's RNG state and seed labels.
+These are twelve additional independent streams, represented by six jobs.
+Analysis combines the three new leaves with existing leaves
+**22885157/22904262/22904264** and reuses MCMC **22780263**.
+
+The expected result is
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/combined24x300_analysis_23350708/`.
+The random campaign-directory suffix was not included in the supplied
+submission output, so the machine-readable record leaves that field unset
+(`-`): [reported_add12_to24_jobs_20261124.tsv](reported_add12_to24_jobs_20261124.tsv).
+
+To inspect these jobs on UBELIX:
+
+```bash
+sacct -j 23350702,23350703,23350704,23350705,23350706,23350707,23350708 \
+    --format=JobID,JobName%35,State,AllocCPUS,Elapsed,ExitCode
+```
+
+The submission instructions below would create another fresh campaign if
+repeated; the jobs above already represent the requested expansion.
 
 ## Submit on UBELIX
 

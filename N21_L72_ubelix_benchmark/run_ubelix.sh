@@ -23,6 +23,7 @@ proposals=$1 steps=$2 seed_base=$3 campaign=$4
 [[ $campaign == /* && -d $campaign/snapshot ]] || fail 'Missing absolute campaign snapshot.'
 campaign=$(cd "$campaign" && pwd -P)
 snapshot="$campaign/snapshot"
+module purge
 module load OpenSSL/1.1
 executable="$snapshot/cpn_ns_N21"
 [[ -x $executable && -x /usr/bin/time ]] || fail 'Missing N21 executable or GNU time.'

@@ -1,11 +1,13 @@
 # L120 screening campaign
 
 The requested expansion to **24 NS streams at 300k updates each** is
-prepared locally (2026-11-24). It adds twelve fresh streams to the twelve
-completed ones and reuses MCMC 22780263. Submit with
-`bash N4_volume_benchmark/add_L120_12_to24_300k_ubelix.sh`.
-See [the 24-stream setup](ADD_12_TO24_STREAMS_300K.md) for stage dependencies,
-seed checks, resources and outputs. No new job IDs have been reported yet.
+user-reported submitted on 2026-11-24. Starts **23350702/23350704/23350706**
+each add four fresh streams at 150k; dependent leaves
+**23350703/23350705/23350707** take the same streams to 300k. Analysis
+**23350708** waits for all three leaves, combines existing12 plus new12
+and reuses MCMC **22780263**. Completion has not been verified. See
+[the 24-stream setup](ADD_12_TO24_STREAMS_300K.md) and
+[the submission record](reported_add12_to24_jobs_20261124.tsv).
 
 On 2026-11-21 the user reported submission of robustness analysis
 **22974798**, covering the bin/block grid, three four-stream groups and

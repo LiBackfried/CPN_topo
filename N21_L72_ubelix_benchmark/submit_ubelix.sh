@@ -14,6 +14,7 @@ seed_base=${NS_SEED_BASE:-21720001}
 [[ $seed_base =~ ^[1-9][0-9]{0,9}$ ]] && (( seed_base + 109 < 2147483399 )) || fail 'Invalid ran2 seed range.'
 [[ $scratch == /* && $executable == /* && -x $executable ]] || fail 'Use absolute scratch/binary paths and build cpn_ns_N21 first.'
 command -v sbatch >/dev/null || fail 'Run this driver on UBELIX.'
+module purge
 module load OpenSSL/1.1
 info=$("$executable" 2>&1 || true)
 grep -Fxq 'Compiled with N = 21' <<< "$info" || fail 'Executable must report N = 21.'

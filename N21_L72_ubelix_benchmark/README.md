@@ -18,11 +18,13 @@ new files may not yet be committed, so `git pull` alone might not transfer them.
 ```bash
 cd /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo
 bash N21_L72_ubelix_benchmark/build_N21_ubelix.sh
+module purge
 module load OpenSSL/1.1
 (./cpn_ns_N21 2>&1 || true) | grep -Fx 'Compiled with N = 21'
 ```
 
-The helper loads `foss/2025a` and `OpenSSL/1.1`, copies C sources to a temporary
+The helper starts from a clean module environment and loads `GCCcore/14.2.0`
+and `OpenSSL/1.1`, then copies C sources to a temporary
 build directory, sets N=21 there, bootstraps Autotools, configures and builds.
 It adds the same monotonic NS-loop timer as the local benchmark. It creates
 `cpn_ns_N21`, `cpn_ns_N21.build.log`, `cpn_ns_N21.build_info.txt` and
@@ -30,6 +32,25 @@ It adds the same monotonic NS-loop timer as the local benchmark. It creates
 objects, `cpn_ns`, `cpn_ns_N4` and other executables. The no-input invocation
 deliberately returns a nonzero status; the grep above checks its banner.
 Do not simply rename an N=4 executable.
+
+The compiler-only module avoids the MPI/libevent dependencies brought in by
+`foss/2025a`; that stack needs OpenSSL/3 and warns when OpenSSL/1.1 replaces it.
+OpenSSL/1.1 is retained for the simulation's existing MD5 API. The build records
+its loaded modules in `cpn_ns_N21.build_info.txt`. Submission, simulation and
+analysis scripts also reset their own module environments before loading their
+requirements. Running them with `bash` or `sbatch` keeps these changes inside
+their child shells; already-running jobs are unaffected.
+
+The warning alone does not establish a compilation failure. A successful build
+prints `Built .../cpn_ns_N21`; if it fails, inspect:
+
+```bash
+tail -n 60 cpn_ns_N21.build.log
+```
+
+The compiler version above follows the GCCcore-14.2.0 module identified in the
+reported warning. If it cannot be loaded at the site, use
+`module spider GCCcore/14.2.0` to inspect the site's module prerequisites.
 
 ## Submit
 
