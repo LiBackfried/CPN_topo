@@ -1,0 +1,416 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-11-24",
+  "provenance": {
+    "source": "User-provided UBELIX terminal report and summary.txt contents in this chat",
+    "remote_sacct_or_files_independently_inspected": false,
+    "raw_remote_data_copied_locally": false,
+    "precision": "Timing reports have six decimal places; comparison tables retain more digits than summary.txt. Both transcriptions are retained.",
+    "null_policy": "A null bootstrap_standard_error with reported_error='nan' preserves an undefined reported uncertainty; it is not zero."
+  },
+  "configured_settings": {
+    "N": 21,
+    "L": 72,
+    "source_beta": 0.6,
+    "theta": 0,
+    "live_points_per_stream": 50,
+    "streams_per_arm": 10,
+    "microcanonical_sweeps_per_ns_update": 4,
+    "initial_heatbath_sweeps": 20,
+    "heatbath_spacing_between_live_points": 8,
+    "cooling_sweeps": 50,
+    "cooling_measurement_interval": 5,
+    "bootstrap": {
+      "unit": "independent whole streams, separately per arm",
+      "replicates": 500,
+      "seed": 20261124
+    },
+    "timing": "NS-loop wall time, excludes initialization and first measurement"
+  },
+  "campaigns": [
+    {
+      "name": "smoke_100",
+      "ns_updates_per_stream": 100,
+      "campaign_directory": "/scratch/network/users/lb25v444/out_data/ns_N21_L72_benchmark.uZevELp8",
+      "simulation_job_ids": {
+        "p15500": 23351015,
+        "p31000": 23351016
+      },
+      "seed_bases": {
+        "p15500": 21721001,
+        "p31000": 21721101
+      },
+      "original_analysis_job_id": 23351017,
+      "original_analysis_outcome": "Reported missing p31000/results.json traceback",
+      "replacement_analysis_job_id": 23353763,
+      "analysis_directory": "/scratch/network/users/lb25v444/out_data/ns_N21_L72_benchmark.uZevELp8/analysis_23353763",
+      "timings": [
+        {
+          "proposals_per_update": 15500,
+          "cpu_model": "AMD EPYC 7742 64-Core Processor",
+          "streams": 10,
+          "median_loop_wall_s_per_update": 0.181514,
+          "min_loop_wall_s_per_update": 0.1786,
+          "max_loop_wall_s_per_update": 0.189242,
+          "max_rss_mib": 8
+        },
+        {
+          "proposals_per_update": 31000,
+          "cpu_model": "AMD EPYC 7742 64-Core Processor",
+          "streams": 10,
+          "median_loop_wall_s_per_update": 0.211989,
+          "min_loop_wall_s_per_update": 0.198312,
+          "max_loop_wall_s_per_update": 0.232991,
+          "max_rss_mib": 8
+        }
+      ],
+      "observable_comparisons": [
+        {
+          "observable": "mean_action_density",
+          "p15500": 0.8589392238733263,
+          "p15500_bootstrap_se": 0.00010165299416546653,
+          "p31000": 0.8590178569686197,
+          "p31000_bootstrap_se": 0.0001326375960896667,
+          "difference_p31000_minus_p15500": 0.00007863309529332341,
+          "combined_se": 0.0001671109305798096,
+          "difference_over_combined_se": 0.47054429665670167
+        },
+        {
+          "observable": "mean_G0",
+          "p15500": 14.826415258584337,
+          "p15500_bootstrap_se": 0.4381790643887821,
+          "p31000": 15.051874511935022,
+          "p31000_bootstrap_se": 0.5243911559621441,
+          "difference_p31000_minus_p15500": 0.22545925335068517,
+          "combined_se": 0.6833644539482151,
+          "difference_over_combined_se": 0.3299253451771876
+        },
+        {
+          "observable": "mean_Gk",
+          "p15500": 14.094460408624224,
+          "p15500_bootstrap_se": 0.2713564556933797,
+          "p31000": 14.029833449601401,
+          "p31000_bootstrap_se": 0.36837684067958737,
+          "difference_p31000_minus_p15500": -0.06462695902282256,
+          "combined_se": 0.4575323188535944,
+          "difference_over_combined_se": -0.14125113431277084
+        },
+        {
+          "observable": "xi_L_squared",
+          "p15500": 6.823649707522856,
+          "p15500_bootstrap_se": 4.859007692139543,
+          "p31000": 9.57186830386601,
+          "p31000_bootstrap_se": 5.172076125985829,
+          "difference_p31000_minus_p15500": 2.748218596343154,
+          "combined_se": 7.096501053706949,
+          "difference_over_combined_se": 0.3872638889988731
+        },
+        {
+          "observable": "mean_Q_U",
+          "p15500": -0.31043947061323846,
+          "p15500_bootstrap_se": 0.5529546286793839,
+          "p31000": -0.1989389935841451,
+          "p31000_bootstrap_se": 0.624955516714429,
+          "difference_p31000_minus_p15500": 0.11150047702909335,
+          "combined_se": 0.8344628327551528,
+          "difference_over_combined_se": 0.13361946470515806
+        },
+        {
+          "observable": "mean_Q_U_squared",
+          "p15500": 4.693290231991186,
+          "p15500_bootstrap_se": 1.5800582370458391,
+          "p31000": 5.92059700157856,
+          "p31000_bootstrap_se": 1.4986693379761706,
+          "difference_p31000_minus_p15500": 1.2273067695873747,
+          "combined_se": 2.17774971405034,
+          "difference_over_combined_se": 0.5635664932793121
+        },
+        {
+          "observable": "chi_topological",
+          "p15500": 0.0008867510738959409,
+          "p15500_bootstrap_se": 0.0002739878007867217,
+          "p31000": 0.0011344560722242067,
+          "p31000_bootstrap_se": 0.00030723905155265933,
+          "difference_p31000_minus_p15500": 0.0002477049983282658,
+          "combined_se": 0.00041166145044067696,
+          "difference_over_combined_se": 0.6017201709392551
+        }
+      ],
+      "derived_expected_remaining_prior_mass": 0.1353352832366127,
+      "derived_remaining_mass_note": "Expected shrinkage exp(-updates/50), not a pasted short-campaign summary field; this is a timing/workflow smoke test."
+    },
+    {
+      "name": "trial_5000",
+      "ns_updates_per_stream": 5000,
+      "campaign_directory": "/scratch/network/users/lb25v444/out_data/ns_N21_L72_benchmark.5NegZsTv",
+      "simulation_job_ids": {
+        "p15500": 23350970,
+        "p31000": 23350971
+      },
+      "seed_bases": {
+        "p15500": 21720001,
+        "p31000": 21720101
+      },
+      "original_analysis_job_id": 23350972,
+      "original_analysis_outcome": "Not supplied; same older launcher was used",
+      "replacement_analysis_job_id": 23353908,
+      "analysis_directory": "/scratch/network/users/lb25v444/out_data/ns_N21_L72_benchmark.5NegZsTv/analysis_23353908",
+      "timings": [
+        {
+          "proposals_per_update": 15500,
+          "cpu_model": "AMD EPYC 7742 64-Core Processor",
+          "streams": 10,
+          "median_loop_wall_s_per_update": 0.181234,
+          "min_loop_wall_s_per_update": 0.179506,
+          "max_loop_wall_s_per_update": 0.183682,
+          "max_rss_mib": 8
+        },
+        {
+          "proposals_per_update": 31000,
+          "cpu_model": "AMD EPYC 7742 64-Core Processor",
+          "streams": 10,
+          "median_loop_wall_s_per_update": 0.230456,
+          "min_loop_wall_s_per_update": 0.20979,
+          "max_loop_wall_s_per_update": 0.234222,
+          "max_rss_mib": 8
+        }
+      ],
+      "observable_comparisons": [
+        {
+          "observable": "mean_action_density",
+          "p15500": 0.8582062711361208,
+          "p15500_bootstrap_se": 0.00009358133012976307,
+          "p31000": 0.8584319842039231,
+          "p31000_bootstrap_se": 0.00010462597654695538,
+          "difference_p31000_minus_p15500": 0.00022571306780228007,
+          "combined_se": 0.0001403711520122983,
+          "difference_over_combined_se": 1.607973323340003
+        },
+        {
+          "observable": "mean_G0",
+          "p15500": 16.096037378372333,
+          "p15500_bootstrap_se": 0.4501963422653479,
+          "p31000": 15.345050071090272,
+          "p31000_bootstrap_se": 0.4930748179268398,
+          "difference_p31000_minus_p15500": -0.7509873072820614,
+          "combined_se": 0.6676822018465706,
+          "difference_over_combined_se": -1.1247675993235984
+        },
+        {
+          "observable": "mean_Gk",
+          "p15500": 14.568538397036694,
+          "p15500_bootstrap_se": 0.24945629014381385,
+          "p31000": 14.486486253398553,
+          "p31000_bootstrap_se": 0.14089764540810892,
+          "difference_p31000_minus_p15500": -0.0820521436381405,
+          "combined_se": 0.2864970980199692,
+          "difference_over_combined_se": -0.2863978176575505
+        },
+        {
+          "observable": "xi_L_squared",
+          "p15500": 13.776719998822928,
+          "p15500_bootstrap_se": 4.06685023297544,
+          "p31000": 7.7873628129800805,
+          "p31000_bootstrap_se": 4.699422822952249,
+          "difference_p31000_minus_p15500": -5.989357185842848,
+          "combined_se": 6.214808580023754,
+          "difference_over_combined_se": -0.963723517582573
+        },
+        {
+          "observable": "mean_Q_U",
+          "p15500": 0.31941406842842884,
+          "p15500_bootstrap_se": 0.42192307816229485,
+          "p31000": -0.001979740923773482,
+          "p31000_bootstrap_se": 0.5278998770411648,
+          "difference_p31000_minus_p15500": -0.3213938093522023,
+          "combined_se": 0.6757938769077616,
+          "difference_over_combined_se": -0.4755796409739726
+        },
+        {
+          "observable": "mean_Q_U_squared",
+          "p15500": 4.038168022266937,
+          "p15500_bootstrap_se": 1.0857140960796803,
+          "p31000": 4.349561592935884,
+          "p31000_bootstrap_se": 0.7906994567046778,
+          "difference_p31000_minus_p15500": 0.3113935706689466,
+          "combined_se": 1.3431234973967172,
+          "difference_over_combined_se": 0.23184284339638095
+        },
+        {
+          "observable": "chi_topological",
+          "p15500": 0.0007592867814731747,
+          "p15500_bootstrap_se": 0.0002067375968624537,
+          "p31000": 0.0008390350450543515,
+          "p31000_bootstrap_se": 0.0001595669690333536,
+          "difference_p31000_minus_p15500": 0.00007974826358117689,
+          "combined_se": 0.0002611552250347552,
+          "difference_over_combined_se": 0.30536729093037973
+        }
+      ],
+      "reported_summary_txt": {
+        "p15500": {
+          "log_accumulated_prior_mass": {
+            "estimate": 0,
+            "bootstrap_standard_error": 0
+          },
+          "log_Z": {
+            "estimate": 0,
+            "bootstrap_standard_error": 0
+          },
+          "log_remaining_prior_mass": {
+            "estimate": -100,
+            "bootstrap_standard_error": 0
+          },
+          "remaining_prior_mass": {
+            "estimate": 3.72007597602e-44,
+            "bootstrap_standard_error": 4.9833981e-60
+          },
+          "mean_action_density": {
+            "estimate": 0.858206271136,
+            "bootstrap_standard_error": 0.00009358133
+          },
+          "mean_energy": {
+            "estimate": 1.71641254227,
+            "bootstrap_standard_error": 0.00018716266
+          },
+          "mean_G0": {
+            "estimate": 16.0960373784,
+            "bootstrap_standard_error": 0.45019634
+          },
+          "mean_Gk": {
+            "estimate": 14.568538397,
+            "bootstrap_standard_error": 0.24945629
+          },
+          "xi_L_squared": {
+            "estimate": 13.7767199988,
+            "bootstrap_standard_error": 4.0668502
+          },
+          "xi_L": {
+            "estimate": 3.71170041879,
+            "bootstrap_standard_error": 0.5783443
+          },
+          "mean_Q_U": {
+            "estimate": 0.319414068428,
+            "bootstrap_standard_error": 0.42192308
+          },
+          "mean_Q_U_squared": {
+            "estimate": 4.03816802227,
+            "bootstrap_standard_error": 1.0857141
+          },
+          "chi_topological": {
+            "estimate": 0.000759286781473,
+            "bootstrap_standard_error": 0.0002067376
+          },
+          "mean_Q_z": {
+            "estimate": 0.319414068428,
+            "bootstrap_standard_error": 0.42192308
+          },
+          "mean_Q_plaquette": {
+            "estimate": 0.319381122744,
+            "bootstrap_standard_error": 0.42186952
+          },
+          "mean_extensive_energy": {
+            "estimate": 186855.535002,
+            "bootstrap_standard_error": 20.375276
+          },
+          "mean_symanzik_action": {
+            "estimate": 112113.321001,
+            "bootstrap_standard_error": 12.225166
+          }
+        },
+        "p31000": {
+          "log_accumulated_prior_mass": {
+            "estimate": 0,
+            "bootstrap_standard_error": 0
+          },
+          "log_Z": {
+            "estimate": 0,
+            "bootstrap_standard_error": 0
+          },
+          "log_remaining_prior_mass": {
+            "estimate": -100,
+            "bootstrap_standard_error": 0
+          },
+          "remaining_prior_mass": {
+            "estimate": 3.72007597602e-44,
+            "bootstrap_standard_error": 4.9833981e-60
+          },
+          "mean_action_density": {
+            "estimate": 0.858431984204,
+            "bootstrap_standard_error": 0.00010462598
+          },
+          "mean_energy": {
+            "estimate": 1.71686396841,
+            "bootstrap_standard_error": 0.00020925195
+          },
+          "mean_G0": {
+            "estimate": 15.3450500711,
+            "bootstrap_standard_error": 0.49307482
+          },
+          "mean_Gk": {
+            "estimate": 14.4864862534,
+            "bootstrap_standard_error": 0.14089765
+          },
+          "xi_L_squared": {
+            "estimate": 7.78736281298,
+            "bootstrap_standard_error": 4.6994228
+          },
+          "xi_L": {
+            "estimate": 2.79058467225,
+            "bootstrap_standard_error": null,
+            "reported_error": "nan"
+          },
+          "mean_Q_U": {
+            "estimate": -0.00197974092377,
+            "bootstrap_standard_error": 0.52789988
+          },
+          "mean_Q_U_squared": {
+            "estimate": 4.34956159294,
+            "bootstrap_standard_error": 0.79069946
+          },
+          "chi_topological": {
+            "estimate": 0.000839035045054,
+            "bootstrap_standard_error": 0.00015956697
+          },
+          "mean_Q_z": {
+            "estimate": -0.00197974092377,
+            "bootstrap_standard_error": 0.52789988
+          },
+          "mean_Q_plaquette": {
+            "estimate": -0.00202473713513,
+            "bootstrap_standard_error": 0.52783137
+          },
+          "mean_extensive_energy": {
+            "estimate": 186904.679057,
+            "bootstrap_standard_error": 22.780005
+          },
+          "mean_symanzik_action": {
+            "estimate": 112142.807434,
+            "bootstrap_standard_error": 13.668003
+          }
+        }
+      },
+      "derived_planning": {
+        "proposal_doubling_time_ratio": 1.2715936303342639,
+        "proposal_doubling_extra_percent": 27.159363033426388,
+        "p15500": {
+          "loop_minutes_for_5000": 15.102833333333335,
+          "projected_loop_hours_for_50000": 2.5171388888888893
+        },
+        "p31000": {
+          "loop_minutes_for_5000": 19.204666666666665,
+          "projected_loop_hours_for_50000": 3.2007777777777777
+        },
+        "note": "5000-step durations are rate times step count, not separately reported process-wall medians. 50000-step durations are projections."
+      }
+    }
+  ],
+  "interpretation_limits": [
+    "No direct N21 MCMC reference in these campaigns",
+    "No demonstrated live-point independence, adequate initialization or constrained-chain mixing",
+    "Proposal-count differences are descriptive marginal comparisons of correlated observables, not an equivalence or joint test",
+    "Remaining prior mass is deterministic expected shrinkage, not a measured mixing diagnostic",
+    "log_Z is a deprecated alias for log_accumulated_prior_mass, not the physical partition function",
+    "Undefined xi_L bootstrap error is retained; replica histories were not available to count invalid draws"
+  ]
+}

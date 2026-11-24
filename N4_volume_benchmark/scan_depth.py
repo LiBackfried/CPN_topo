@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scan equal-length CP^3 stream prefixes at beta 0.7 and report target coverage."""
+"""Scan equal-length NS stream prefixes and report beta-reweighting coverage."""
 
 from __future__ import annotations
 
@@ -11,7 +11,6 @@ from itertools import islice
 from pathlib import Path
 
 import numpy as np
-from scipy.special import logsumexp
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from analyze_nested_sampling import evaluate_at_beta
@@ -22,18 +21,22 @@ SOURCE_BETA = 0.7
 N = 4
 STATISTICS = ("mean_action_density", "xi_L_squared", "chi_topological", "log_Z_ratio",
               "mean_G0", "mean_Gk")
+TOPOLOGY_STATISTICS = ("mean_Q_U", "xi_squared_chi_topological")
 OBSERVABLES = ("action_density", "g0", "gk", "q_u", "q_z", "q_plaq")
 
 
-def load_segment(path: Path, config: dict) -> np.ndarray:
+def load_segment(path: Path, config: dict, cooling_step: int | None = None) -> np.ndarray:
     updates = int(config["num_ns_meas"][0]) - 1
-    cooling = int(config["num_cool_step"][0])
+    max_cooling = int(config["num_cool_step"][0])
     spacing = int(config["meas_cool_every"][0])
+    cooling = max_cooling if cooling_step is None else cooling_step
+    if spacing <= 0 or not 0 <= cooling <= max_cooling or cooling % spacing:
+        raise ValueError(f"Cooling step {cooling} is unavailable in {path}")
     general = np.loadtxt(path / "dati.dat", ndmin=2)
     with (path / "topo.dat").open() as file:
-        # Only keep the final cooling row from each dead point's block.
+        # Keep the requested cooling row from each dead point's block.
         rows = (line for line in file if not line.startswith("#"))
-        topology = np.loadtxt(islice(rows, cooling // spacing, None, cooling // spacing + 1),
+        topology = np.loadtxt(islice(rows, cooling // spacing, None, max_cooling // spacing + 1),
                               usecols=(0, 1, 2, 3, 4), ndmin=2)
     iterations = np.loadtxt(path / "acceptance_rate.dat", usecols=0, ndmin=1, dtype=int)
     if (len(general) != updates + 1 or len(topology) != updates + 1
@@ -44,7 +47,7 @@ def load_segment(path: Path, config: dict) -> np.ndarray:
     return np.column_stack((general[:, 1:4], topology[:, 2:5]))
 
 
-def load_chain(path: Path) -> tuple[dict, np.ndarray]:
+def load_chain(path: Path, *, cpn_n: int = N, cooling_step: int | None = None) -> tuple[dict, np.ndarray]:
     paths = []
     while True:
         if path in paths:
@@ -62,14 +65,15 @@ def load_chain(path: Path) -> tuple[dict, np.ndarray]:
         expected_start, expected_rng = (2, 1) if segments else (1, 0)
         if (int(config["start"][0]), int(config["rng_start"][0])) != (expected_start, expected_rng):
             raise ValueError(f"Wrong start or RNG flags for segment {path}")
-        if "Theory: 2d CP^{N-1} model with N = 4\n" not in (path / "log.dat").read_text():
-            raise ValueError(f"Expected a completed N=4 simulation in {path}")
+        theory = f"Theory: 2d CP^{{N-1}} model with N = {cpn_n}"
+        if theory not in (path / "log.dat").read_text().splitlines():
+            raise ValueError(f"Expected a completed N={cpn_n} simulation in {path}")
         comparable = {key: value for key, value in config.items()
                       if key not in {"start", "rng_start", "num_ns_meas"}}
         if settings is not None and comparable != settings:
             raise ValueError(f"Settings changed within continuation history at {path}")
         settings = comparable
-        data = load_segment(path, config)
+        data = load_segment(path, config, cooling_step)
         if segments:
             if not np.allclose(segments[-1][-1], data[0], rtol=1e-10, atol=1e-10):
                 raise ValueError(f"Continuation does not repeat the parent's final measurement in {path}")
@@ -99,12 +103,20 @@ def common_prefix(chains: Sequence[np.ndarray], updates: int, n_live: int) -> li
     return streams
 
 
-def target_diagnostics(data, lattice: int, beta: float, n_streams: int) -> dict:
-    target, statistics = evaluate_at_beta(data, lattice, SOURCE_BETA, beta, N)
+def target_statistics(data, lattice: int, beta: float, cpn_n: int, source_beta: float):
+    target, statistics = evaluate_at_beta(data, lattice, source_beta, beta, cpn_n)
+    statistics["xi_squared_chi_topological"] = statistics["xi_L_squared"] * statistics["chi_topological"]
+    return target, statistics
+
+
+def target_diagnostics(data, lattice: int, beta: float, n_streams: int, *,
+                       cpn_n: int = N, source_beta: float = SOURCE_BETA,
+                       keys: tuple[str, ...] = STATISTICS) -> dict:
+    target, statistics = target_statistics(data, lattice, beta, cpn_n, source_beta)
     weights = target.weight
     owner = data.observables["stream_index"].astype(int)
     stream_mass = np.bincount(owner, weights=weights, minlength=n_streams)
-    q99 = np.searchsorted(target.log_z_curve, np.log(0.99))
+    q99 = min(np.searchsorted(target.log_z_curve, np.log(0.99)), len(weights) - 1)
     log_x = data.log_x[-1]
     # For theta=0, H>=0 and exp[-(beta-beta0)*H]<=1. The bound is conditional
     # on the NS estimate of X and can remain loose after apparent convergence.
@@ -122,11 +134,13 @@ def target_diagnostics(data, lattice: int, beta: float, n_streams: int) -> dict:
         "stream_weight_ess": 1 / np.sum(stream_mass ** 2),
         "max_stream_weight": max(stream_mass),
         "nonzero_Q_weight": weights[np.abs(data.observables["q_u"]) >= 0.5].sum(),
-        **{key: statistics[key] for key in STATISTICS},
+        **{key: statistics[key] for key in keys},
     }
 
 
-def scan(chains: Sequence[np.ndarray], lattice: int, n_live: int, args) -> list[dict]:
+def scan(chains: Sequence[np.ndarray], lattice: int, n_live: int, args, *,
+         cpn_n: int = N, source_beta: float = SOURCE_BETA,
+         keys: tuple[str, ...] = STATISTICS) -> list[dict]:
     available = min(len(chain) - 1 for chain in chains)
     depths = sorted(set(args.updates or []) | {available})
     if depths[0] < 1 or depths[-1] > available:
@@ -135,8 +149,8 @@ def scan(chains: Sequence[np.ndarray], lattice: int, n_live: int, args) -> list[
     def statistic(data):
         values = {}
         for beta in args.targets:
-            _, estimates = evaluate_at_beta(data, lattice, SOURCE_BETA, beta, N)
-            values.update({f"{beta}/{key}": estimates[key] for key in STATISTICS})
+            _, estimates = target_statistics(data, lattice, beta, cpn_n, source_beta)
+            values.update({f"{beta}/{key}": estimates[key] for key in keys})
         return values
 
     rows, draws = [], []
@@ -145,7 +159,8 @@ def scan(chains: Sequence[np.ndarray], lattice: int, n_live: int, args) -> list[
         merged = combine_streams(streams)
         rows.append([
             {"L": lattice, "chains": len(chains), "updates": updates,
-             **target_diagnostics(merged, lattice, beta, len(chains))}
+             **target_diagnostics(merged, lattice, beta, len(chains),
+                                  cpn_n=cpn_n, source_beta=source_beta, keys=keys)}
             for beta in args.targets
         ])
         if args.bootstrap:
@@ -155,7 +170,7 @@ def scan(chains: Sequence[np.ndarray], lattice: int, n_live: int, args) -> list[
 
     for depth, group in enumerate(rows):
         for row, reference in zip(group, rows[-1]):
-            for key in STATISTICS:
+            for key in keys:
                 row[f"{key}_shift_from_deepest"] = row[key] - reference[key]
                 if args.bootstrap:
                     sample_key = f"{row['target_beta']}/{key}"
@@ -165,8 +180,10 @@ def scan(chains: Sequence[np.ndarray], lattice: int, n_live: int, args) -> list[
     return [row for group in rows for row in group]
 
 
-def load_ns_ensemble(run_roots: list[Path]) -> tuple[dict, tuple[np.ndarray, ...]]:
-    configs, chains = zip(*(load_chain(path) for path in discover_runs(run_roots)))
+def load_ns_ensemble(run_roots: list[Path], *, cpn_n: int = N, source_beta: float = SOURCE_BETA,
+                     cooling_step: int | None = None) -> tuple[dict, tuple[np.ndarray, ...]]:
+    configs, chains = zip(*(load_chain(path, cpn_n=cpn_n, cooling_step=cooling_step)
+                            for path in discover_runs(run_roots)))
     if len(chains) < 2:
         raise ValueError("At least two independently seeded chains are required")
     seeds = {int(config["rng_seed"][0]) for config in configs}
@@ -176,8 +193,8 @@ def load_ns_ensemble(run_roots: list[Path]) -> tuple[dict, tuple[np.ndarray, ...
     if lattice != other_extent:
         raise ValueError("Expected a square lattice")
     for config in configs:
-        if (float(config["beta"][0]), float(config["theta"][0])) != (SOURCE_BETA, 0.0):
-            raise ValueError("Expected source beta 0.7 and theta 0")
+        if (float(config["beta"][0]), float(config["theta"][0])) != (source_beta, 0.0):
+            raise ValueError(f"Expected source beta {source_beta} and theta 0")
         if {k: v for k, v in config.items() if k != "rng_seed"} != {
                 k: v for k, v in configs[0].items() if k != "rng_seed"}:
             raise ValueError("Compare ensembles with different settings in separate scans")
@@ -189,21 +206,31 @@ def main() -> None:
     parser.add_argument("run_roots", type=Path, nargs="+", help="Leaf job roots or independent run directories")
     parser.add_argument("--updates", type=int, nargs="+", help="Prefix lengths, in addition to the deepest shared length")
     parser.add_argument("--targets", type=float, nargs="+", default=[0.8, 0.9, 1.0])
+    parser.add_argument("--cpn-n", type=int, default=N, help="Compile-time N to verify against each log")
+    parser.add_argument("--source-beta", type=float, default=SOURCE_BETA, help="Source beta to verify against the inputs")
+    parser.add_argument("--cooling-step", type=int, help="Charge measurement cooling sweep (default: final sweep)")
+    parser.add_argument("--topology-observables", action="store_true",
+                        help="Also report mean charge and xi squared times chi, with paired bootstrap errors")
     parser.add_argument("--bootstrap", type=int, default=0, help="Paired whole-stream replicates (0 disables)")
     parser.add_argument("--seed", type=int, default=20261106)
     args = parser.parse_args()
     if args.bootstrap < 0 or args.bootstrap == 1 or args.seed < 0:
         parser.error("Use 0 or at least 2 bootstrap replicates and a nonnegative seed")
-    if any(not np.isfinite(beta) or beta < SOURCE_BETA for beta in args.targets):
-        parser.error("This low-energy coverage scan requires finite target betas >= 0.7")
+    if args.cpn_n <= 0 or not np.isfinite(args.source_beta) or args.source_beta < 0:
+        parser.error("Use positive N and a finite nonnegative source beta")
+    if any(not np.isfinite(beta) or beta < args.source_beta for beta in args.targets):
+        parser.error("This low-energy coverage scan requires finite target betas at or above the source")
     if len(set(args.targets)) != len(args.targets):
         parser.error("Specify each target beta only once")
 
     try:
-        config, chains = load_ns_ensemble(args.run_roots)
+        config, chains = load_ns_ensemble(args.run_roots, cpn_n=args.cpn_n, source_beta=args.source_beta,
+                                          cooling_step=args.cooling_step)
+        keys = STATISTICS + TOPOLOGY_STATISTICS if args.topology_observables else STATISTICS
+        rows = scan(chains, int(config["size"][0]), int(config["num_live_pts"][0]), args,
+                    cpn_n=args.cpn_n, source_beta=args.source_beta, keys=keys)
     except ValueError as exc:
         parser.error(str(exc))
-    rows = scan(chains, int(config["size"][0]), int(config["num_live_pts"][0]), args)
     writer = csv.DictWriter(sys.stdout, fieldnames=list(rows[0]), lineterminator="\n")
     writer.writeheader()
     writer.writerows(rows)

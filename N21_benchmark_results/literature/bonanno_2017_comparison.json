@@ -1,0 +1,356 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-11-24",
+  "citation": {
+    "author": "Claudio Bonanno",
+    "title": "Investigation of the topological properties of the CP^(N-1) model using Monte Carlo simulations",
+    "type": "Master's thesis",
+    "institution": "Università di Pisa",
+    "year": 2017,
+    "academic_year": "2016/2017",
+    "supervisor": "Massimo D'Elia",
+    "table": "4.2",
+    "printed_page": 72,
+    "pdf_page_one_based": 74,
+    "repository_record": "https://etd.adm.unipi.it/t/etd-09262017-185353/",
+    "pdf_url": "https://etd.adm.unipi.it/theses/available/etd-09262017-185353/unrestricted/Tesi_Bonanno_Claudio.pdf"
+  },
+  "provenance": {
+    "attribution": "User identified Claudio Bonanno's master's thesis; repository record and local PDF title/table verified",
+    "image": "bonanno_table_4_2_user_reference.png",
+    "verified_page_render": "bonanno_thesis_page72.png",
+    "local_zotero_pdf": "C:/Users/libac/Zotero/storage/4DX42BMR/Tesi_Bonanno_Claudio.pdf",
+    "zotero_attachment_key": "4DX42BMR",
+    "zotero_attachment_metadata_source": "Read-only zotero.sqlite.bak dated 2026-11-23; live database was locked; no library modifications",
+    "pdf_downloaded_from_network": false,
+    "local_zotero_pdf_sha256": "FE07BBB871E29B309ED5D6207C1970BDC61B516315DA941081475F42DBAAE26A",
+    "ns_source": "../ubelix_reported_results.json; user-reported 5000-update UBELIX summaries, analysis 23353908",
+    "ns_raw_remote_data_independently_inspected": false
+  },
+  "reference_settings": {
+    "N": 21,
+    "L": 72,
+    "V": 5184,
+    "theta": 0
+  },
+  "reference_values": [
+    {
+      "beta": 0.6,
+      "local": {
+        "energy": {
+          "estimate": 1.716722,
+          "standard_error": 0.000009,
+          "printed": "1.716722(9)"
+        },
+        "xi_L": {
+          "estimate": 2.95,
+          "standard_error": 0.04,
+          "printed": "2.95(4)"
+        },
+        "mean_Q_U": {
+          "estimate": 0.01,
+          "standard_error": 0.03,
+          "printed": "0.01(3)"
+        },
+        "V_chi_L": {
+          "estimate": 4.97,
+          "standard_error": 0.06,
+          "printed": "4.97(6)"
+        }
+      },
+      "simulated_tempering": {
+        "energy": {
+          "estimate": 1.716722,
+          "standard_error": 0.000002,
+          "printed": "1.716722(2)"
+        },
+        "xi_L": {
+          "estimate": 2.895,
+          "standard_error": 0.007,
+          "printed": "2.895(7)"
+        },
+        "mean_Q_U": {
+          "estimate": 0.002,
+          "standard_error": 0.003,
+          "printed": "0.002(3)"
+        },
+        "V_chi_L": {
+          "estimate": 4.943,
+          "standard_error": 0.008,
+          "printed": "4.943(8)"
+        }
+      }
+    },
+    {
+      "beta": 0.61,
+      "local": {
+        "energy": {
+          "estimate": 1.687653,
+          "standard_error": 0.000009,
+          "printed": "1.687653(9)"
+        },
+        "xi_L": {
+          "estimate": 3.01,
+          "standard_error": 0.04,
+          "printed": "3.01(4)"
+        },
+        "mean_Q_U": {
+          "estimate": -0.02,
+          "standard_error": 0.03,
+          "printed": "-0.02(3)"
+        },
+        "V_chi_L": {
+          "estimate": 4.26,
+          "standard_error": 0.08,
+          "printed": "4.26(8)"
+        }
+      },
+      "simulated_tempering": {
+        "energy": {
+          "estimate": 1.687663,
+          "standard_error": 0.000002,
+          "printed": "1.687663(2)"
+        },
+        "xi_L": {
+          "estimate": 3.011,
+          "standard_error": 0.008,
+          "printed": "3.011(8)"
+        },
+        "mean_Q_U": {
+          "estimate": 0.002,
+          "standard_error": 0.002,
+          "printed": "0.002(2)"
+        },
+        "V_chi_L": {
+          "estimate": 4.327,
+          "standard_error": 0.006,
+          "printed": "4.327(6)"
+        }
+      }
+    }
+  ],
+  "mapping": {
+    "energy_per_NV": "2*mean_action_density = mean_energy = mean_extensive_energy/(N*V); positive energy convention of Table 4.2; do not use beta*H/(N*V)",
+    "xi_L_squared": "Compare to reference xi_L squared; reference error uses first-order delta propagation 2*xi_L*SE(xi_L)",
+    "mean_Q_U": "mean_Q_U from final cooling step 50; reference is cooled U-geometric charge",
+    "V_chi_L_centered": "V*chi_topological = weighted Var(Q_U), V=5184; error also multiplied by V; finite-sample mean Q is subtracted"
+  },
+  "comparison_assumptions": [
+    "Reference and NS errors combined as independent marginal errors; observable correlations not used for a joint test",
+    "Compare beta=0.6 only; no beta=0.61 reweighted NS output was supplied",
+    "Thesis and code share c1=4/3,c2=-1/12 and second-moment xi definition; literal energy-action formula drops additive constants in the thesis whereas Table 4.2 uses a positive energy convention",
+    "Exact cooling count used for Table 4.2 was not established; matching topological definitions do not by themselves prove matched cooling systematics",
+    "Literature agreement at the present broad NS errors does not establish unbiased sampling"
+  ],
+  "comparisons": [
+    {
+      "proposals_per_update": 15500,
+      "beta": 0.6,
+      "reference_method": "local",
+      "observable": "energy_per_NV",
+      "ns_estimate": 1.7164125422722416,
+      "ns_bootstrap_se": 0.00018716266025952614,
+      "reference_estimate": 1.716722,
+      "reference_se": 0.000009,
+      "difference_ns_minus_reference": -0.0003094577277584776,
+      "combined_se": 0.00018737892462980676,
+      "difference_over_combined_se": -1.6515076515133948
+    },
+    {
+      "proposals_per_update": 15500,
+      "beta": 0.6,
+      "reference_method": "local",
+      "observable": "xi_L_squared",
+      "ns_estimate": 13.776719998822928,
+      "ns_bootstrap_se": 4.06685023297544,
+      "reference_estimate": 8.7025,
+      "reference_se": 0.23600000000000002,
+      "difference_ns_minus_reference": 5.074219998822928,
+      "combined_se": 4.073692037630287,
+      "difference_over_combined_se": 1.2456071671472395
+    },
+    {
+      "proposals_per_update": 15500,
+      "beta": 0.6,
+      "reference_method": "local",
+      "observable": "mean_Q_U",
+      "ns_estimate": 0.31941406842842884,
+      "ns_bootstrap_se": 0.42192307816229485,
+      "reference_estimate": 0.01,
+      "reference_se": 0.03,
+      "difference_ns_minus_reference": 0.30941406842842883,
+      "combined_se": 0.422988278662596,
+      "difference_over_combined_se": 0.7314956088304243
+    },
+    {
+      "proposals_per_update": 15500,
+      "beta": 0.6,
+      "reference_method": "local",
+      "observable": "V_chi_L_centered",
+      "ns_estimate": 3.9361426751569373,
+      "ns_bootstrap_se": 1.0717277021349598,
+      "reference_estimate": 4.97,
+      "reference_se": 0.06,
+      "difference_ns_minus_reference": -1.0338573248430625,
+      "combined_se": 1.0734059192698169,
+      "difference_over_combined_se": -0.9631559750912709
+    },
+    {
+      "proposals_per_update": 15500,
+      "beta": 0.6,
+      "reference_method": "simulated_tempering",
+      "observable": "energy_per_NV",
+      "ns_estimate": 1.7164125422722416,
+      "ns_bootstrap_se": 0.00018716266025952614,
+      "reference_estimate": 1.716722,
+      "reference_se": 0.000002,
+      "difference_ns_minus_reference": -0.0003094577277584776,
+      "combined_se": 0.0001871733458466317,
+      "difference_over_combined_se": -1.65332155793189
+    },
+    {
+      "proposals_per_update": 15500,
+      "beta": 0.6,
+      "reference_method": "simulated_tempering",
+      "observable": "xi_L_squared",
+      "ns_estimate": 13.776719998822928,
+      "ns_bootstrap_se": 4.06685023297544,
+      "reference_estimate": 8.381025,
+      "reference_se": 0.040530000000000004,
+      "difference_ns_minus_reference": 5.395694998822929,
+      "combined_se": 4.067052187807822,
+      "difference_over_combined_se": 1.3266844755516298
+    },
+    {
+      "proposals_per_update": 15500,
+      "beta": 0.6,
+      "reference_method": "simulated_tempering",
+      "observable": "mean_Q_U",
+      "ns_estimate": 0.31941406842842884,
+      "ns_bootstrap_se": 0.42192307816229485,
+      "reference_estimate": 0.002,
+      "reference_se": 0.003,
+      "difference_ns_minus_reference": 0.31741406842842884,
+      "combined_se": 0.42193374347869594,
+      "difference_over_combined_se": 0.7522841520364335
+    },
+    {
+      "proposals_per_update": 15500,
+      "beta": 0.6,
+      "reference_method": "simulated_tempering",
+      "observable": "V_chi_L_centered",
+      "ns_estimate": 3.9361426751569373,
+      "ns_bootstrap_se": 1.0717277021349598,
+      "reference_estimate": 4.943,
+      "reference_se": 0.008,
+      "difference_ns_minus_reference": -1.0068573248430623,
+      "combined_se": 1.071757560049604,
+      "difference_over_combined_se": -0.9394450409068839
+    },
+    {
+      "proposals_per_update": 31000,
+      "beta": 0.6,
+      "reference_method": "local",
+      "observable": "energy_per_NV",
+      "ns_estimate": 1.7168639684078462,
+      "ns_bootstrap_se": 0.00020925195309391077,
+      "reference_estimate": 1.716722,
+      "reference_se": 0.000009,
+      "difference_ns_minus_reference": 0.00014196840784608256,
+      "combined_se": 0.00020944541024719597,
+      "difference_over_combined_se": 0.6778301213596692
+    },
+    {
+      "proposals_per_update": 31000,
+      "beta": 0.6,
+      "reference_method": "local",
+      "observable": "xi_L_squared",
+      "ns_estimate": 7.7873628129800805,
+      "ns_bootstrap_se": 4.699422822952249,
+      "reference_estimate": 8.7025,
+      "reference_se": 0.23600000000000002,
+      "difference_ns_minus_reference": -0.9151371870199201,
+      "combined_se": 4.705344925601575,
+      "difference_over_combined_se": -0.1944888635136393
+    },
+    {
+      "proposals_per_update": 31000,
+      "beta": 0.6,
+      "reference_method": "local",
+      "observable": "mean_Q_U",
+      "ns_estimate": -0.001979740923773482,
+      "ns_bootstrap_se": 0.5278998770411648,
+      "reference_estimate": 0.01,
+      "reference_se": 0.03,
+      "difference_ns_minus_reference": -0.011979740923773482,
+      "combined_se": 0.5287516242812658,
+      "difference_over_combined_se": -0.02265665082364067
+    },
+    {
+      "proposals_per_update": 31000,
+      "beta": 0.6,
+      "reference_method": "local",
+      "observable": "V_chi_L_centered",
+      "ns_estimate": 4.349557673561758,
+      "ns_bootstrap_se": 0.8271951674689051,
+      "reference_estimate": 4.97,
+      "reference_se": 0.06,
+      "difference_ns_minus_reference": -0.6204423264382415,
+      "combined_se": 0.8293683410185789,
+      "difference_over_combined_se": -0.7480901979888123
+    },
+    {
+      "proposals_per_update": 31000,
+      "beta": 0.6,
+      "reference_method": "simulated_tempering",
+      "observable": "energy_per_NV",
+      "ns_estimate": 1.7168639684078462,
+      "ns_bootstrap_se": 0.00020925195309391077,
+      "reference_estimate": 1.716722,
+      "reference_se": 0.000002,
+      "difference_ns_minus_reference": 0.00014196840784608256,
+      "combined_se": 0.0002092615107314678,
+      "difference_over_combined_se": 0.6784258000902121
+    },
+    {
+      "proposals_per_update": 31000,
+      "beta": 0.6,
+      "reference_method": "simulated_tempering",
+      "observable": "xi_L_squared",
+      "ns_estimate": 7.7873628129800805,
+      "ns_bootstrap_se": 4.699422822952249,
+      "reference_estimate": 8.381025,
+      "reference_se": 0.040530000000000004,
+      "difference_ns_minus_reference": -0.5936621870199188,
+      "combined_se": 4.699597594452581,
+      "difference_over_combined_se": -0.1263219190767906
+    },
+    {
+      "proposals_per_update": 31000,
+      "beta": 0.6,
+      "reference_method": "simulated_tempering",
+      "observable": "mean_Q_U",
+      "ns_estimate": -0.001979740923773482,
+      "ns_bootstrap_se": 0.5278998770411648,
+      "reference_estimate": 0.002,
+      "reference_se": 0.003,
+      "difference_ns_minus_reference": -0.003979740923773482,
+      "combined_se": 0.5279084013160587,
+      "difference_over_combined_se": -0.007538695943940494
+    },
+    {
+      "proposals_per_update": 31000,
+      "beta": 0.6,
+      "reference_method": "simulated_tempering",
+      "observable": "V_chi_L_centered",
+      "ns_estimate": 4.349557673561758,
+      "ns_bootstrap_se": 0.8271951674689051,
+      "reference_estimate": 4.943,
+      "reference_se": 0.008,
+      "difference_ns_minus_reference": -0.5934423264382414,
+      "combined_se": 0.827233851509904,
+      "difference_over_combined_se": -0.7173815788063606
+    }
+  ],
+  "beta_061_status": "Reference values saved for future reweighting comparison; not compared directly with beta=0.6 NS data"
+}

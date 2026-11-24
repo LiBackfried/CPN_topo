@@ -13,6 +13,9 @@ trap 'rm -rf -- "$work"' EXIT
 project="$work/project"
 mkdir -p "$project/N21_L72_ubelix_benchmark" "$project/utils" "$work/bin" "$work/scratch"
 cp "$setup/"{submit_ubelix.sh,run_ubelix.sh,analyze_ubelix.sh,summarize.py,input.template} "$project/N21_L72_ubelix_benchmark/"
+cp "$setup/scan_targets_ubelix.sh" "$project/N21_L72_ubelix_benchmark/"
+mkdir "$project/N4_volume_benchmark"
+cp "$repo/N4_volume_benchmark/scan_depth.py" "$project/N4_volume_benchmark/"
 cp "$repo/analyze_nested_sampling.py" "$project/"
 cp "$repo/utils/"*.py "$project/utils/"
 module() { return 0; }
@@ -39,6 +42,9 @@ cat > "$work/bin/sbatch" <<'SH'
 set -euo pipefail
 [[ ! -v SBATCH_NTASKS && ! -v SBATCH_TIMELIMIT ]]
 if [[ ${MOCK_FAIL_SECOND:-0} == 1 && $* == *N21_L72_p31000* ]]; then exit 1; fi
+if [[ $* == *'/snapshot/scan_targets_ubelix.sh '* ]]; then
+    [[ $PWD == "$SLURM_SUBMIT_DIR" ]]
+fi
 id=$((920001+$(wc -l < "$MOCK_RECORD")))
 printf '%s\t%s\n' "$id" "$*" >> "$MOCK_RECORD"
 printf '%s;mockcluster\n' "$id"
@@ -62,6 +68,10 @@ cat > "$work/bin/python3" <<'SH'
 set -euo pipefail
 printf '%s\n' "$*" >> "$MOCK_ANALYSIS"
 if [[ $1 == -c ]]; then exit 0; fi
+if [[ $1 == */scan_depth.py ]]; then
+    printf 'target_beta\n0.6\n0.61\n'
+    exit 0
+fi
 if [[ $1 == */analyze_nested_sampling.py ]]; then
     while (( $# )); do
         if [[ $1 == --output ]]; then out=$2; break; fi
@@ -76,6 +86,7 @@ fi
 SH
 chmod +x "$project/cpn_ns_N21" "$work/bin/"*
 export PATH="$work/bin:$PATH" NS_SCRATCH="$work/scratch" MOCK_RECORD="$work/submissions.tsv"
+export SLURM_SUBMIT_DIR="$project"
 export MOCK_RESULT="$work/mock_results.json" MOCK_ANALYSIS="$work/analysis_calls.txt"
 touch "$MOCK_RECORD"
 "$REAL_PYTHON" -c 'import json,sys; keys=("mean_action_density","mean_G0","mean_Gk","xi_L_squared","mean_Q_U","mean_Q_U_squared","chi_topological"); json.dump({"settings":{"cpn_n":21,"source_beta":0.6,"beta_reweighted":False},"estimates":dict.fromkeys(keys,1.),"bootstrap_standard_errors":dict.fromkeys(keys,.1)},open(sys.argv[1],"w"))' "$MOCK_RESULT"
@@ -147,4 +158,47 @@ partial=$(sed -n 's/^Campaign: //p' "$work/partial.log")
 NS_STOC=1 NS_INIT_SWEEPS=1 bash N21_L72_ubelix_benchmark/submit_ubelix.sh > "$work/default.log"
 default=$(sed -n 's/^Campaign: //p' "$work/default.log")
 awk -F '\t' 'NR>1 {if ($2!=5000) exit 1}' "$default/jobs.tsv"
+# Verify deeper jobs reuse the original binary and dispatch just the near-source scans.
+count=$(wc -l < "$MOCK_RECORD")
+if NS_SEED_BASE=21720001 bash N21_L72_ubelix_benchmark/submit_ubelix.sh near-source "$default" > "$work/overlap.log" 2>&1; then exit 1; fi
+[[ $(wc -l < "$MOCK_RECORD") == "$count" ]]
+(cd "$work"; bash "$project/N21_L72_ubelix_benchmark/submit_ubelix.sh" near-source "$default") > "$work/near_source.log"
+near=$(sed -n 's/^Campaign: //p' "$work/near_source.log")
+cmp "$near/snapshot/cpn_ns_N21" "$default/snapshot/cpn_ns_N21"
+awk -F '\t' 'NR>1 {if ($2!=20000 || ($1==15500 && $3!=21722001) || ($1==31000 && $3!=21722101)) exit 1}' "$near/jobs.tsv"
+near_analysis=$(<"$near/analysis_job_id.txt")
+near_dependencies=$(awk -F '\t' 'NR>1 {printf ":%s", $4}' "$near/jobs.tsv")
+grep -F -- "--dependency=afterok$near_dependencies" "$MOCK_RECORD" |
+    grep -Fq -- "$near/snapshot/scan_targets_ubelix.sh $near $default"
+for fixture in "$default" "$near"; do
+    while IFS=$'\t' read -r proposals steps seeds job path; do
+        [[ $proposals == proposals ]] && continue
+        mkdir "$path"
+        touch "$path/completed"
+        for run in {0..9}; do
+            mkdir "$path/run_$run"
+            touch "$path/run_$run/completed"
+            printf 'size 72 72\nnum_live_pts 50\nnum_ns_meas %d\nnum_single_site_stoc_upd %s\n' \
+                "$((steps+1))" "$proposals" > "$path/run_$run/input.conf"
+        done
+    done < "$fixture/jobs.tsv"
+done
+SLURM_JOB_ID=$near_analysis SLURM_NTASKS=1 bash "$near/snapshot/scan_targets_ubelix.sh" "$near" "$default" < /dev/null
+near_output="$project/N21_benchmark_results/near_source_$near_analysis"
+[[ $(<"$near/analysis_output.txt") == "$near_output" ]]
+[[ -f $near_output/completed && ! -e $near/near_source_$near_analysis ]]
+for proposals in 15500 31000; do
+    for kind in original deep combined_5000; do
+        [[ -s $near_output/p${proposals}_$kind.csv ]]
+    done
+done
+[[ -z $(find "$near_output" -mindepth 1 ! -type f) ]]
+[[ $(find "$near_output" -type f | wc -l) == 10 ]]
+[[ $(grep -c -- '--targets 0.60 0.61' "$MOCK_ANALYSIS") == 6 ]]
+[[ $(grep -c -- '--updates 500 1000 2000 5000 10000 20000' "$MOCK_ANALYSIS") == 2 ]]
+SLURM_JOB_ID=920011 SLURM_NTASKS=1 bash "$project/N21_L72_ubelix_benchmark/scan_targets_ubelix.sh" "$default" < /dev/null
+wide_output="$project/N21_benchmark_results/target_scan_920011"
+[[ -f $wide_output/completed && ! -e $default/target_scan_920011 ]]
+[[ -s $wide_output/p15500_depth.csv && -s $wide_output/p31000_depth.csv ]]
+[[ -z $(find "$wide_output" -mindepth 1 ! -type f) && $(find "$wide_output" -type f | wc -l) == 5 ]]
 echo 'PASS: syntax/LF, resources, configs, twenty seeds, workers, reports, analysis routing and failure guards (mock Slurm).'

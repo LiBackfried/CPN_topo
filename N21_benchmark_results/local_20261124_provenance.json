@@ -1,0 +1,10 @@
+{
+  "revision": "fed72be767650822668161e11e1285b0e4dbe581",
+  "compiled_N": 21,
+  "cpu": 8,
+  "updates": 100,
+  "source_matches_previous_optimized_build": true,
+  "timing": "CLOCK_MONOTONIC NS-loop wall time; separate process wall and loop CPU time",
+  "filesystem": "WSL ext4 scratch; output copy excluded from timing",
+  "md5_enabled": false
+}
