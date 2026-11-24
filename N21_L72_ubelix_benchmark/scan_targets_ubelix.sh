@@ -19,6 +19,12 @@ export LC_ALL=C OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
     exit 1
 }
 campaign=$(cd "$1" && pwd -P)
+worktree=$(cd "${SLURM_SUBMIT_DIR:?Submit from the CPN_topo repository root.}" && pwd -P)
+[[ -r $worktree/N21_L72_ubelix_benchmark/scan_targets_ubelix.sh ]] || {
+    echo "Submit from the CPN_topo repository root to save results in that worktree." >&2
+    exit 1
+}
+results_root="$worktree/N21_benchmark_results"
 reference=
 if [[ $# == 2 ]]; then
     reference=$(cd "$2" && pwd -P)
@@ -28,10 +34,10 @@ if [[ $# == 2 ]]; then
         echo "Expected both near-source campaigns to use the same executable." >&2
         exit 1
     }
-    output="$campaign/near_source_${SLURM_JOB_ID}"
+    output="$results_root/near_source_${SLURM_JOB_ID}"
 else
-    repo=${SLURM_SUBMIT_DIR:?Submit from the CPN_topo repository root.}
-    output="$campaign/target_scan_${SLURM_JOB_ID}"
+    repo="$worktree"
+    output="$results_root/target_scan_${SLURM_JOB_ID}"
 fi
 scanner="$repo/N4_volume_benchmark/scan_depth.py"
 [[ -r $scanner ]]
@@ -86,6 +92,7 @@ module purge
 module load Python SciPy-bundle matplotlib
 python_bin=$(type -P python3 || type -P python)
 "$python_bin" -c 'import numpy, scipy, matplotlib'
+mkdir -p "$results_root"
 mkdir "$output"
 cp "$campaign/jobs.tsv" "$output/jobs.tsv"
 sha256sum "$scanner" "$repo/analyze_nested_sampling.py" "$repo/utils/nest_sampl.py" > "$output/analysis_sources.sha256"

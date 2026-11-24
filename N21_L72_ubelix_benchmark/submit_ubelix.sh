@@ -91,7 +91,7 @@ for proposals in 15500 31000; do
 done
 analysis_args=("$campaign")
 if [[ -n $reference ]]; then analysis_args+=("$reference"); fi
-analysis=$(sbatch --parsable --export=ALL --chdir="$campaign" --ntasks=1 --cpus-per-task=1 \
+analysis=$(cd "$repo" && sbatch --parsable --export=ALL --chdir="$campaign" --ntasks=1 --cpus-per-task=1 \
     --mem-per-cpu=8G --time=02:00:00 --dependency="afterok:${jobs[0]}:${jobs[1]}" \
     --output="$campaign/analysis_%j.out" --error="$campaign/analysis_%j.err" \
     "$snapshot/$analysis_worker" "${analysis_args[@]}") || fail "Analysis submission failed; simulation jobs are in $manifest."
@@ -100,7 +100,8 @@ analysis=${analysis%%;*}
 printf '%s\n' "$analysis" > "$campaign/analysis_job_id.txt"
 printf 'sacct -j %s,%s,%s --format=JobID,JobName,State,ReqCPUS,AllocCPUS,Elapsed,MaxRSS\n' \
     "${jobs[0]}" "${jobs[1]}" "$analysis" | tee "$campaign/check_command.txt"
-analysis_dir=analysis
-if [[ -n $reference ]]; then analysis_dir=near_source; fi
-echo "Dependent analysis job: $analysis; results: $campaign/${analysis_dir}_$analysis"
+analysis_output="$campaign/analysis_$analysis"
+if [[ -n $reference ]]; then analysis_output="$repo/N21_benchmark_results/near_source_$analysis"; fi
+printf '%s\n' "$analysis_output" > "$campaign/analysis_output.txt"
+echo "Dependent analysis job: $analysis; results: $analysis_output"
 echo 'No direct MCMC reference is submitted by this NS benchmark.'

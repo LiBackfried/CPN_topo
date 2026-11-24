@@ -35,8 +35,11 @@ sbatch --ntasks=1 --cpus-per-task=1 \
   N21_L72_ubelix_benchmark/scan_targets_ubelix.sh "$campaign"
 ```
 
-The job reads simulation jobs 23350970 and 23350971 and writes
-`target_scan_<job_ID>/p15500_depth.csv` and `p31000_depth.csv` under that campaign.
+The job reads scratch simulation jobs 23350970 and 23350971 and writes
+`N21_benchmark_results/target_scan_<job_ID>/p15500_depth.csv` and
+`p31000_depth.csv` in the UBELIX worktree. The results directory contains
+aggregate observables, depth diagnostics and provenance. Simulation streams
+and checkpoints remain on scratch.
 The `completed` marker appears after both scans succeed. Each CSV covers prefixes
 of 1,000, 2,000, 3,500 and 5,000 updates with a common low-energy cutoff across
 streams at each prefix. The scan uses 200 paired whole-stream bootstrap draws

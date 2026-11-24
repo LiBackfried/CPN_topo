@@ -46,14 +46,19 @@ simulation request allows for median loop-time estimates of about 60 and
 77 minutes per stream based on the observed 5,000-step rates. Behavior
 at later cutoffs can change the runtime.
 
-The driver prints the new scratch campaign and analysis ID. The output
-`near_source_<analysis_ID>/` contains `p15500_original.csv`,
+The driver prints the new scratch campaign, analysis ID and results path.
+The output is in `N21_benchmark_results/near_source_<analysis_ID>/` in the
+UBELIX worktree. It contains `p15500_original.csv`,
 `p15500_deep.csv`, `p15500_combined_5000.csv` and the corresponding
 `p31000_*.csv` files. The new-depth CSVs use the same seed resamples at
 every prefix. Each scan uses a common cutoff across its included streams.
 The cutoff can therefore differ between the original, new and pooled
 estimates at 5,000 steps. Check target weight near each cutoff when
 comparing the three results. Measurements use 25 cooling sweeps.
+
+The directory contains aggregate observables, bootstrap standard errors, depth
+diagnostics and small provenance files. Simulation streams and checkpoints
+remain on scratch. The scanner computes bootstrap draws in memory.
 
 ## Decide how much depth and work are needed
 
