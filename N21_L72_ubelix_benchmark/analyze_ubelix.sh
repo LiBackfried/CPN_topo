@@ -24,14 +24,21 @@ python_bin=$(type -P python3 || type -P python)
 "$python_bin" -c 'import numpy, scipy, matplotlib'
 output="$campaign/analysis_${SLURM_JOB_ID}"
 mkdir "$output"
+# Keep the worker actually submitted, including when repairing an older snapshot.
+cp "${BASH_SOURCE[0]}" "$output/analysis_worker.sh"
+sha256sum "$output/analysis_worker.sh" > "$output/analysis_worker.sha256"
 # This also verifies both completed jobs, all streams and the distinct seed ranges.
 "$python_bin" "$snapshot/summarize.py" "$campaign" "$output"
-while IFS=$'\t' read -r proposals steps seed_base job path; do
+while IFS=$'\t' read -r -u 3 proposals steps seed_base job path; do
     [[ $proposals == proposals ]] && continue
-    srun --ntasks=1 --cpus-per-task=1 --export=ALL "$python_bin" "$snapshot/analyze_nested_sampling.py" \
+    srun --input=none --ntasks=1 --cpus-per-task=1 --export=ALL "$python_bin" "$snapshot/analyze_nested_sampling.py" \
         "$path" --output "$output/p${proposals}" --cpn-n 21 --bootstrap 500 --seed 20261124 \
-        > "$output/p${proposals}_analysis.log" 2>&1
-done < "$campaign/jobs.tsv"
+        < /dev/null 3<&- > "$output/p${proposals}_analysis.log" 2>&1
+    [[ -s "$output/p${proposals}/results.json" ]] || {
+        echo "Analysis did not produce p${proposals}/results.json; inspect $output/p${proposals}_analysis.log" >&2
+        exit 1
+    }
+done 3< "$campaign/jobs.tsv"
 "$python_bin" "$snapshot/summarize.py" "$campaign" "$output" --compare-observables
 touch "$output/completed"
 echo "Completed N21 timing and weighted source-beta analyses: $output"

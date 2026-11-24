@@ -49,6 +49,10 @@ set -euo pipefail
 [[ $* == *--export=ALL* ]]
 if (( SLURM_NTASKS == 10 )); then
     [[ $* == *--cpu-bind=cores* && $* == *--kill-on-bad-exit=1* ]]
+else
+    # Slurm can consume inherited stdin. Reproduce a step draining a while-read
+    # manifest, so analysis must isolate its own manifest descriptor.
+    cat > /dev/null
 fi
 while [[ $1 == --* ]]; do shift; done
 for ((task=0; task<SLURM_NTASKS; task++)); do SLURM_PROCID=$task "$@"; done
@@ -63,6 +67,7 @@ if [[ $1 == */analyze_nested_sampling.py ]]; then
         if [[ $1 == --output ]]; then out=$2; break; fi
         shift
     done
+    if [[ ${MOCK_SKIP_SECOND_RESULT:-0} == 1 && $out == */p31000 ]]; then exit 0; fi
     mkdir -p "$out"
     cp "$MOCK_RESULT" "$out/results.json"
 else
@@ -95,6 +100,24 @@ output="$campaign/analysis_920003"
 [[ -f $output/completed && $(wc -l < "$output/timings.csv") == 21 ]]
 [[ $(wc -l < "$output/observable_comparison.csv") == 8 ]]
 [[ $(grep -c -- '--cpn-n 21 --bootstrap 500 --seed 20261124' "$MOCK_ANALYSIS") == 2 ]]
+[[ -s $output/analysis_worker.sh && -s $output/analysis_worker.sha256 ]]
+if MOCK_SKIP_SECOND_RESULT=1 SLURM_JOB_ID=920004 SLURM_NTASKS=1 \
+    bash "$campaign/snapshot/analyze_ubelix.sh" "$campaign" > "$work/missing_result.log" 2>&1; then exit 1; fi
+grep -q 'Analysis did not produce p31000/results.json' "$work/missing_result.log"
+[[ ! -e $campaign/analysis_920004/completed ]]
+# Recovery can submit the corrected repository worker against an older immutable
+# snapshot, without replacing its worker or invalidating its integrity manifest.
+cp "$campaign/snapshot/analyze_ubelix.sh" "$work/new_worker.saved"
+cp "$campaign/snapshot/scripts.sha256" "$work/scripts_sha256.saved"
+printf '#!/bin/bash\necho "old snapshot worker must not run" >&2\nexit 99\n' > "$campaign/snapshot/analyze_ubelix.sh"
+(cd "$campaign/snapshot"; sha256sum ./*.sh ./*.py input.template utils/*.py > scripts.sha256)
+old_hash=$(sha256sum "$campaign/snapshot/analyze_ubelix.sh" "$campaign/snapshot/scripts.sha256")
+SLURM_JOB_ID=920005 SLURM_NTASKS=1 bash "$project/N21_L72_ubelix_benchmark/analyze_ubelix.sh" "$campaign" > "$work/recovery.log"
+[[ -f $campaign/analysis_920005/completed && -s $campaign/analysis_920005/p31000/results.json ]]
+[[ $(sha256sum "$campaign/snapshot/analyze_ubelix.sh" "$campaign/snapshot/scripts.sha256") == "$old_hash" ]]
+cmp "$project/N21_L72_ubelix_benchmark/analyze_ubelix.sh" "$campaign/analysis_920005/analysis_worker.sh"
+cp "$work/new_worker.saved" "$campaign/snapshot/analyze_ubelix.sh"
+cp "$work/scripts_sha256.saved" "$campaign/snapshot/scripts.sha256"
 # Wrong model, allocation, output reuse, missing completion, and seed corruption fail.
 sed -i 's/N = 21/N = 4/' "$project/cpn_ns_N21"
 if bash N21_L72_ubelix_benchmark/submit_ubelix.sh 3 > "$work/wrongN.log" 2>&1; then exit 1; fi

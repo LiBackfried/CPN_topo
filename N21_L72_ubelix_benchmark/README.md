@@ -135,12 +135,40 @@ absolute campaign directory):
 
 ```bash
 sbatch --chdir=CAMPAIGN --output=CAMPAIGN/analysis_%j.out \
-  --error=CAMPAIGN/analysis_%j.err CAMPAIGN/snapshot/analyze_ubelix.sh CAMPAIGN
+  --error=CAMPAIGN/analysis_%j.err \
+  "$PWD/N21_L72_ubelix_benchmark/analyze_ubelix.sh" CAMPAIGN
 ```
 
 Each retry writes a new `analysis_<job_ID>` directory. If a simulation fails,
 the `afterok` analysis remains pending with an unsatisfied dependency; inspect
 and cancel that dependent analysis before starting a replacement campaign.
+
+### Repair the skipped second-arm analysis
+
+An earlier worker allowed `srun` to consume the input of its manifest-reading
+loop, skipping the 31,000-proposal arm and failing at the comparison stage with
+missing `p31000/results.json`. The fixed worker reads the manifest through its
+own descriptor, gives `srun` no standard input, and checks each arm's result
+before proceeding. Regression validation reproduces the old failure with an
+input-consuming mock step and verifies the fix.
+
+For the reported 100-update campaign, sync the corrected `analyze_ubelix.sh` to
+the repository on UBELIX and submit only analysis again:
+
+```bash
+cd /storage/homefs/lb25v444/cpn_nestsampl/CPN_topo
+campaign=/scratch/network/users/lb25v444/out_data/ns_N21_L72_benchmark.uZevELp8
+sbatch --chdir="$campaign" --output="$campaign/analysis_%j.out" \
+  --error="$campaign/analysis_%j.err" \
+  "$PWD/N21_L72_ubelix_benchmark/analyze_ubelix.sh" "$campaign"
+```
+
+Use the corrected repository worker, rather than the older worker inside the
+campaign snapshot. Simulation and analysis-source snapshots remain unchanged,
+so their existing integrity checks still apply. Each retry also saves the actual
+submitted worker as `analysis_worker.sh` plus its hash in the new output folder.
+No recompilation or simulation rerun is needed. The same repair applies to
+`ns_N21_L72_benchmark.5NegZsTv` after both of its simulation jobs complete.
 
 ## Local checks
 
