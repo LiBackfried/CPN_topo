@@ -1,5 +1,9 @@
 # N=21, L=72 UBELIX benchmark
 
+Collected local and reported UBELIX results are in
+[N21_benchmark_results](../N21_benchmark_results/README.md), including both
+replacement analysis jobs, timing comparisons, observables and interpretation.
+
 Fresh nested-sampling trial with two proposal counts, at source beta 0.6 and
 theta 0. Each arm has ten independently seeded streams, 50 live points and
 5,000 NS updates per stream (`num_ns_meas=5001`). Proposals per update are

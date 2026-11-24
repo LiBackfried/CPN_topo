@@ -13,6 +13,9 @@ trap 'rm -rf -- "$work"' EXIT
 project="$work/project"
 mkdir -p "$project/N21_L72_ubelix_benchmark" "$project/utils" "$work/bin" "$work/scratch"
 cp "$setup/"{submit_ubelix.sh,run_ubelix.sh,analyze_ubelix.sh,summarize.py,input.template} "$project/N21_L72_ubelix_benchmark/"
+cp "$setup/scan_targets_ubelix.sh" "$project/N21_L72_ubelix_benchmark/"
+mkdir "$project/N4_volume_benchmark"
+cp "$repo/N4_volume_benchmark/scan_depth.py" "$project/N4_volume_benchmark/"
 cp "$repo/analyze_nested_sampling.py" "$project/"
 cp "$repo/utils/"*.py "$project/utils/"
 module() { return 0; }
@@ -62,6 +65,10 @@ cat > "$work/bin/python3" <<'SH'
 set -euo pipefail
 printf '%s\n' "$*" >> "$MOCK_ANALYSIS"
 if [[ $1 == -c ]]; then exit 0; fi
+if [[ $1 == */scan_depth.py ]]; then
+    printf 'target_beta\n0.6\n0.61\n'
+    exit 0
+fi
 if [[ $1 == */analyze_nested_sampling.py ]]; then
     while (( $# )); do
         if [[ $1 == --output ]]; then out=$2; break; fi
@@ -147,4 +154,34 @@ partial=$(sed -n 's/^Campaign: //p' "$work/partial.log")
 NS_STOC=1 NS_INIT_SWEEPS=1 bash N21_L72_ubelix_benchmark/submit_ubelix.sh > "$work/default.log"
 default=$(sed -n 's/^Campaign: //p' "$work/default.log")
 awk -F '\t' 'NR>1 {if ($2!=5000) exit 1}' "$default/jobs.tsv"
+# Verify deeper jobs reuse the original binary and dispatch just the near-source scans.
+count=$(wc -l < "$MOCK_RECORD")
+if NS_SEED_BASE=21720001 bash N21_L72_ubelix_benchmark/submit_ubelix.sh near-source "$default" > "$work/overlap.log" 2>&1; then exit 1; fi
+[[ $(wc -l < "$MOCK_RECORD") == "$count" ]]
+bash N21_L72_ubelix_benchmark/submit_ubelix.sh near-source "$default" > "$work/near_source.log"
+near=$(sed -n 's/^Campaign: //p' "$work/near_source.log")
+cmp "$near/snapshot/cpn_ns_N21" "$default/snapshot/cpn_ns_N21"
+awk -F '\t' 'NR>1 {if ($2!=20000 || ($1==15500 && $3!=21722001) || ($1==31000 && $3!=21722101)) exit 1}' "$near/jobs.tsv"
+near_analysis=$(<"$near/analysis_job_id.txt")
+near_dependencies=$(awk -F '\t' 'NR>1 {printf ":%s", $4}' "$near/jobs.tsv")
+grep -F -- "--dependency=afterok$near_dependencies" "$MOCK_RECORD" |
+    grep -Fq -- "$near/snapshot/scan_targets_ubelix.sh $near $default"
+for fixture in "$default" "$near"; do
+    while IFS=$'\t' read -r proposals steps seeds job path; do
+        [[ $proposals == proposals ]] && continue
+        mkdir "$path"
+        touch "$path/completed"
+        for run in {0..9}; do
+            mkdir "$path/run_$run"
+            touch "$path/run_$run/completed"
+            printf 'size 72 72\nnum_live_pts 50\nnum_ns_meas %d\nnum_single_site_stoc_upd %s\n' \
+                "$((steps+1))" "$proposals" > "$path/run_$run/input.conf"
+        done
+    done < "$fixture/jobs.tsv"
+done
+SLURM_JOB_ID=$near_analysis SLURM_NTASKS=1 bash "$near/snapshot/scan_targets_ubelix.sh" "$near" "$default" < /dev/null
+near_output="$near/near_source_$near_analysis"
+[[ -f $near_output/completed && $(find "$near_output" -name 'p*.csv' | wc -l) == 6 ]]
+[[ $(grep -c -- '--targets 0.60 0.61' "$MOCK_ANALYSIS") == 6 ]]
+[[ $(grep -c -- '--updates 500 1000 2000 5000 10000 20000' "$MOCK_ANALYSIS") == 2 ]]
 echo 'PASS: syntax/LF, resources, configs, twenty seeds, workers, reports, analysis routing and failure guards (mock Slurm).'

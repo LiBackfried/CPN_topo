@@ -1,0 +1,61 @@
+{
+  "resume_L72_p5000": {
+    "median_loop_wall_s_per_update": 0.08274198006000001,
+    "wall_range": [
+      0.08210028439,
+      0.08466365741000001
+    ],
+    "median_loop_cpu_s_per_update": 0.07934034,
+    "median_initialization_cpu_s": 0.004307,
+    "median_process_wall_s": 8.338700312,
+    "loop_minutes_per_10000_updates": 13.790330010000002,
+    "max_checkpoint_energy_error": 0.0,
+    "median_seed_matched_historical_wall_speedup": 35.009424205215225,
+    "median_seed_matched_historical_cpu_speedup": 37.80371102748556,
+    "historical_max_cutoff_difference": 2.445599278644295e-12,
+    "historical_max_acceptance_difference": 0.0
+  },
+  "fresh_L72_p5000": {
+    "median_loop_wall_s_per_update": 0.07712784565,
+    "wall_range": [
+      0.07706365257,
+      0.08227719616
+    ],
+    "median_loop_cpu_s_per_update": 0.0750465,
+    "median_initialization_cpu_s": 6.260245,
+    "median_process_wall_s": 14.402028286000018,
+    "loop_minutes_per_10000_updates": 12.854640941666666,
+    "max_checkpoint_energy_error": 0.0,
+    "median_seed_matched_historical_wall_speedup": 37.562888355484624,
+    "median_seed_matched_historical_cpu_speedup": 38.7243318849472,
+    "historical_max_cutoff_difference": 1.723066134218243e-12,
+    "historical_max_acceptance_difference": 0.0
+  },
+  "fresh_L72_p15500": {
+    "median_loop_wall_s_per_update": 0.08811572857,
+    "wall_range": [
+      0.08492770858,
+      0.09183212014
+    ],
+    "median_loop_cpu_s_per_update": 0.08420541,
+    "median_initialization_cpu_s": 6.334423,
+    "median_process_wall_s": 15.451199333999995,
+    "loop_minutes_per_10000_updates": 14.685954761666666,
+    "max_checkpoint_energy_error": 0.0,
+    "historical_mean_cpu_s_per_update": 10.7788995,
+    "historical_cpu_speedup": 128.0072088004797,
+    "historical_max_acceptance_difference": 0.0
+  },
+  "fresh_L150_p67500": {
+    "median_loop_wall_s_per_update": 0.47649972522,
+    "wall_range": [
+      0.44325127797,
+      0.51127570975
+    ],
+    "median_loop_cpu_s_per_update": 0.46084934,
+    "median_initialization_cpu_s": 28.368561,
+    "median_process_wall_s": 77.47379075600003,
+    "loop_minutes_per_10000_updates": 79.41662087,
+    "max_checkpoint_energy_error": 0.0
+  }
+}

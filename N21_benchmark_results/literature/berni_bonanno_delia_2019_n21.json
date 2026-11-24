@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "citation_key": "BerniBonannoDElia2019LargeN",
+  "doi": "10.1103/PhysRevD.100.114509",
+  "arxiv": "1911.03384",
+  "source_pdf": "https://arxiv.org/pdf/1911.03384",
+  "provenance": {
+    "ensembles": "Table I, PDF page 6",
+    "observables": "Table II, PDF page 8",
+    "charge": "Section 3 A, PDF page 4",
+    "user_reference_image": "berni_bonanno_delia_table_ii_user_reference.png"
+  },
+  "settings": {
+    "N": 21,
+    "theta": 0,
+    "charge": "Geometric link charge Q_U",
+    "cooling_sweeps": 25,
+    "volume_boundary_conditions": "Periodic replica of Hasenbusch parallel tempering"
+  },
+  "table_ii_scale_factors": {
+    "xi_L": 1,
+    "a2_chi": 1000,
+    "xi2_chi": 1000
+  },
+  "table_ii_unreported_fields": [
+    "Z",
+    "b2",
+    "b4",
+    "reduced_chi_squared",
+    "dof"
+  ],
+  "rows": [
+    {
+      "beta_L": 0.68,
+      "L": 102,
+      "xi_L": {
+        "estimate": 4.772,
+        "standard_error": 0.004,
+        "printed": "4.772(4)"
+      },
+      "a2_chi": {
+        "estimate": 0.0003404,
+        "standard_error": 6e-7,
+        "printed": "0.3404(6)"
+      },
+      "xi2_chi": {
+        "estimate": 0.00775,
+        "standard_error": 0.000018,
+        "printed": "7.750(18)"
+      }
+    },
+    {
+      "beta_L": 0.7,
+      "L": 114,
+      "xi_L": {
+        "estimate": 5.409,
+        "standard_error": 0.004,
+        "printed": "5.409(4)"
+      },
+      "a2_chi": {
+        "estimate": 0.0002647,
+        "standard_error": 4e-7,
+        "printed": "0.2647(4)"
+      },
+      "xi2_chi": {
+        "estimate": 0.007746,
+        "standard_error": 0.000016,
+        "printed": "7.746(16)"
+      }
+    }
+  ]
+}
