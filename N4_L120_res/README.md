@@ -1,12 +1,16 @@
 # L120 screening campaign
 
-The stream-count check is prepared for the completed 24-stream ensemble:
-`bash N4_volume_benchmark/submit_L120_stream_count_ubelix.sh`.
-It compares old12/new12 and nested random subsets of 6/8/12/16/20/24 streams,
+The stream-count check was user-reported submitted on 2026-11-25:
+preparation **23463724**, evaluation array **23463726** (baseline plus eight
+orderings, maximum two tasks at once), and dependent report **23463729**.
+It compares old12/new12 and nested subsets of 6/8/12/16/20/24 streams,
 including bootstrap precision curves and old/new/full joint bin checks.
-See [STREAM_COUNT_CHECK.md](STREAM_COUNT_CHECK.md) for inputs, resources,
-outputs and resume instructions. This post-processing job has not yet
-been submitted from the local setup.
+Records are under `stream_count24.9OJpLn/`; expected output is
+`stream_count24.9OJpLn/report_23463729/`. The user now reports the scan done;
+its results have not been found locally, so collector completion and results
+remain unverified. See
+[STREAM_COUNT_CHECK.md](STREAM_COUNT_CHECK.md) and
+[the submission record](reported_stream_count_jobs_20261125.tsv).
 
 The current L120 ensemble has **24 NS streams at 300k updates each**.
 On 2026-11-25 the user reported completion and pulled analysis **23350708**

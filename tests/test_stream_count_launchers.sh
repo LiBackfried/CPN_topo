@@ -61,6 +61,7 @@ SBATCH_NTASKS=10 SBATCH_TIMELIMIT=1 bash N4_volume_benchmark/submit_L120_stream_
 campaign=$(awk -F ': ' '/^L120 stream-count campaign:/ {print $2}' "$testroot/submission.log")
 [[ $(wc -l < "$MOCK_RECORD") == 3 && $(wc -l < "$campaign/jobs.tsv") == 4 ]]
 grep -q -- '--dependency=afterok:98001 --array=0-8%2' "$MOCK_RECORD"
+grep -q -- '--array=0-8%2 --mem-per-cpu=8G --time=04:00:00' "$MOCK_RECORD"
 grep -q -- '--dependency=afterok:98002.*--mem-per-cpu=4G' "$MOCK_RECORD"
 [[ -s "$campaign/resume_command.txt" && $(wc -l < "$campaign/raw_inputs.tsv") == 8 ]]
 export SLURM_NTASKS=1 SLURM_CPUS_PER_TASK=1 SLURM_JOB_ID=98001
@@ -77,6 +78,7 @@ grep -q 'job_23350707' "$MOCK_ANALYSIS"
 bash N4_volume_benchmark/submit_L120_stream_count_ubelix.sh --resume "$campaign" > "$testroot/resume.log"
 [[ $(wc -l < "$MOCK_RECORD") == 5 && $(wc -l < "$campaign/jobs.tsv") == 6 ]]
 tail -n 2 "$MOCK_RECORD" | grep -q -- '--array=0-8%2'
+tail -n 2 "$MOCK_RECORD" | grep -q -- '--mem-per-cpu=8G --time=04:00:00'
 tail -n 1 "$MOCK_RECORD" | grep -q -- '--dependency=afterok:98004'
 if SLURM_NTASKS=2 bash "$campaign/worker.sh" collect "$campaign" > /dev/null 2>&1; then exit 1; fi
 if bash N4_volume_benchmark/submit_L120_stream_count_ubelix.sh --resume "$testroot" > /dev/null 2>&1; then exit 1; fi

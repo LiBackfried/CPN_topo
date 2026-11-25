@@ -67,7 +67,7 @@ if [[ ! -f "$campaign/cache/completed" ]]; then
     prep_dependency=("--dependency=afterok:$prepare")
     echo "Submitted cache preparation $prepare"
 fi
-array=$(submit "${prep_dependency[@]}" --array="0-${orderings}%2" --job-name=N4L120_count_scan \
+array=$(submit "${prep_dependency[@]}" --array="0-${orderings}%2" --mem-per-cpu=8G --time=04:00:00 --job-name=N4L120_count_scan \
     --output="$campaign/slurm_scan_%A_%a.out" "$campaign/worker.sh" evaluate "$campaign")
 printf 'evaluate_array\t%s\t%s\n' "$array" "${prep_dependency[*]:--}" >> "$campaign/jobs.tsv"
 echo "Submitted evaluation array $array: baseline plus $orderings orderings, maximum two concurrent tasks"
