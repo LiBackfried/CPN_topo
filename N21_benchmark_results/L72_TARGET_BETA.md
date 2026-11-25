@@ -1,10 +1,8 @@
 # N=21 target-beta analysis at L=72
 
-The study range is β=0.68–0.76. First [increase the β=0.60 statistics and
-validate reweighting to β=0.61](L72_NEAR_SOURCE.md). The wider screen uses
-β=0.68, 0.70, 0.72, 0.74 and 0.76 at θ=0. The command below can screen the
-two original 5,000-update β=0.60 ensembles separately once that validation
-has been reviewed.
+**On hold for L=72 as of 25 November 2026.** The active L=72 study is
+β=0.60 → 0.61. This page records the deferred β=0.68–0.76 screen and its
+finite-volume context. [Near-source results](L72_NEAR_SOURCE_RESULTS.md)
 
 ## Finite volume
 
@@ -15,9 +13,8 @@ L=102 and L=114, with ratios of about 20 and 21. The proxies illustrate why
 volume effects matter for topology. Their size at L=72 and their evolution
 across the target range require measurements. [Berni et al., Table I and Sec. 4 A](https://arxiv.org/pdf/1911.03384#page=7)
 
-Use direct MCMC at the same N, L and β to check reweighting. Start with β=0.68
-and 0.76 to bracket the range. Check topological tunneling and block errors in
-the reference chains. Compare across volumes separately at fixed β. The
+If this range is revisited at L=72, use direct MCMC at the same N, L and β
+to check reweighting and compare across volumes separately at fixed β. The
 [published points](LITERATURE_COMPARISON.md#berni-bonanno-and-delia-2019) give
 larger-volume context at β=0.68 and 0.70.
 

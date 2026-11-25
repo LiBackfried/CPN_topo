@@ -1,11 +1,23 @@
 # L120 screening campaign
 
-The requested expansion to **24 NS streams at 300k updates each** is
-user-reported submitted on 2026-11-24. Starts **23350702/23350704/23350706**
-each add four fresh streams at 150k; dependent leaves
-**23350703/23350705/23350707** take the same streams to 300k. Analysis
-**23350708** waits for all three leaves, combines existing12 plus new12
-and reuses MCMC **22780263**. Completion has not been verified. See
+The stream-count check is prepared for the completed 24-stream ensemble:
+`bash N4_volume_benchmark/submit_L120_stream_count_ubelix.sh`.
+It compares old12/new12 and nested random subsets of 6/8/12/16/20/24 streams,
+including bootstrap precision curves and old/new/full joint bin checks.
+See [STREAM_COUNT_CHECK.md](STREAM_COUNT_CHECK.md) for inputs, resources,
+outputs and resume instructions. This post-processing job has not yet
+been submitted from the local setup.
+
+The current L120 ensemble has **24 NS streams at 300k updates each**.
+On 2026-11-25 the user reported completion and pulled analysis **23350708**
+with its `completed` marker to `combined24x300_analysis_23350708/`.
+New leaves **23350703/23350705/23350707** follow starts
+**23350702/23350704/23350706** and add twelve streams to existing leaves
+22885157/22904262/22904264, reusing MCMC **22780263**. Depth checks pass
+through beta=1.0 and most statistical errors fall 25-30%. Integrated
+observables remain within 1.8 combined SE of MCMC; the conditional G0-bin
+offset persists at 4.42 marginal SE and needs a 24-stream joint check. See
+[the current 24-stream review](RESULTS_24_STREAMS_REVIEW.md),
 [the 24-stream setup](ADD_12_TO24_STREAMS_300K.md) and
 [the submission record](reported_add12_to24_jobs_20261124.tsv).
 
@@ -25,7 +37,7 @@ This is an N=4, theta=0 campaign independent of the L90 jobs. NS uses
 source beta=0.7 and direct MCMC uses target beta=1.0. On 2026-11-19 the
 user reported submission of the first screening campaign described below.
 
-The latest completed analysis, copied on 2026-11-21, is **22904265** at
+The earlier twelve-stream analysis, copied on 2026-11-21, is **22904265** at
 `combined300_ns22885157_analysis_22904265/`: **twelve independent streams,
 300k updates each**, combining existing leaf 22885157 with new leaves
 22904262 and 22904264. The earlier four-stream analyses **22780264**,

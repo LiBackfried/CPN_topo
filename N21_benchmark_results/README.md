@@ -209,18 +209,16 @@ fresh UBELIX trials did not resume those snapshots.
 
 ## Next physics checks
 
-The study targets **β=0.68–0.76**, including at L=72. The first stage adds
-independent β=0.60 streams and tests reweighting to β=0.61. Review that stage
-before the wider finite-volume screen.
-[Near-source study](L72_NEAR_SOURCE.md) · [Wider target range](L72_TARGET_BETA.md)
+At L=72 the active study is **β=0.60 → 0.61**. The β=0.68–0.76 L=72 scan
+is on hold.
+[Near-source study](L72_NEAR_SOURCE.md) · [Results of job 23365849](L72_NEAR_SOURCE_RESULTS.md) · [Deferred scan notes](L72_TARGET_BETA.md)
 
-1. Compare weighted NS observables against independently thermalized N=21,
-   L=72 MCMC at beta 0.6, with autocorrelation-aware errors.
-   The saved literature comparison is an external reference; a matched current
-   executable/cooling control remains a separate diagnostic.
-2. Test longer/hot-and-cold initialization and live-point separation; the current
-   20-sweep initialization and eight-sweep spacing have not been validated.
-3. Examine constrained-chain mixing at fixed cutoffs and sensitivity to proposal
-   count, rather than relying on acceptance rates alone.
-4. Specify target betas and perform a depth/weight-support scan before planning
-   longer reweighting campaigns or extrapolating to L=150.
+1. Prioritize direct L=72 MCMC at β=0.61, with β=0.60 as a source control.
+   Use independent hot and cold starts, compare cooled charge with the same
+   measurement settings, and check sector tunneling and block errors.
+2. At β=0.60, use the MCMC histories to test the NS thermalization length and
+   spacing of initial live points. Use fixed-cutoff pilots in the near-source
+   weight-bearing region to measure charge autocorrelation with the 15,500
+   and 31,000 proposal workloads.
+3. Keep 5,000 updates per stream as the working depth. Review the topology
+   checks before adding independent streams to improve precision.

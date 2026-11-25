@@ -1,12 +1,17 @@
 # L120 results through 300k NS updates
 
+The current **24-stream** analysis **23350708** was copied and verified
+complete locally on 2026-11-25. See [the current review](RESULTS_24_STREAMS_REVIEW.md)
+for the depth checks, precision gain and persistent conditional G0 offset.
+The sections below retain the earlier **twelve-stream** results.
+
 The robustness analysis **22974798**, copied on 2026-11-23, is complete.
 The pooled comparison stays within joint 95% thresholds across the bin/block
 grid (32-bin p about 0.085-0.093). Four-stream groups still show local
 residuals; pooled agreement alone does not validate sampling. See
 [the robustness review](../N4_volume_benchmark/ROBUSTNESS_REVIEW_20261123.md).
 
-The latest depth-scan analysis is
+The earlier twelve-stream depth-scan analysis is
 `combined300_ns22885157_analysis_22904265/`, with a `completed` marker,
 **twelve independent streams and 300k updates per stream**. Its inputs
 are existing NS leaf **22885157**, fresh leaves **22904262** and
@@ -20,7 +25,7 @@ previous four-stream 300k copy. This review uses saved CSVs, the new
 conditional-bin plot and previously inspected MCMC plots; raw measurements
 and NS acceptance histories are not included in the local analysis copies.
 
-## Current depth assessment
+## Earlier twelve-stream depth assessment
 
 **The twelve-stream 300k ensemble passes the observed edge and paired
 prefix-stability screens through beta=1.0.** At that target, 270k and

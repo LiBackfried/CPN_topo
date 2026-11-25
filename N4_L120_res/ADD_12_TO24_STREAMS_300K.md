@@ -1,8 +1,10 @@
 # L120 expansion from twelve to twenty-four streams
 
 Prepared locally on 2026-11-24 at the user's request. On the same date the
-user reported the submissions below. Remote execution/completion has not
-been independently verified.
+user reported the submissions below. On 2026-11-25 the user reported all
+runs completed and pulled analysis 23350708, whose local `completed` marker,
+inputs and output tables were checked. Remote Slurm status has not been
+independently queried. See [the 24-stream review](RESULTS_24_STREAMS_REVIEW.md).
 
 Add **twelve fresh independent NS streams**, each with **300,000 updates**,
 to the existing twelve. Keep N=4, L=120, source beta=0.7, theta=0, 50 live
@@ -31,11 +33,15 @@ These are twelve additional independent streams, represented by six jobs.
 Analysis combines the three new leaves with existing leaves
 **22885157/22904262/22904264** and reuses MCMC **22780263**.
 
-The expected result is
+The completed analysis was copied to local directory
+`combined24x300_analysis_23350708/`; its UBELIX output path is
 `/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/combined24x300_analysis_23350708/`.
-The random campaign-directory suffix was not included in the supplied
-submission output, so the machine-readable record leaves that field unset
-(`-`): [reported_add12_to24_jobs_20261124.tsv](reported_add12_to24_jobs_20261124.tsv).
+The campaign records were also copied to `add12_to24_300k.5QBVa7/`, identifying
+the UBELIX record directory as
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/add12_to24_300k.5QBVa7`.
+The initial submission records retain the then-unknown suffix (`-`); new
+completion entries supply it in
+[reported_add12_to24_jobs_20261124.tsv](reported_add12_to24_jobs_20261124.tsv).
 
 To inspect these jobs on UBELIX:
 

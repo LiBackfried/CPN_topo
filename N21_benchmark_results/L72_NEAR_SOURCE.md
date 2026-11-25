@@ -60,6 +60,25 @@ The directory contains aggregate observables, bootstrap standard errors, depth
 diagnostics and small provenance files. Simulation streams and checkpoints
 remain on scratch. The scanner computes bootstrap draws in memory.
 
+## Reported submission on 24 November 2026
+
+The user reported completion on 25 November 2026. The local copy contains the
+completion marker and all six analysis CSVs. [Results review](L72_NEAR_SOURCE_RESULTS.md)
+
+| Job ID | Role |
+| ---: | --- |
+| 23365847 | 10 streams, 20,000 updates, 15,500 proposals per update |
+| 23365848 | 10 streams, 20,000 updates, 31,000 proposals per update |
+| 23365849 | β=0.60 and β=0.61 analysis after both simulations succeed |
+
+Scratch campaign: `/scratch/network/users/lb25v444/out_data/ns_N21_L72_benchmark.CG2olxVi`.
+The analysis output is in `N21_benchmark_results/near_source_23365849/` in
+the UBELIX checkout and the local copy.
+
+```bash
+sacct -j 23365847,23365848,23365849 --format=JobID,JobName,State,ExitCode,Elapsed
+```
+
 ## Decide how much depth and work are needed
 
 - At β=0.61, find the first tested depth where the 99% target-weight point
@@ -85,5 +104,7 @@ remain on scratch. The scanner computes bootstrap draws in memory.
   bare couplings measures the combined effect of N, physical volume and
   the reweighting shift.
 
-The β=0.68–0.76 screen follows the near-source review. L=72 remains a
-finite-volume ensemble at those couplings.
+The β=0.68–0.76 screen is on hold for L=72. The active comparison is β=0.60
+and 0.61. The completed depth scan supports 5,000 updates per stream, so the
+next runs should resolve the topology and initialization questions.
+[Results review](L72_NEAR_SOURCE_RESULTS.md)
