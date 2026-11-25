@@ -15,7 +15,13 @@ cp -r "$repo/"{include,lib,src} "$project/"
 cp "$repo/"{Makefile.am,configure.ac,script_build_code.sh} "$project/"
 cp "$setup/"{build_N21_ubelix.sh,submit_mcmc_ubelix.sh,mcmc_job_ubelix.sh,analyze_mcmc.py} "$project/N21_L72_ubelix_benchmark/"
 cp "$repo/utils/"{cpn_io.py,mcmc.py} "$project/utils/"
-module() { return 0; }
+export MODULE_CWD_FAILURE="$work/module_cwd_failure"
+module() {
+    if ! pwd -P >/dev/null 2>&1; then
+        touch "$MODULE_CWD_FAILURE"
+        return 1
+    fi
+}
 srun() {
     local task
     while [[ $1 == --* ]]; do shift; done
@@ -23,6 +29,7 @@ srun() {
 }
 export -f module srun
 ac_cv_header_openssl_md5_h=no bash "$project/N21_L72_ubelix_benchmark/build_N21_ubelix.sh" mcmc
+[[ ! -e $MODULE_CWD_FAILURE ]]
 cmp "$repo/include/macro.h" "$project/include/macro.h"
 cat > "$work/bin/sbatch" <<'SH'
 #!/bin/bash

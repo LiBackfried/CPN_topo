@@ -15,7 +15,8 @@ repo=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)
 module purge
 module load GCCcore/14.2.0 OpenSSL/1.1
 work=$(mktemp -d "${TMPDIR:-/tmp}/cpn-N21-build.XXXXXXXX")
-trap 'rm -rf -- "$work"; module purge || true' EXIT
+# Leave the temporary directory before removing it. Modules are local to this Bash process.
+trap 'cd / && rm -rf -- "$work"' EXIT
 mkdir "$work/include" "$work/lib" "$work/src"
 cp "$repo/"{Makefile.am,configure.ac,script_build_code.sh} "$work/"
 cp "$repo/include/"*.h "$work/include/"
