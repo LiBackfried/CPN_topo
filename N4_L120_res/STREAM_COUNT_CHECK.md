@@ -3,17 +3,15 @@
 Prepared on 2026-11-25. This is post-processing of the **existing 24 streams**
 at 300k updates, source beta=0.7, N=4, L120, target beta=1.0. It submits no
 simulation runs and needs no executable rebuild. The user reported the
-submissions below on 2026-11-25; completion has not been independently checked.
+submissions below on 2026-11-25. The campaign and complete report have now
+been pulled and checked locally; see [STREAM_COUNT_RESULTS.md](STREAM_COUNT_RESULTS.md).
 
-The user subsequently reported the stream-count scan done. The evaluation
-array is recorded as user-reported completed; its campaign/report files are
-not present locally yet. Collector 23463729 completion remains unverified
-until its output or scheduler record is available. For review, pull
-`stream_count24.9OJpLn/report_23463729/` and
-`stream_count24.9OJpLn/evaluations/task_0/` into this volume's local result
-folder. The report holds the scaling tables/plots; task0 holds the old/new/
-full conditional covariance and joint diagnostics. The numerical cache is
-not required for reviewing these outputs.
+Verified the cache, all nine evaluation-task markers/signatures, 43 ensemble
+results and collector **23463729** completion marker in the local copy.
+The report holds scaling tables/plots; task0 holds old/new/full covariance
+and joint diagnostics. Errors scale broadly as 1/sqrt(k), while the pooled
+conditional G0 feature persists with an approximate joint p of 0.002.
+This is local-output verification; current remote Slurm state was not queried.
 
 ## Reported submissions
 

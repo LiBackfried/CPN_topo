@@ -1,5 +1,11 @@
 # L120: 24 streams through 300k updates, reviewed 2026-11-25
 
+The completed [stream-count follow-up](STREAM_COUNT_RESULTS.md) now supplies
+the joint diagnostic absent from this production output. It confirms the
+precision scaling and reproduces the conditional G0 offset in both disjoint
+twelve-stream cohorts; pooled full24 joint p is approximately 0.002. The
+production numbers and limitations below are retained as the earlier baseline.
+
 The copied analysis **23350708** is complete in
 `combined24x300_analysis_23350708/`. It combines **24 independently seeded
 NS streams**, each at **300,000 cumulative updates**, and reuses direct

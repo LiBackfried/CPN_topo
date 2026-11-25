@@ -213,8 +213,12 @@ At L=72 the active study is **β=0.60 → 0.61**. The β=0.68–0.76 L=72 scan
 is on hold.
 [Near-source study](L72_NEAR_SOURCE.md) · [Results of job 23365849](L72_NEAR_SOURCE_RESULTS.md) · [Deferred scan notes](L72_TARGET_BETA.md)
 
+The L=72 β=0.61 reference, L=72 β=0.60 prior checks and L=150 β=0.60 MCMC
+timing pilot all use independent hot starts.
+[MCMC validation and timing commands](MCMC_VALIDATION.md)
+
 1. Prioritize direct L=72 MCMC at β=0.61, with β=0.60 as a source control.
-   Use independent hot and cold starts, compare cooled charge with the same
+   Use independent hot starts, compare cooled charge with the same
    measurement settings, and check sector tunneling and block errors.
 2. At β=0.60, use the MCMC histories to test the NS thermalization length and
    spacing of initial live points. Use fixed-cutoff pilots in the near-source

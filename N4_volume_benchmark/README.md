@@ -1,5 +1,10 @@
 # CP³ volume and reweighting benchmark on UBELIX
 
+For L120 source-prior initialization and a separate doubled-proposal control,
+run `bash N4_volume_benchmark/submit_L120_sampling_validation_ubelix.sh`.
+See [the sampling-validation setup](../N4_L120_res/SAMPLING_VALIDATION.md)
+for the hot/cold pilots, eight 172800-proposal streams and earlier L38 results.
+
 For the effect of stream count on the completed L120 ensemble, run
 `bash N4_volume_benchmark/submit_L120_stream_count_ubelix.sh`.
 See [the stream-count check](../N4_L120_res/STREAM_COUNT_CHECK.md).

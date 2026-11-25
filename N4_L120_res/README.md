@@ -1,14 +1,24 @@
 # L120 screening campaign
 
+The next sampling checks are prepared locally: **four beta=0.7 hot/cold
+initialization pilots** and **eight separate NS controls at 172800
+proposals/update**, 300k updates each. Run
+`bash N4_volume_benchmark/submit_L120_sampling_validation_ubelix.sh` on UBELIX.
+See [the setup and earlier proposal-count findings](SAMPLING_VALIDATION.md).
+No jobs for these checks have been submitted from the local checkout.
+
 The stream-count check was user-reported submitted on 2026-11-25:
 preparation **23463724**, evaluation array **23463726** (baseline plus eight
 orderings, maximum two tasks at once), and dependent report **23463729**.
 It compares old12/new12 and nested subsets of 6/8/12/16/20/24 streams,
 including bootstrap precision curves and old/new/full joint bin checks.
-Records are under `stream_count24.9OJpLn/`; expected output is
-`stream_count24.9OJpLn/report_23463729/`. The user now reports the scan done;
-its results have not been found locally, so collector completion and results
-remain unverified. See
+The campaign and completed report are now pulled under
+`stream_count24.9OJpLn/report_23463729/`. All nine tasks and 43 ensemble
+results were checked. Errors broadly follow 1/sqrt(k); old/new integrated
+means agree within 1.29 combined NS SE. The conditional G0 residual appears
+in both cohorts and remains negative in all 40 subsets; pooled full24 joint
+p is approximately 0.002 under the bootstrap error model. See
+[the stream-count results](STREAM_COUNT_RESULTS.md),
 [STREAM_COUNT_CHECK.md](STREAM_COUNT_CHECK.md) and
 [the submission record](reported_stream_count_jobs_20261125.tsv).
 
@@ -20,7 +30,8 @@ New leaves **23350703/23350705/23350707** follow starts
 22885157/22904262/22904264, reusing MCMC **22780263**. Depth checks pass
 through beta=1.0 and most statistical errors fall 25-30%. Integrated
 observables remain within 1.8 combined SE of MCMC; the conditional G0-bin
-offset persists at 4.42 marginal SE and needs a 24-stream joint check. See
+offset persists at 4.42 marginal SE in that production output; the stream-count
+follow-up above supplies the joint check. See
 [the current 24-stream review](RESULTS_24_STREAMS_REVIEW.md),
 [the 24-stream setup](ADD_12_TO24_STREAMS_300K.md) and
 [the submission record](reported_add12_to24_jobs_20261124.tsv).
