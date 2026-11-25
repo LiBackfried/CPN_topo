@@ -1,0 +1,5 @@
+key	value
+bootstrap	200
+orderings	8
+joint_draws	1000
+seed	20261125

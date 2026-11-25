@@ -1,0 +1,1159 @@
+{
+  "schema": 1,
+  "lattice": 120,
+  "beta": 1.0,
+  "source_beta": 0.7,
+  "cpn_n": 4,
+  "updates": 300000,
+  "n_live": 50,
+  "stream_count": 24,
+  "bins": 32,
+  "block_size": 512,
+  "burn_in": 20000,
+  "tail": 0.005,
+  "bootstrap": 200,
+  "joint_draws": 1000,
+  "seed": 20261125,
+  "counts": [
+    6,
+    8,
+    12,
+    16,
+    20,
+    24
+  ],
+  "orderings": 8,
+  "focus_bin": 9,
+  "common_epsilon_cutoff": 0.5055205101195432,
+  "mcmc": "/rs_scratch/users/lb25v444/out_data/mcmc_120_N4_beta1p0_3x100k/job_22780263",
+  "mcmc_reference": {
+    "mean_action_density": {
+      "estimate": 0.5419982173532243,
+      "se": 4.397309653644478e-06
+    },
+    "mean_Q_U": {
+      "estimate": 0.0022155868237347495,
+      "se": 0.005769966743848593
+    },
+    "mean_Q_U_squared": {
+      "estimate": 7.364896924083763,
+      "se": 0.020435018509865094
+    },
+    "chi_topological": {
+      "estimate": 0.0005114508343929715,
+      "se": 1.4190628148732445e-06
+    },
+    "xi_L_squared": {
+      "estimate": 98.79024657044486,
+      "se": 2.9599552990210203
+    },
+    "mean_G0": {
+      "estimate": 105.62807117824912,
+      "se": 0.5288111052706193
+    },
+    "mean_Gk": {
+      "estimate": 83.12084231555012,
+      "se": 0.307234187778167
+    }
+  },
+  "streams": [
+    {
+      "stream": 0,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22885157/run_0",
+      "seed": 828968384
+    },
+    {
+      "stream": 1,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22885157/run_1",
+      "seed": 828968385
+    },
+    {
+      "stream": 2,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22885157/run_2",
+      "seed": 828968386
+    },
+    {
+      "stream": 3,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22885157/run_3",
+      "seed": 828968387
+    },
+    {
+      "stream": 4,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22904262/run_0",
+      "seed": 335358449
+    },
+    {
+      "stream": 5,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22904262/run_1",
+      "seed": 335358450
+    },
+    {
+      "stream": 6,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22904262/run_2",
+      "seed": 335358451
+    },
+    {
+      "stream": 7,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22904262/run_3",
+      "seed": 335358452
+    },
+    {
+      "stream": 8,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22904264/run_0",
+      "seed": 691294503
+    },
+    {
+      "stream": 9,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22904264/run_1",
+      "seed": 691294504
+    },
+    {
+      "stream": 10,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22904264/run_2",
+      "seed": 691294505
+    },
+    {
+      "stream": 11,
+      "cohort": "old",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_22904264/run_3",
+      "seed": 691294506
+    },
+    {
+      "stream": 12,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350703/run_0",
+      "seed": 25597939
+    },
+    {
+      "stream": 13,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350703/run_1",
+      "seed": 25597940
+    },
+    {
+      "stream": 14,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350703/run_2",
+      "seed": 25597941
+    },
+    {
+      "stream": 15,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350703/run_3",
+      "seed": 25597942
+    },
+    {
+      "stream": 16,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350705/run_0",
+      "seed": 1713020953
+    },
+    {
+      "stream": 17,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350705/run_1",
+      "seed": 1713020954
+    },
+    {
+      "stream": 18,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350705/run_2",
+      "seed": 1713020955
+    },
+    {
+      "stream": 19,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350705/run_3",
+      "seed": 1713020956
+    },
+    {
+      "stream": 20,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350707/run_0",
+      "seed": 1015237625
+    },
+    {
+      "stream": 21,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350707/run_1",
+      "seed": 1015237626
+    },
+    {
+      "stream": 22,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350707/run_2",
+      "seed": 1015237627
+    },
+    {
+      "stream": 23,
+      "cohort": "new",
+      "path": "/rs_scratch/users/lb25v444/out_data/ns_N4_beta0p7_volume_benchmark/L120/job_23350707/run_3",
+      "seed": 1015237628
+    }
+  ],
+  "plan": [
+    {
+      "ordering": 0,
+      "permutation": [
+        7,
+        9,
+        15,
+        1,
+        4,
+        20,
+        12,
+        2,
+        18,
+        8,
+        17,
+        16,
+        14,
+        13,
+        0,
+        3,
+        10,
+        11,
+        19,
+        23,
+        6,
+        5,
+        21,
+        22
+      ],
+      "subsets": {
+        "6": [
+          1,
+          4,
+          7,
+          9,
+          15,
+          20
+        ],
+        "8": [
+          1,
+          2,
+          4,
+          7,
+          9,
+          12,
+          15,
+          20
+        ],
+        "12": [
+          1,
+          2,
+          4,
+          7,
+          8,
+          9,
+          12,
+          15,
+          16,
+          17,
+          18,
+          20
+        ],
+        "16": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7,
+          8,
+          9,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          20
+        ],
+        "20": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          23
+        ]
+      }
+    },
+    {
+      "ordering": 1,
+      "permutation": [
+        18,
+        6,
+        4,
+        0,
+        5,
+        20,
+        21,
+        3,
+        10,
+        9,
+        14,
+        23,
+        11,
+        8,
+        12,
+        7,
+        15,
+        16,
+        2,
+        1,
+        13,
+        19,
+        22,
+        17
+      ],
+      "subsets": {
+        "6": [
+          0,
+          4,
+          5,
+          6,
+          18,
+          20
+        ],
+        "8": [
+          0,
+          3,
+          4,
+          5,
+          6,
+          18,
+          20,
+          21
+        ],
+        "12": [
+          0,
+          3,
+          4,
+          5,
+          6,
+          9,
+          10,
+          14,
+          18,
+          20,
+          21,
+          23
+        ],
+        "16": [
+          0,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          14,
+          18,
+          20,
+          21,
+          23
+        ],
+        "20": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          14,
+          15,
+          16,
+          18,
+          20,
+          21,
+          23
+        ]
+      }
+    },
+    {
+      "ordering": 2,
+      "permutation": [
+        17,
+        5,
+        16,
+        21,
+        13,
+        14,
+        3,
+        19,
+        22,
+        12,
+        15,
+        11,
+        20,
+        10,
+        0,
+        23,
+        6,
+        18,
+        1,
+        9,
+        7,
+        8,
+        4,
+        2
+      ],
+      "subsets": {
+        "6": [
+          5,
+          13,
+          14,
+          16,
+          17,
+          21
+        ],
+        "8": [
+          3,
+          5,
+          13,
+          14,
+          16,
+          17,
+          19,
+          21
+        ],
+        "12": [
+          3,
+          5,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          19,
+          21,
+          22
+        ],
+        "16": [
+          0,
+          3,
+          5,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "20": [
+          0,
+          1,
+          3,
+          5,
+          6,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ]
+      }
+    },
+    {
+      "ordering": 3,
+      "permutation": [
+        16,
+        5,
+        9,
+        20,
+        17,
+        4,
+        1,
+        18,
+        14,
+        12,
+        6,
+        10,
+        2,
+        13,
+        19,
+        22,
+        15,
+        7,
+        3,
+        21,
+        23,
+        11,
+        0,
+        8
+      ],
+      "subsets": {
+        "6": [
+          4,
+          5,
+          9,
+          16,
+          17,
+          20
+        ],
+        "8": [
+          1,
+          4,
+          5,
+          9,
+          16,
+          17,
+          18,
+          20
+        ],
+        "12": [
+          1,
+          4,
+          5,
+          6,
+          9,
+          10,
+          12,
+          14,
+          16,
+          17,
+          18,
+          20
+        ],
+        "16": [
+          1,
+          2,
+          4,
+          5,
+          6,
+          9,
+          10,
+          12,
+          13,
+          14,
+          16,
+          17,
+          18,
+          19,
+          20,
+          22
+        ],
+        "20": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ]
+      }
+    },
+    {
+      "ordering": 4,
+      "permutation": [
+        0,
+        1,
+        2,
+        8,
+        17,
+        19,
+        21,
+        12,
+        4,
+        18,
+        11,
+        7,
+        14,
+        20,
+        16,
+        15,
+        3,
+        22,
+        13,
+        5,
+        10,
+        23,
+        9,
+        6
+      ],
+      "subsets": {
+        "6": [
+          0,
+          1,
+          2,
+          8,
+          17,
+          19
+        ],
+        "8": [
+          0,
+          1,
+          2,
+          8,
+          12,
+          17,
+          19,
+          21
+        ],
+        "12": [
+          0,
+          1,
+          2,
+          4,
+          7,
+          8,
+          11,
+          12,
+          17,
+          18,
+          19,
+          21
+        ],
+        "16": [
+          0,
+          1,
+          2,
+          4,
+          7,
+          8,
+          11,
+          12,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "20": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          8,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ]
+      }
+    },
+    {
+      "ordering": 5,
+      "permutation": [
+        23,
+        8,
+        12,
+        13,
+        17,
+        6,
+        11,
+        14,
+        18,
+        1,
+        19,
+        3,
+        9,
+        10,
+        20,
+        4,
+        15,
+        21,
+        2,
+        16,
+        22,
+        5,
+        7,
+        0
+      ],
+      "subsets": {
+        "6": [
+          6,
+          8,
+          12,
+          13,
+          17,
+          23
+        ],
+        "8": [
+          6,
+          8,
+          11,
+          12,
+          13,
+          14,
+          17,
+          23
+        ],
+        "12": [
+          1,
+          3,
+          6,
+          8,
+          11,
+          12,
+          13,
+          14,
+          17,
+          18,
+          19,
+          23
+        ],
+        "16": [
+          1,
+          3,
+          4,
+          6,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          17,
+          18,
+          19,
+          20,
+          23
+        ],
+        "20": [
+          1,
+          2,
+          3,
+          4,
+          6,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23
+        ]
+      }
+    },
+    {
+      "ordering": 6,
+      "permutation": [
+        18,
+        14,
+        3,
+        6,
+        10,
+        5,
+        12,
+        20,
+        2,
+        21,
+        17,
+        15,
+        9,
+        7,
+        22,
+        4,
+        1,
+        23,
+        11,
+        13,
+        8,
+        19,
+        0,
+        16
+      ],
+      "subsets": {
+        "6": [
+          3,
+          5,
+          6,
+          10,
+          14,
+          18
+        ],
+        "8": [
+          3,
+          5,
+          6,
+          10,
+          12,
+          14,
+          18,
+          20
+        ],
+        "12": [
+          2,
+          3,
+          5,
+          6,
+          10,
+          12,
+          14,
+          15,
+          17,
+          18,
+          20,
+          21
+        ],
+        "16": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          12,
+          14,
+          15,
+          17,
+          18,
+          20,
+          21,
+          22
+        ],
+        "20": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          17,
+          18,
+          20,
+          21,
+          22,
+          23
+        ]
+      }
+    },
+    {
+      "ordering": 7,
+      "permutation": [
+        5,
+        10,
+        4,
+        17,
+        0,
+        8,
+        9,
+        1,
+        22,
+        19,
+        16,
+        6,
+        23,
+        15,
+        14,
+        2,
+        13,
+        12,
+        11,
+        18,
+        3,
+        20,
+        7,
+        21
+      ],
+      "subsets": {
+        "6": [
+          0,
+          4,
+          5,
+          8,
+          10,
+          17
+        ],
+        "8": [
+          0,
+          1,
+          4,
+          5,
+          8,
+          9,
+          10,
+          17
+        ],
+        "12": [
+          0,
+          1,
+          4,
+          5,
+          6,
+          8,
+          9,
+          10,
+          16,
+          17,
+          19,
+          22
+        ],
+        "16": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          8,
+          9,
+          10,
+          14,
+          15,
+          16,
+          17,
+          19,
+          22,
+          23
+        ],
+        "20": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          22,
+          23
+        ]
+      }
+    }
+  ],
+  "config": {
+    "size": [
+      "120",
+      "120"
+    ],
+    "beta": [
+      "0.7"
+    ],
+    "theta": [
+      "0.0"
+    ],
+    "num_MC_step": [
+      "20"
+    ],
+    "meas_every": [
+      "8"
+    ],
+    "num_micro": [
+      "4"
+    ],
+    "num_norm": [
+      "1"
+    ],
+    "save_conf_every": [
+      "1"
+    ],
+    "num_cool_step": [
+      "50"
+    ],
+    "meas_cool_every": [
+      "5"
+    ],
+    "rng_seed": [
+      "828968384"
+    ],
+    "num_replica": [
+      "1"
+    ],
+    "defect_size": [
+      "0"
+    ],
+    "hierarc_upd": [
+      "0"
+    ],
+    "grid_step": [
+      "1"
+    ],
+    "grid_max": [
+      "100"
+    ],
+    "num_single_site_stoc_upd": [
+      "86400"
+    ],
+    "num_live_pts": [
+      "50"
+    ],
+    "save_dead": [
+      "0"
+    ],
+    "conf_file": [
+      "conf.dat"
+    ],
+    "data_file": [
+      "dati.dat"
+    ],
+    "topo_file": [
+      "topo.dat"
+    ],
+    "live_energy_file": [
+      "live_energy.dat"
+    ],
+    "log_file": [
+      "log.dat"
+    ],
+    "rng_state_file": [
+      "rng_state.dat"
+    ],
+    "swap_acc_file": [
+      "swap_acc.dat"
+    ],
+    "swap_track_file": [
+      "swap_track.dat"
+    ],
+    "topo_potential_file": [
+      "topo_potential"
+    ],
+    "multicanonic_acc_file": [
+      "multicanonic_acc.dat"
+    ]
+  },
+  "sources": {
+    "N4_volume_benchmark/scan_stream_count.py": "5b24fd4c273b35a00796a56f69d3d68c661a49c24c081632dfd824361656a4ab",
+    "N4_volume_benchmark/check_ensemble_robustness.py": "986e428079e74adcabb4a3baa8d4ead234a8a67c0d51309ce3560e50c5bbcc92",
+    "N4_volume_benchmark/compare_action_bins.py": "70e4885b807aa47fdbbc936d2c7da77991a0d91ee6f6f8538520f8ec08848a66",
+    "N4_volume_benchmark/scan_depth.py": "c00ae73301724197c09d6a57cd7d7d6638e4f34013787a2c5a9368061a5b620d",
+    "analyze_nested_sampling.py": "023c608711776f643d2621d17a00f872cec60a0c316647a1e70654ebdaecb624",
+    "utils/nest_sampl.py": "ff737cb739cc6f22bbbfbd96a3d72a1f1cc21050fe09c36b19f2316ae4000ab0",
+    "utils/mcmc.py": "020371839e2b6ad1cb3b250d3b75da0d7effb6e2c437794e06f0e16c06ac3971",
+    "utils/cpn_io.py": "118c1db64a86f197824bc572f353b21e063b5fc318d20b49d5417a9c50669e1e"
+  },
+  "files": {
+    "blocks.npy": "b44a442fc197deebd79152ca0a6666cf133b347911dc7760528005c01bb44c74",
+    "edges.npy": "55d40705f78cf3940ae8b796eb202cbdb7418270b0352bbb1675c71321f1fa3e",
+    "stream_00.npy": "c9236bbf1ccc723bcff659dafcbfaff3a14d4f87e2d712a2f937a97f87c25701",
+    "stream_01.npy": "a71657e3c34ab6f8045db72b8e24e46631d020900e314e2a95db4ad619f66c14",
+    "stream_02.npy": "973617ecbb6d847c96fe1c49d0057b59daaa58cb62212dac33ed5625840f517f",
+    "stream_03.npy": "a070a916564ad25ae885a9aef07cc6aa5b5bff411908f064d0acc5941d704c04",
+    "stream_04.npy": "7f10ab427a4c0f527de93736cf074f7e8994689c13fd5dade207ec8824b626a6",
+    "stream_05.npy": "aaed971af2d402f473cbc4a4ca4848b177519795953b7335fc36bb29600ab99b",
+    "stream_06.npy": "b8c9965e8a105d55ce1068b6a48c1fc26f6cdfa80d37e7f12539e62187e4e80e",
+    "stream_07.npy": "9e5b7aa2c6c67a86a7e9f5d6c4f314b2e7e20ba3646a12cb46ed70401ba0cac3",
+    "stream_08.npy": "a9fde523a429a92cb22aec4835dace96f818a130db2bd90974ea250e5bb09ece",
+    "stream_09.npy": "9ca46f807479cf01a385910301fa4068419d974f739dce67638b94b5987d46dd",
+    "stream_10.npy": "15402824d3acd16266248ed7c97d8817949ea6830746c9c74eb4e6385fba33f6",
+    "stream_11.npy": "608e4801ed3446856c8c1636f8f84939349c427b70d28e4737a7f9dc4c12b4b7",
+    "stream_12.npy": "81987910f4bd048718ee66212f7ab003e9230245e078a1351ca4f026c7a3bb4c",
+    "stream_13.npy": "7d574c71b07a84426f9d6965d4995a97d1e1ec02d0cf87efa1fa1382847b782b",
+    "stream_14.npy": "517f42b7106d79408bf81c245cc411011ee9c8f2e2581b25d70d0a688a023a71",
+    "stream_15.npy": "23a1f3b02040618e60af3227930479351ce90f64b48637fcc217f0ed15a807d9",
+    "stream_16.npy": "752470971f386b03df56744d157907025a5d4f3b7b7ce1397a1584bf3556a55b",
+    "stream_17.npy": "0c8ca223517a066b102c9e70cb792e038392f73ee1c13af6d03efed1ebbfb5a0",
+    "stream_18.npy": "479acd801b5bb0c9b5e43ab9fc193d7d926d382d00af3e47cf50bc1df796f5f3",
+    "stream_19.npy": "daf3b83a563f98426e1a90eb953560e208495265d55ba52326772e9ce65a534d",
+    "stream_20.npy": "dd053ce68fe88987e01a68cc9e8a6bf11807c8393cf10b08515333a7580ffe4a",
+    "stream_21.npy": "0192c9472d7981013e08998c4e30c2fbc0eea23295919b9809461198ebb98de9",
+    "stream_22.npy": "3d9b538be64d8d314a93f36ed40e45278b6eb9ec93c2aad8140bfb6ab9df300d",
+    "stream_23.npy": "d694de0ac5b7b8b26c6465e3b7d516e545c8c68099be0e3973a1dee8732b6594"
+  }
+}
