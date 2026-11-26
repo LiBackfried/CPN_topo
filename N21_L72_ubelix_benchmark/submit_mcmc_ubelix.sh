@@ -1,5 +1,5 @@
 #!/bin/bash
-# Submit from UBELIX. The optional step count lets the L150 pilot inform sizing.
+# Submit from UBELIX. The optional argument overrides the cycles per chain.
 set -euo pipefail
 export LC_ALL=C
 fail() { echo "$*" >&2; exit 1; }
@@ -7,9 +7,9 @@ fail() { echo "$*" >&2; exit 1; }
 mode=$1
 case $mode in
     L72-b061) lattice=72; beta=0.61; stride=10; default_steps=200000; wall=08:00:00 ;;
-    L72-b060) lattice=72; beta=0.60; stride=1;  default_steps=20000;  wall=04:00:00 ;;
+    L72-b060) lattice=72; beta=0.60; stride=1;  default_steps=200000; wall=08:00:00 ;;
     L150-timing) lattice=150; beta=0.60; stride=1; default_steps=2000; wall=01:00:00 ;;
-    L150-prior) lattice=150; beta=0.60; stride=1; default_steps=20000; wall=10:00:00 ;;
+    L150-prior) lattice=150; beta=0.60; stride=1; default_steps=200000; wall=1-16:00:00 ;;
     *) fail "Unknown MCMC mode: $mode" ;;
 esac
 steps=${2:-$default_steps}

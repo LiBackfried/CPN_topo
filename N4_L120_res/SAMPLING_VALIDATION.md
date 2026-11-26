@@ -1,8 +1,47 @@
 # L120 source initialization and proposal-count checks
 
-Prepared locally on 2026-11-25 at the user's request; no UBELIX jobs have
-been submitted from this checkout. The proposed target-MCMC error audit
-(previous step 1) is dropped. The two checks below implement steps 2 and 3.
+Prepared locally on 2026-11-25 at the user's request. The user subsequently
+reported all nine UBELIX submissions below; remote scheduler state has not
+been checked. The proposed target-MCMC error audit (previous step 1) is
+dropped. The two checks below implement steps 2 and 3.
+
+## Reported campaign submission
+
+Campaign records and Slurm logs:
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/sampling_validation.6xXcOg`.
+See [the machine-readable submission record](reported_sampling_validation_jobs_20261125.tsv).
+
+| Role | Job | Dependency | Configuration |
+| --- | --- | --- | --- |
+| Source pilot | 23502233 | none | two cold/two hot, beta=0.7, 10000 MC cycles each |
+| Source analysis | 23502234 | afterok:23502233 | warmup, binning, ACF, live-point spacing |
+| NS batch 1 stage 1 | 23502235 | none | four streams, 100k cumulative updates |
+| NS batch 1 stage 2 | 23502236 | afterok:23502235 | same four streams, 200k cumulative |
+| NS batch 1 stage 3 | 23502237 | afterok:23502236 | same four streams, 300k cumulative |
+| NS batch 2 stage 1 | 23502238 | none | four streams, 100k cumulative updates |
+| NS batch 2 stage 2 | 23502239 | afterok:23502238 | same four streams, 200k cumulative |
+| NS batch 2 stage 3 | 23502240 | afterok:23502239 | same four streams, 300k cumulative |
+| Proposal analysis | 23502241 | afterok:23502237:23502240 | separate baseline24 versus control8; MCMC 22780263 |
+
+Seed ranges: source **2126073774-2126073777** (run_0/1 cold, run_2/3 hot),
+NS batch 1 **1842970723-1842970726**, NS batch 2 **591970683-591970686**.
+All eight new NS streams use 172800 proposals/update, source beta=0.7,
+initialization 20/8 and 50 live points. The six NS jobs represent eight
+independent streams across three segments each, not 24 new streams.
+
+Expected result directories:
+
+- `N4_L120_res/source_init_23502233_analysis_23502234/`
+- `N4_L120_res/proposals172800_23502237_analysis_23502241/`
+
+On 2026-11-26, the source analysis 23502234 was found locally with its
+completion marker, all diagnostic tables/plots, and matching source hashes.
+The proposal-analysis directory was not found. See
+[the results review](SAMPLING_VALIDATION_RESULTS_20261126.md) for source
+autocorrelation, warmup checks and their early-window caveat. Remote
+scheduler status remains unchecked. To retry only an analysis after its
+inputs complete, submit its wrapper with the recorded pilot or leaves;
+do not rerun the fresh-campaign submission helper.
 
 ## Run on UBELIX
 

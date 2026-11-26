@@ -32,12 +32,12 @@ def save_rows(path, rows):
         writer.writerows(rows)
 
 
-def autocorrelation(values, stride):
+def autocorrelation(values, stride, lag_power=10):
     """Windowed tau_int in MC cycles and the ACF at specific MC-cycle lags."""
     values = np.asarray(values, dtype=float)
     centered = values - values.mean()
     variance = np.dot(centered, centered)
-    lags = sorted({8} | {stride * 2**power for power in range(11)})
+    lags = sorted({8} | {stride * 2**power for power in range(lag_power + 1)})
     estimates = dict.fromkeys(f"rho_lag_{lag}" for lag in lags)
     estimates.update(tau_int_cycles=None, effective_measurements=None, window_cycles=None)
     if variance == 0:
@@ -113,6 +113,10 @@ def run_checks(mode, job):
 def analyze_chains(mode, job, timing, output):
     target_reference = mode == "L72-b061"
     cuts = [0, 2000, 10000, 20000] if target_reference else [0, 20, 100, 500, 2000, 5000]
+    long_prior = mode in ("L72-b060", "L150-prior") and timing[0]["cycles"] >= 200000
+    if long_prior:
+        cuts.extend((10000, 20000))
+    lag_power = 14 if long_prior else 10
     chains = load_ensemble(job, cooling_step=25)
     if [chain.path.name for chain in chains] != [r["chain"] for r in timing]:
         raise ValueError("Chain directories do not match the four timed runs")
@@ -150,12 +154,22 @@ def analyze_chains(mode, job, timing, output):
                                 min_sector=int(charge.min()), max_sector=int(charge.max())))
             for key, values in series(kept).items():
                 acf_rows.append(dict(chain=run["chain"], start=run["start"], burn_in_cycles=cut,
-                                     observable=key, **autocorrelation(values, chain.meas_every)))
+                                     observable=key,
+                                     **autocorrelation(values, chain.meas_every, lag_power)))
         if not target_reference:
             # The NS initializer saves its first configuration after cycle 21.
-            for label, start in (("initial_20_8", 21), ("late_20_8", cuts[-1] + 1)):
-                steps = start + 8 * np.arange(50)
-                for key, values in series(chain).items():
+            samples = 50
+            window_specs = [("initial_20_8", 21, 8), ("late_20_8", cuts[-1] + 1, 8)]
+            if long_prior:
+                for spacing in (512, 1024, 2048):
+                    last_start = len(chain.steps) - (samples - 1) * spacing
+                    starts = range(cuts[-1] + 1, last_start + 1, samples * spacing)
+                    window_specs.extend((f"late_s{spacing}_{index}", start, spacing)
+                                        for index, start in enumerate(starts, 1))
+            observables = series(chain)
+            for label, start, spacing in window_specs:
+                steps = start + spacing * np.arange(samples)
+                for key, values in observables.items():
                     picked = values[steps - 1]
                     windows.append(dict(chain=run["chain"], start=run["start"], window=label,
                                         first_cycle=int(steps[0]), last_cycle=int(steps[-1]),

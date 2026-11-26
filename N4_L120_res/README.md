@@ -1,11 +1,24 @@
 # L120 screening campaign
 
-The next sampling checks are prepared locally: **four beta=0.7 hot/cold
-initialization pilots** and **eight separate NS controls at 172800
-proposals/update**, 300k updates each. Run
-`bash N4_volume_benchmark/submit_L120_sampling_validation_ubelix.sh` on UBELIX.
+The source-prior pilot analysis **23502234** is now pulled and locally
+checked (2026-11-26). Autocorrelation times are 1.59–1.78 MC cycles for
+action and about 0.5 for G0/Gk/Q/Q²; spacing eight looks reasonable.
+Hot/cold long-run means agree across the cut scan, but the initial hot-start
+50-point action windows show a rough 2.8-SE early/late difference, so
+20-cycle warmup remains provisional. The doubled-proposal comparison
+23502241 has not been found locally. See
+[the sampling-validation review](SAMPLING_VALIDATION_RESULTS_20261126.md).
+
+The user reported submission of the next sampling checks on 2026-11-25:
+**four beta=0.7 hot/cold initialization pilots** (23502233; dependent
+analysis 23502234) and **eight separate NS controls at 172800
+proposals/update**, 300k updates each (batch 1: 23502235 -> 23502236 ->
+23502237; batch 2: 23502238 -> 23502239 -> 23502240). Proposal analysis
+23502241 waits for both leaves and compares baseline24 with control8,
+reusing MCMC 22780263. Campaign records/logs are under
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/sampling_validation.6xXcOg`.
 See [the setup and earlier proposal-count findings](SAMPLING_VALIDATION.md).
-No jobs for these checks have been submitted from the local checkout.
+Submission is user-reported; remote state and completion are unverified.
 
 The stream-count check was user-reported submitted on 2026-11-25:
 preparation **23463724**, evaluation array **23463726** (baseline plus eight

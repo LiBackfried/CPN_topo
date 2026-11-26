@@ -213,16 +213,10 @@ At L=72 the active study is **β=0.60 → 0.61**. The β=0.68–0.76 L=72 scan
 is on hold.
 [Near-source study](L72_NEAR_SOURCE.md) · [Results of job 23365849](L72_NEAR_SOURCE_RESULTS.md) · [Deferred scan notes](L72_TARGET_BETA.md)
 
-The L=72 β=0.61 reference, L=72 β=0.60 prior checks and L=150 β=0.60 MCMC
-timing pilot all use independent hot starts.
-[MCMC validation and timing commands](MCMC_VALIDATION.md)
-
-1. Prioritize direct L=72 MCMC at β=0.61, with β=0.60 as a source control.
-   Use independent hot starts, compare cooled charge with the same
-   measurement settings, and check sector tunneling and block errors.
-2. At β=0.60, use the MCMC histories to test the NS thermalization length and
-   spacing of initial live points. Use fixed-cutoff pilots in the near-source
-   weight-bearing region to measure charge autocorrelation with the 15,500
-   and 31,000 proposal workloads.
-3. Keep 5,000 updates per stream as the working depth. Review the topology
-   checks before adding independent streams to improve precision.
+The L=72 direct MCMC comparisons favor 31,000 proposals per NS update at
+the current 5,000-update depth. The β=0.60 MCMC prior check shows strong
+topological correlations at the current eight-cycle live-point spacing.
+Resolve warmup and spacing with longer source trajectories, then check
+charge mixing in fixed-cutoff trials. The L=150 follow-up is set up
+for 200,000 cycles per hot chain to check autocorrelations before NS.
+[MCMC results and next runs](MCMC_VALIDATION_RESULTS.md) · [MCMC launch setup](MCMC_VALIDATION.md)
