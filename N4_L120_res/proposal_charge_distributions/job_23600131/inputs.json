@@ -1,0 +1,24 @@
+{
+  "comparison": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/proposals172800_23502237_analysis_23502241/inputs.json",
+  "comparison_sha256": "22451ff30bcd8ee5317e711a347a1b0837caa497c2d559df1b93ede05687a8e5",
+  "bootstrap": 200,
+  "seed": 20261126,
+  "beta": 1.0,
+  "updates": 300000,
+  "burn_in": 20000,
+  "block_size": 512,
+  "proposals": {
+    "baseline24": 86400,
+    "control8": 172800
+  },
+  "source_hashes": {
+    "N4_volume_benchmark/plot_L120_proposal_charges.py": "912e66d608b25a02813552bc07b39ba0d1e135dae725173433258c4050014c0c",
+    "N4_volume_benchmark/plot_charge_distributions.py": "2d783726fbd7e2ebb388c477264bce7b334914d589a15126bf7692f98ccbb52d",
+    "N4_volume_benchmark/export_charge_moments.py": "d703a605f0a79e40c64527076ba982551b7f8972b5763939d0231181e9dfe14a",
+    "N4_volume_benchmark/scan_depth.py": "c00ae73301724197c09d6a57cd7d7d6638e4f34013787a2c5a9368061a5b620d",
+    "analyze_nested_sampling.py": "023c608711776f643d2621d17a00f872cec60a0c316647a1e70654ebdaecb624",
+    "utils/cpn_io.py": "118c1db64a86f197824bc572f353b21e063b5fc318d20b49d5417a9c50669e1e",
+    "utils/mcmc.py": "020371839e2b6ad1cb3b250d3b75da0d7effb6e2c437794e06f0e16c06ac3971",
+    "utils/nest_sampl.py": "ff737cb739cc6f22bbbfbd96a3d72a1f1cc21050fe09c36b19f2316ae4000ab0"
+  }
+}

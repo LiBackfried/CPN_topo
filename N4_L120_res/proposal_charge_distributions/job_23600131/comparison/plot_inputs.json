@@ -1,0 +1,10 @@
+{
+  "baseline24": {
+    "path": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/proposal_charge_distributions/job_23600131/baseline24/charge_distributions.csv",
+    "sha256": "e4e2925636c2293aa8d53c24aa6157d3b89ce96ffcdb4adb19a1ef0826ba2746"
+  },
+  "control8": {
+    "path": "/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/proposal_charge_distributions/job_23600131/control8/charge_distributions.csv",
+    "sha256": "908dc31c118c1bf731783c900aa3ad243db77cf3e9aa7532b14d3800f12ad312"
+  }
+}
