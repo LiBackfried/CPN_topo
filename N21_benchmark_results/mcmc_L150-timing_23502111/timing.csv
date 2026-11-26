@@ -1,0 +1,5 @@
+chain,start,seed,lattice,beta,node,cpu_model,cycles,measurement_stride,elapsed_seconds,seconds_per_cycle,user_seconds,system_seconds,max_rss_kib
+run_0,hot,194008440,150,0.6,bnode006,AMD EPYC 7742 64-Core Processor,2000,1,1204.31,0.602155,1193.58,0.2,27648
+run_1,hot,194008441,150,0.6,bnode006,AMD EPYC 7742 64-Core Processor,2000,1,1198.51,0.599255,1188.36,0.21,27648
+run_2,hot,194008442,150,0.6,bnode006,AMD EPYC 7742 64-Core Processor,2000,1,1204.49,0.602245,1193.55,0.22,27648
+run_3,hot,194008443,150,0.6,bnode006,AMD EPYC 7742 64-Core Processor,2000,1,1204.0,0.602,1193.71,0.21,27648

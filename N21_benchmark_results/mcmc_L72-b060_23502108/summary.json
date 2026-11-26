@@ -1,0 +1,277 @@
+{
+  "mode": "L72-b060",
+  "source_job": "/rs_scratch/users/lb25v444/out_data/mcmc_N21_L72-b060.Vuwu0jlf/job_23502107",
+  "cooling_step": 25,
+  "median_seconds_per_cycle": 0.12256875,
+  "range_seconds_per_cycle": [
+    0.12242950000000001,
+    0.1227205
+  ],
+  "runs": [
+    {
+      "size": [
+        "72",
+        "72"
+      ],
+      "beta": [
+        "0.60"
+      ],
+      "theta": [
+        "0.0"
+      ],
+      "num_MC_step": [
+        "20000"
+      ],
+      "meas_every": [
+        "1"
+      ],
+      "num_micro": [
+        "4"
+      ],
+      "num_norm": [
+        "1"
+      ],
+      "save_conf_every": [
+        "1000"
+      ],
+      "num_cool_step": [
+        "50"
+      ],
+      "meas_cool_every": [
+        "5"
+      ],
+      "start": [
+        "1"
+      ],
+      "rng_seed": [
+        "194008428"
+      ],
+      "rng_start": [
+        "0"
+      ],
+      "num_replica": [
+        "1"
+      ],
+      "defect_size": [
+        "0"
+      ],
+      "hierarc_upd": [
+        "0"
+      ],
+      "conf_file": [
+        "conf.dat"
+      ],
+      "data_file": [
+        "dati.dat"
+      ],
+      "topo_file": [
+        "topo.dat"
+      ],
+      "log_file": [
+        "log.dat"
+      ],
+      "rng_state_file": [
+        "rng_state.dat"
+      ]
+    },
+    {
+      "size": [
+        "72",
+        "72"
+      ],
+      "beta": [
+        "0.60"
+      ],
+      "theta": [
+        "0.0"
+      ],
+      "num_MC_step": [
+        "20000"
+      ],
+      "meas_every": [
+        "1"
+      ],
+      "num_micro": [
+        "4"
+      ],
+      "num_norm": [
+        "1"
+      ],
+      "save_conf_every": [
+        "1000"
+      ],
+      "num_cool_step": [
+        "50"
+      ],
+      "meas_cool_every": [
+        "5"
+      ],
+      "start": [
+        "1"
+      ],
+      "rng_seed": [
+        "194008429"
+      ],
+      "rng_start": [
+        "0"
+      ],
+      "num_replica": [
+        "1"
+      ],
+      "defect_size": [
+        "0"
+      ],
+      "hierarc_upd": [
+        "0"
+      ],
+      "conf_file": [
+        "conf.dat"
+      ],
+      "data_file": [
+        "dati.dat"
+      ],
+      "topo_file": [
+        "topo.dat"
+      ],
+      "log_file": [
+        "log.dat"
+      ],
+      "rng_state_file": [
+        "rng_state.dat"
+      ]
+    },
+    {
+      "size": [
+        "72",
+        "72"
+      ],
+      "beta": [
+        "0.60"
+      ],
+      "theta": [
+        "0.0"
+      ],
+      "num_MC_step": [
+        "20000"
+      ],
+      "meas_every": [
+        "1"
+      ],
+      "num_micro": [
+        "4"
+      ],
+      "num_norm": [
+        "1"
+      ],
+      "save_conf_every": [
+        "1000"
+      ],
+      "num_cool_step": [
+        "50"
+      ],
+      "meas_cool_every": [
+        "5"
+      ],
+      "start": [
+        "1"
+      ],
+      "rng_seed": [
+        "194008430"
+      ],
+      "rng_start": [
+        "0"
+      ],
+      "num_replica": [
+        "1"
+      ],
+      "defect_size": [
+        "0"
+      ],
+      "hierarc_upd": [
+        "0"
+      ],
+      "conf_file": [
+        "conf.dat"
+      ],
+      "data_file": [
+        "dati.dat"
+      ],
+      "topo_file": [
+        "topo.dat"
+      ],
+      "log_file": [
+        "log.dat"
+      ],
+      "rng_state_file": [
+        "rng_state.dat"
+      ]
+    },
+    {
+      "size": [
+        "72",
+        "72"
+      ],
+      "beta": [
+        "0.60"
+      ],
+      "theta": [
+        "0.0"
+      ],
+      "num_MC_step": [
+        "20000"
+      ],
+      "meas_every": [
+        "1"
+      ],
+      "num_micro": [
+        "4"
+      ],
+      "num_norm": [
+        "1"
+      ],
+      "save_conf_every": [
+        "1000"
+      ],
+      "num_cool_step": [
+        "50"
+      ],
+      "meas_cool_every": [
+        "5"
+      ],
+      "start": [
+        "1"
+      ],
+      "rng_seed": [
+        "194008431"
+      ],
+      "rng_start": [
+        "0"
+      ],
+      "num_replica": [
+        "1"
+      ],
+      "defect_size": [
+        "0"
+      ],
+      "hierarc_upd": [
+        "0"
+      ],
+      "conf_file": [
+        "conf.dat"
+      ],
+      "data_file": [
+        "dati.dat"
+      ],
+      "topo_file": [
+        "topo.dat"
+      ],
+      "log_file": [
+        "log.dat"
+      ],
+      "rng_state_file": [
+        "rng_state.dat"
+      ]
+    }
+  ],
+  "timing_metric": "Process wall time divided by MC cycles"
+}

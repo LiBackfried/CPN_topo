@@ -1,0 +1,32 @@
+{
+  "mcmc": "/rs_scratch/users/lb25v444/out_data/mcmc_120_N4_beta0p7_initpilot/job_23502233",
+  "lattice": 120,
+  "beta": 0.7,
+  "cuts": [
+    0,
+    20,
+    100,
+    500,
+    1000,
+    2000
+  ],
+  "acf_burn": 2000,
+  "starts": [
+    0,
+    0,
+    1,
+    1
+  ],
+  "runs": [
+    "/rs_scratch/users/lb25v444/out_data/mcmc_120_N4_beta0p7_initpilot/job_23502233/run_0",
+    "/rs_scratch/users/lb25v444/out_data/mcmc_120_N4_beta0p7_initpilot/job_23502233/run_1",
+    "/rs_scratch/users/lb25v444/out_data/mcmc_120_N4_beta0p7_initpilot/job_23502233/run_2",
+    "/rs_scratch/users/lb25v444/out_data/mcmc_120_N4_beta0p7_initpilot/job_23502233/run_3"
+  ],
+  "seeds": [
+    2126073774,
+    2126073775,
+    2126073776,
+    2126073777
+  ]
+}

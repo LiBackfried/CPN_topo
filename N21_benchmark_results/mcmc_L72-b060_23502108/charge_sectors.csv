@@ -1,0 +1,9 @@
+chain,start,burn_in_cycles,measurements,unique_sectors,transitions,min_sector,max_sector
+run_0,hot,2000,18000,13,650,-5,7
+run_0,hot,5000,15000,13,545,-5,7
+run_1,hot,2000,18000,16,676,-7,8
+run_1,hot,5000,15000,16,567,-7,8
+run_2,hot,2000,18000,13,705,-7,5
+run_2,hot,5000,15000,12,583,-6,5
+run_3,hot,2000,18000,17,634,-9,7
+run_3,hot,5000,15000,17,521,-9,7

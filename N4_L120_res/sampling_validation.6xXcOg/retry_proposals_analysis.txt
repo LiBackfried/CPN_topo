@@ -1,0 +1,1 @@
+sbatch --ntasks=1 --cpus-per-task=1 --dependency=afterok:23502237:23502240 --output=/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/sampling_validation.6xXcOg/slurm_proposals_analysis_%j.out N4_volume_benchmark/analyze_L120_sampling_validation_ubelix.sh proposals 23502237 23502240

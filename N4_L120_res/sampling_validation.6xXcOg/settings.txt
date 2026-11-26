@@ -1,0 +1,5 @@
+mode=all
+pilot_MC_cycles=10000
+NS_proposals=172800
+NS_init_cycles=20
+NS_live_spacing=8
