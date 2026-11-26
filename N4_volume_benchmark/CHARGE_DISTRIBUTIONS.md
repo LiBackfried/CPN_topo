@@ -2,9 +2,21 @@
 
 ## L120 baseline versus doubled proposals
 
-The locally pulled L120 summaries contain moments but no histogram exports
-or raw charge histories. A measured distribution cannot be reconstructed
-from those moments. For the completed comparison 23502241, sync the new
+On 2026-11-26, the user reported submission of this analysis as **23600131**.
+Expected output:
+`N4_L120_res/proposal_charge_distributions/job_23600131/`.
+Expected Slurm log in the submission checkout:
+`N4_L120_charge_comparison_23600131.log`.
+The completed export and all comparison plots were subsequently pulled
+and checked locally on 2026-11-26, including normalized histograms, shared
+MCMC probabilities/errors and source/input provenance. See
+[the results review](../N4_L120_res/CHARGE_DISTRIBUTIONS_REVIEW_20261126.md)
+and [the submission record](../N4_L120_res/reported_proposal_charge_jobs_20261126.tsv).
+Remote accounting and raw charge histories were not queried.
+
+The earlier L120 summary pulls contained moments without histogram exports
+or raw charge histories; the completed export above now supplies the
+histograms. To reproduce the plots for comparison 23502241, sync
 `plot_L120_proposal_charges.py` and `plot_L120_proposal_charges_ubelix.sh`,
 then submit from the UBELIX checkout root:
 

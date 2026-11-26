@@ -119,6 +119,40 @@ class SamplingValidationTests(unittest.TestCase):
                     study.analyze_proposals(args)
             self.assertFalse(args.output.exists())
 
+    def test_expanded_control_preserves_old8_fresh16_and_count_orderings(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            mc_fixture(root/'mc',count=12288,beta=1.,starts=(1,1,1),cadence=10)
+            paths=[]; data=[]
+            for i in range(48):
+                path=root/f'ns_{i}'; path.mkdir(); paths.append(path)
+                (path/'input.conf').write_text(f'rng_seed {i+1}\n')
+                rng=np.random.default_rng(i)
+                epsilon=np.linspace(.8,.5,4001)+i*1e-7
+                data.append(np.column_stack((epsilon,10+rng.normal(size=4001),
+                    4+.2*rng.normal(size=4001),rng.normal(size=4001),np.zeros((4001,2)))))
+            cfg=dict(size=['22','22'],num_single_site_stoc_upd=['86400'],num_live_pts=['50'],
+                     num_MC_step=['20'],meas_every=['8'],rng_seed=['1'])
+            control={**cfg,'num_single_site_stoc_upd':['172800'],'rng_seed':['25']}
+            args=SimpleNamespace(baseline=[root/'base'],control=[root/'control'],mcmc=root/'mc',
+                output=root/'expanded',lattice=22,updates=4000,depths=[3000,3500,4000],
+                bootstrap=4,joint_draws=20,seed=321,control_streams=24,stream_orderings=2)
+            with patch.object(study,'load_ns_ensemble',side_effect=[(cfg,data[:24]),(control,data[24:])]), \
+                 patch.object(study,'discover_runs',return_value=paths), \
+                 patch.object(study,'bootstrap_nested_sampling',wraps=study.bootstrap_nested_sampling) as bootstrap:
+                study.analyze_proposals(args)
+            self.assertEqual([len(c.args[0]) for c in bootstrap.call_args_list],[24,24,8,16,8,12,16,8,12,16])
+            old_ids={int(s.observables['stream_index'][0]) for s in bootstrap.call_args_list[2].args[0]}
+            fresh_ids={int(s.observables['stream_index'][0]) for s in bootstrap.call_args_list[3].args[0]}
+            self.assertEqual(old_ids,set(range(24,32)))
+            self.assertEqual(fresh_ids,set(range(32,48)))
+            for cohort in ('baseline24','control24','old8','fresh16'):
+                for name in ('joint.json','action_joint.json','action_comparison.png'):
+                    self.assertTrue((args.output/cohort/name).exists())
+            with (args.output/'stream_count_observables.csv').open() as file:
+                self.assertEqual(len(list(csv.DictReader(file))),42)
+            self.assertTrue((args.output/'old8_fresh16_differences.csv').exists())
+
 
 if __name__ == '__main__':
     unittest.main()

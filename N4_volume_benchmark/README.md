@@ -1,5 +1,11 @@
 # CP³ volume and reweighting benchmark on UBELIX
 
+To expand the L120 doubled-proposal cohort from eight to **24 streams**, run
+`bash N4_volume_benchmark/add_L120_proposals_8to24_ubelix.sh`.
+It adds sixteen fresh 172800-proposal streams at 300k updates and queues
+matched proposal/stream-count/action/charge analyses. See
+[the expansion setup](../N4_L120_res/EXPAND_DOUBLED_PROPOSALS_24_STREAMS.md).
+
 For L120 source-prior initialization and a separate doubled-proposal control,
 run `bash N4_volume_benchmark/submit_L120_sampling_validation_ubelix.sh`.
 See [the sampling-validation setup](../N4_L120_res/SAMPLING_VALIDATION.md)

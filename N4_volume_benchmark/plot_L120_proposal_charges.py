@@ -36,11 +36,13 @@ def histogram_vectors(rows):
 def render(root, output, floor=1e-6):
     if not 0 < floor < 1:
         raise ValueError("Probability floor must be between zero and one")
+    control_name='control24' if (root/'control24').is_dir() else 'control8'
+    control_count=24 if control_name=='control24' else 8
     cohorts = {name:read_histograms([root/name/"charge_distributions.csv"])
-               for name in ("baseline24", "control8")}
+               for name in ("baseline24", control_name)}
     for name, rows in cohorts.items():
         metadata = json.loads((root/name/'inputs.json').read_text(encoding='utf-8'))
-        count, proposals = (24,86400) if name=='baseline24' else (8,172800)
+        count, proposals = (24,86400) if name=='baseline24' else (control_count,172800)
         expected = dict(L=120,cpn_n=4,source_beta=.7,theta=0,targets=[1.],updates=300000,
                         NS_streams=count,proposals=proposals,cooling_step=50,
                         MCMC_beta=1.,burn_in_MC_steps=20000,block_size_measurements=512)
@@ -62,7 +64,7 @@ def render(root, output, floor=1e-6):
             if not np.allclose(mc[0].get(center,(0.,0.)), mc[1].get(center,(0.,0.)), rtol=1e-9, atol=1e-12):
                 raise ValueError("The two exports do not use the same MCMC histogram/errors")
         curves = [([r for r in selected['baseline24'] if r['method']=='NS'], 'NS: 86400 proposals, 24 streams', '#2369a4', 'o'),
-                  ([r for r in selected['control8'] if r['method']=='NS'], 'NS: 172800 proposals, 8 streams', '#249c9a', '^'),
+                  ([r for r in selected[control_name] if r['method']=='NS'], f'NS: 172800 proposals, {control_count} streams', '#249c9a', '^'),
                   ([r for r in selected['baseline24'] if r['method']=='MCMC'], 'MCMC: beta=1, 3 chains', '#db7b18', 'D')]
         visible = [abs(r['bin_center']) for rows,_,_,_ in curves for r in rows if r['probability']>=floor]
         extent = max(visible, default=1.)+1
@@ -100,13 +102,15 @@ def analyze(args):
     if args.output.exists():
         raise ValueError(f"Refusing to overwrite {args.output}")
     metadata = json.loads(args.comparison.read_text(encoding='utf-8'))
-    if metadata['updates'] != 300000 or len(metadata['baseline']) != 6 or len(metadata['control']) != 2:
-        raise ValueError("Expected the completed baseline24/control8 proposal comparison")
+    control_count=4*len(metadata['control'])
+    if metadata['updates'] != 300000 or len(metadata['baseline']) != 6 or control_count not in (8,24):
+        raise ValueError("Expected the completed baseline24/control8 or control24 proposal comparison")
+    control_name=f'control{control_count}'
     roots = {name:[scratch_path(p,args.scratch_root) for p in metadata[key]]
-             for name,key in (('baseline24','baseline'),('control8','control'))}
+             for name,key in (('baseline24','baseline'),(control_name,'control'))}
     mc = scratch_path(metadata['mcmc'],args.scratch_root)
     seeds = []
-    for name,expected,proposals in (('baseline24',24,86400),('control8',8,172800)):
+    for name,expected,proposals in (('baseline24',24,86400),(control_name,control_count,172800)):
         paths = discover_runs(roots[name])
         if len(paths) != expected:
             raise ValueError(f"Expected {expected} streams: {name}")
@@ -117,8 +121,8 @@ def analyze(args):
             if settings != ((120,120),.7,0.,50,20,8,proposals):
                 raise ValueError(f"Unexpected NS settings: {path}")
             seeds.append(int(cfg['rng_seed'][0]))
-    if len(set(seeds)) != 32 or min(seeds)<=0:
-        raise ValueError("Need 32 distinct positive NS seeds")
+    if len(set(seeds)) != 24+control_count or min(seeds)<=0:
+        raise ValueError(f"Need {24+control_count} distinct positive NS seeds")
     for path in discover_runs([mc]):
         if int(read_config(path/'input.conf')['rng_seed'][0]) in seeds:
             raise ValueError("NS and MCMC seeds must be independent")
@@ -126,9 +130,9 @@ def analyze(args):
     save_json(args.output/'inputs.json',dict(comparison=str(args.comparison.resolve()),
         comparison_sha256=hashlib.sha256(args.comparison.read_bytes()).hexdigest(),
         bootstrap=args.bootstrap, seed=args.seed, beta=1., updates=300000,
-        burn_in=20000, block_size=512, proposals=dict(baseline24=86400,control8=172800),
+        burn_in=20000, block_size=512, proposals={'baseline24':86400,control_name:172800},
         source_hashes={p:hashlib.sha256((REPO/p).read_bytes()).hexdigest() for p in SOURCES}))
-    for i,(name,proposals) in enumerate((('baseline24',86400),('control8',172800))):
+    for i,(name,proposals) in enumerate((('baseline24',86400),(control_name,172800))):
         analyze_distributions(roots[name],mc,args.output/name,120,(1.,),300000,proposals,1.,
             bootstrap=args.bootstrap,seed=args.seed+i,burn_in=20000,block_size=512,
             bin_width=1.,manifest=args.comparison)

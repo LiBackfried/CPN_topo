@@ -1,0 +1,14 @@
+{
+  "baseline24": {
+    "input": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L120_res\\proposals172800_23502237_analysis_23502241\\baseline24\\bins.csv",
+    "sha256": "762cdc93fe6cb1d6d34902e4f3464fe5670b0bdce6f2a4f8f087c59d2f946d30",
+    "max_abs_marginal_z": 1.210657191403839,
+    "worst_bin_1based": 22
+  },
+  "control8": {
+    "input": "C:\\Liane\\00_Doktorat\\PhD_projects\\CPN_NestSamp\\CPN_topo\\N4_L120_res\\proposals172800_23502237_analysis_23502241\\control8\\bins.csv",
+    "sha256": "ff1155cbd2e66ecd5e69bb7393b5b2c2bba0c8f76b880935ba3cb64421b2e2e5",
+    "max_abs_marginal_z": 4.989939856379109,
+    "worst_bin_1based": 3
+  }
+}

@@ -11,7 +11,7 @@ from N4_volume_benchmark import plot_L120_proposal_charges as plot
 
 def export_fixture(output, extra_edges=False, changed_mc=False):
     output.mkdir(parents=True)
-    count,proposals=(24,86400) if output.name=='baseline24' else (8,172800)
+    count,proposals=(24,86400) if output.name=='baseline24' else (24 if output.name=='control24' else 8,172800)
     (output/'inputs.json').write_text(json.dumps(dict(L=120,cpn_n=4,source_beta=.7,theta=0,
         targets=[1.],updates=300000,NS_streams=count,proposals=proposals,cooling_step=50,
         MCMC_beta=1.,burn_in_MC_steps=20000,block_size_measurements=512)))
@@ -55,7 +55,7 @@ class ProposalChargeTests(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root=Path(tmp); scratch=root/'out_data'
             groups=[]
-            for group in range(8):
+            for group in range(12):
                 job=scratch/f'ns/job_{group}'; groups.append(job)
                 for run in range(4):
                     path=job/f'run_{run}'; path.mkdir(parents=True)
@@ -76,7 +76,7 @@ class ProposalChargeTests(unittest.TestCase):
             with patch.object(plot,'analyze_distributions',side_effect=export) as analyze:
                 plot.analyze(args)
             self.assertEqual([c.args[6] for c in analyze.call_args_list],[86400,172800])
-            self.assertEqual([len(c.args[0]) for c in analyze.call_args_list],[6,2])
+            self.assertEqual([len(c.args[0]) for c in analyze.call_args_list],[6,6])
             for call in analyze.call_args_list:
                 self.assertEqual(call.args[1],mc)
                 self.assertEqual(call.args[3:6],(120,(1.,),300000))

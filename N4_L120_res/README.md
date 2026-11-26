@@ -1,10 +1,23 @@
 # L120 screening campaign
 
-To export and plot charge distributions for baseline24, doubled-proposal
-control8 and MCMC at beta=1, submit
-`sbatch N4_volume_benchmark/plot_L120_proposal_charges_ubelix.sh` from the
-updated UBELIX checkout. Local summary pulls do not contain the charge
-histograms or raw histories. See [the charge plotting setup](../N4_volume_benchmark/CHARGE_DISTRIBUTIONS.md).
+The **172800-proposal ensemble expansion from eight to 24 streams** is
+prepared locally. It adds sixteen fresh streams at 300k updates each and
+reuses old leaves 23502237/23502240. From the updated UBELIX checkout run
+`bash N4_volume_benchmark/add_L120_proposals_8to24_ubelix.sh`. A dependent
+analysis compares matched 24-stream proposal ensembles, old8/fresh16 groups,
+depth/count scans and charge distributions. See
+[the expansion instructions](EXPAND_DOUBLED_PROPOSALS_24_STREAMS.md).
+No expansion jobs have been submitted from this checkout.
+
+Charge-distribution analysis **23600131** is now pulled and checked locally
+(2026-11-26) under `proposal_charge_distributions/job_23600131/`. It compares
+baseline24, doubled-proposal control8 and MCMC at beta=1. All histograms
+normalize correctly and the shared MC reference matches between exports.
+The central shapes closely overlap, with a small positive-charge shift and
+some tail-bin differences in control8. See
+[the plots and review](CHARGE_DISTRIBUTIONS_REVIEW_20261126.md),
+[the charge plotting setup](../N4_volume_benchmark/CHARGE_DISTRIBUTIONS.md)
+and [the submission record](reported_proposal_charge_jobs_20261126.tsv).
 
 The source-prior pilot analysis **23502234** is now pulled and locally
 checked (2026-11-26). Autocorrelation times are 1.59–1.78 MC cycles for

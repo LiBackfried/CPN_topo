@@ -176,11 +176,54 @@ not computed; the two quoted joint p values each compare a cohort with
 MC. Eight independent control streams also limit bootstrap calibration and
 the separation of proposal effects from stream-to-stream variation.
 
+### Action-distribution mismatch: clarification after the user's observation
+
+The action distributions must be checked separately from their mean.
+Focusing on control8's mean-action difference of 1.65 combined SE understated
+its shape mismatch. With the already exported action-bin errors included,
+the baseline24 mass residuals have maximum absolute marginal z **1.21**
+across 32 bins. In control8, the three lowest-action bins have residuals
+**-3.88, -4.74 and -4.99 SE**. Thus the doubled-proposal cohort has a clear
+low-action deficit under the current bootstrap error model. These are
+correlated marginal comparisons; an action-distribution joint test was not
+computed. Small-cohort bootstrap calibration remains a limitation.
+
+The new [action plot with uncertainty bands](../N4_volume_benchmark/action_distribution_review_20261126/L120_action_distributions_with_errors.png)
+shows the two cases side by side, with a standardized bin-mass residual
+panel. Its source CSV hashes are saved alongside it. The original comparison
+plots showed action density without error bands, which made visual deviations
+difficult to assess statistically.
+
+For a canonical mean, both factors matter:
+
+`<G0> = integral p(epsilon) <G0 | epsilon> d epsilon`.
+
+At the existing 32-bin resolution, the symmetric decomposition of the G0
+NS-minus-MC difference is:
+
+| Contribution | Baseline24 | Control8 |
+| --- | ---: | ---: |
+| Different action-bin weights | -0.079 ± 0.449 | -0.832 ± 0.559 |
+| Different conditional G0 means within bins | -3.189 ± 1.728 | +1.688 ± 2.580 |
+| Effect of the omitted comparison tails | +0.086 ± 0.065 | -0.076 ± 0.122 |
+| Full G0 difference | -3.182 ± 1.785 | +0.781 ± 2.728 |
+
+The decomposition is an exact algebraic identity for these binned summaries;
+the contribution errors are correlated and must not be added in quadrature.
+It shows that differences in probabilities assigned to the existing bins
+do not account for most of baseline24's G0 offset. Nevertheless, the bins
+have finite width: different action distributions *inside* a bin can change
+its conditional G0 mean. These panels are not an exact fixed-action test.
+Finer binning or explicit matching of within-bin action distributions would
+be needed to separate that effect cleanly. The present data do not isolate
+a purely correlator- or topology-specific mixing failure.
+
 ### Interpretation and next step
 
 **The tested doubling is not a demonstrated resolution of the conditional
 disagreement.** Target-depth stability is reassuring, but the conditional
-pattern changes and the new cohort still exceeds its joint threshold.
+pattern changes, the new cohort still exceeds its joint threshold, and
+its action-distribution shape also differs from MC.
 Neither a monotonic approach to the MC answer nor convergence with proposal
 count is established. Keep baseline24 and control8 separate.
 
