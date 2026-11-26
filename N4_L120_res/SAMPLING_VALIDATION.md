@@ -36,9 +36,13 @@ Expected result directories:
 
 On 2026-11-26, the source analysis 23502234 was found locally with its
 completion marker, all diagnostic tables/plots, and matching source hashes.
-The proposal-analysis directory was not found. See
+Later that day, the completed proposal analysis 23502241 was also pulled
+and checked. The doubled-proposal control is stable from 270k to 300k,
+but its conditional G0/Gk joint comparison still exceeds the 95% threshold
+(p approximately 0.018); the xi² estimate is essentially unchanged. See
 [the results review](SAMPLING_VALIDATION_RESULTS_20261126.md) for source
-autocorrelation, warmup checks and their early-window caveat. Remote
+autocorrelation, warmup checks, the early-window caveat and proposal-count
+findings. Remote
 scheduler status remains unchecked. To retry only an analysis after its
 inputs complete, submit its wrapper with the recorded pilot or leaves;
 do not rerun the fresh-campaign submission helper.

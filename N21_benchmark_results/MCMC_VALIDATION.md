@@ -66,15 +66,21 @@ on the corresponding simulation succeeding.
 | Campaign | Simulation | Analysis | Scratch campaign directory | Results in the UBELIX worktree |
 | --- | ---: | ---: | --- | --- |
 | L=72, β=0.61 reference | 23502100 | 23502101 | `mcmc_N21_L72-b061.xYCkgitk` | `N21_benchmark_results/mcmc_L72-b061_23502101/` |
-| L=72, β=0.60 prior check | 23502107 | 23502108 | `mcmc_N21_L72-b060.Vuwu0jlf` | `N21_benchmark_results/mcmc_L72-b060_23502108/` |
+| L=72, β=0.60 prior pilot, 20,000 cycles/chain | 23502107 | 23502108 | `mcmc_N21_L72-b060.Vuwu0jlf` | `N21_benchmark_results/mcmc_L72-b060_23502108/` |
 | L=150, β=0.60 timing | 23502110 | 23502111 | `mcmc_N21_L150-timing.zScGqbOz` | `N21_benchmark_results/mcmc_L150-timing_23502111/` |
+| L=72, β=0.60 prior, 200,000 cycles/chain | 23568475 | 23568476 | `mcmc_N21_L72-b060.xHZHT8uu` | `N21_benchmark_results/mcmc_L72-b060_23568476/` |
+| L=150, β=0.60 prior, 200,000 cycles/chain | 23568479 | 23568480 | `mcmc_N21_L150-prior.jXGFHcAW` | `N21_benchmark_results/mcmc_L150-prior_23568480/` |
 
 The scratch campaign directories are under
 `/scratch/network/users/lb25v444/out_data/`. Simulation chains are under
 `job_<simulation_ID>/run_0/` through `run_3/` inside each campaign.
+The worktree paths are relative to
+`/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/`.
 
 ```bash
 sacct -j 23502100,23502101,23502107,23502108,23502110,23502111 \
+  --format=JobID,JobName,State,ExitCode,Elapsed,AllocCPUS,MaxRSS
+sacct -j 23568475,23568476,23568479,23568480 \
   --format=JobID,JobName,State,ExitCode,Elapsed,AllocCPUS,MaxRSS
 ```
 

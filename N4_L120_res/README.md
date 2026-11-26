@@ -1,12 +1,22 @@
 # L120 screening campaign
 
+To export and plot charge distributions for baseline24, doubled-proposal
+control8 and MCMC at beta=1, submit
+`sbatch N4_volume_benchmark/plot_L120_proposal_charges_ubelix.sh` from the
+updated UBELIX checkout. Local summary pulls do not contain the charge
+histograms or raw histories. See [the charge plotting setup](../N4_volume_benchmark/CHARGE_DISTRIBUTIONS.md).
+
 The source-prior pilot analysis **23502234** is now pulled and locally
 checked (2026-11-26). Autocorrelation times are 1.59–1.78 MC cycles for
 action and about 0.5 for G0/Gk/Q/Q²; spacing eight looks reasonable.
 Hot/cold long-run means agree across the cut scan, but the initial hot-start
 50-point action windows show a rough 2.8-SE early/late difference, so
 20-cycle warmup remains provisional. The doubled-proposal comparison
-23502241 has not been found locally. See
+**23502241** is also now pulled and checked: control8 is stable from
+270k to 300k, but its conditional joint p is approximately 0.018, and xi²
+remains 82.61 ± 8.93 versus baseline 83.22 ± 8.91 and MC 98.79 ± 2.96.
+Doubling proposals has not demonstrated resolution of the disagreement.
+The two proposal cohorts remain separate. See
 [the sampling-validation review](SAMPLING_VALIDATION_RESULTS_20261126.md).
 
 The user reported submission of the next sampling checks on 2026-11-25:
@@ -18,7 +28,9 @@ proposals/update**, 300k updates each (batch 1: 23502235 -> 23502236 ->
 reusing MCMC 22780263. Campaign records/logs are under
 `/storage/homefs/lb25v444/cpn_nestsampl/CPN_topo/N4_L120_res/sampling_validation.6xXcOg`.
 See [the setup and earlier proposal-count findings](SAMPLING_VALIDATION.md).
-Submission is user-reported; remote state and completion are unverified.
+Submissions/completion were user-reported; both copied analysis completion
+markers and tables have now been checked. Remote accounting and raw NS
+histories were not independently rechecked.
 
 The stream-count check was user-reported submitted on 2026-11-25:
 preparation **23463724**, evaluation array **23463726** (baseline plus eight

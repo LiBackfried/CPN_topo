@@ -1,5 +1,46 @@
 # Charge-distribution export and plots
 
+## L120 baseline versus doubled proposals
+
+The locally pulled L120 summaries contain moments but no histogram exports
+or raw charge histories. A measured distribution cannot be reconstructed
+from those moments. For the completed comparison 23502241, sync the new
+`plot_L120_proposal_charges.py` and `plot_L120_proposal_charges_ubelix.sh`,
+then submit from the UBELIX checkout root:
+
+```bash
+sbatch N4_volume_benchmark/plot_L120_proposal_charges_ubelix.sh
+```
+
+This is a single analysis job (one CPU, 8 GiB, four hours), with no simulation
+or rebuild. It reads the baseline24 and control8 selections from the completed
+proposal comparison's `inputs.json` and reuses MCMC 22780263. It exports
+separate canonical beta=1 histograms for 86400 and 172800 proposals, each at
+300k updates/stream, and compares them with the shared MCMC reference.
+The source beta is 0.7, and final cooling is 50 sweeps. NS errors use 200
+whole-stream bootstrap draws per cohort; MC uses the same cut 20000 and
+block 512 measurements as the proposal comparison. Charges are binned as
+measured in unit-width bins centered on integers, with no rounding or
+symmetrization. The usual common-energy-prefix convention is applied
+separately within each cohort; both have observational depth convergence.
+
+Output is `N4_L120_res/proposal_charge_distributions/job_<JOB_ID>/`, containing
+per-cohort CSVs/provenance and `comparison/L120_Q_U_proposal_comparison.png`
+(also PDF). Equivalent Q_z and Q_plaquette figures are included. Each figure
+has linear and log panels, open markers, and statistical errors. The visible
+charge range covers bins with any probability at least 1e-6; the complete
+normalized histograms are retained in CSV without tail renormalization.
+The two exports must give matching MCMC histograms/errors before overlaying.
+
+Pull that directory back for local viewing. Replot without raw data using:
+
+```bash
+python N4_volume_benchmark/plot_L120_proposal_charges.py plot \
+  N4_L120_res/proposal_charge_distributions/job_JOBID
+```
+
+## Existing volume export
+
 Submit from the updated repository checkout on UBELIX:
 
 ```bash
